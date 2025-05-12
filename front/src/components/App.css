@@ -1,0 +1,1726 @@
+/* Oracle Pharmacy - Main Color Palette */
+:root {
+  --primary-light: rgb(205, 219, 192);
+  --primary-dark: rgb(20, 63, 39);
+  --secondary-white: #f4f7f5;
+  --secondary-light-green: #c3e8bd;
+  --secondary-dark-green: #264d36;
+  --secondary-orange: #ffa726;
+  --secondary-gray: #eeeeee;
+  --text-dark: #333333;
+  --text-light: #ffffff;
+  --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --transition-speed: 0.3s;
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text-dark);
+  background-color: var(--secondary-white);
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary-dark);
+  transition: color var(--transition-speed);
+}
+
+a:hover {
+  color: var(--secondary-orange);
+}
+
+/* Typography */
+.oracle-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 1rem;
+}
+
+.oracle-subtitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--secondary-dark-green);
+  margin-bottom: 0.75rem;
+}
+
+.oracle-text-highlight {
+  color: var(--secondary-orange);
+  font-weight: 600;
+}
+
+/* Layout Components */
+.oracle-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.oracle-section {
+  padding: 3rem 0;
+}
+
+.oracle-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.oracle-col {
+  padding: 0 15px;
+  flex: 1;
+}
+
+/* Header Styles - Top Bar */
+.oracle-topbar {
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.oracle-topbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.oracle-topbar-contact {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.oracle-topbar-item {
+  display: flex;
+  align-items: center;
+  color: var(--text-light);
+  margin-right: 1.5rem;
+  opacity: 0.9;
+  transition: opacity var(--transition-speed);
+}
+
+.oracle-topbar-item:hover {
+  opacity: 1;
+  color: var(--text-light);
+}
+
+.oracle-topbar-icon {
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Main Header */
+.oracle-header {
+  background-color: var(--secondary-white);
+  padding: 1rem 0;
+  box-shadow: var(--shadow-light);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all var(--transition-speed);
+}
+
+.oracle-header-scrolled {
+  padding: 0.5rem 0;
+  box-shadow: var(--shadow-medium);
+}
+
+.oracle-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Logo */
+.oracle-logo {
+  display: flex;
+  align-items: center;
+}
+
+.oracle-logo a {
+  display: flex;
+  align-items: center;
+  color: var(--primary-dark);
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.oracle-logo-img {
+  height: 40px;
+  margin-right: 0.75rem;
+}
+
+/* Navigation Links */
+.oracle-nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.oracle-nav-item {
+  position: relative;
+  margin: 0 0.5rem;
+}
+
+.oracle-nav-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: var(--primary-dark);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color var(--transition-speed);
+  border-radius: 4px;
+}
+
+.oracle-nav-link:hover {
+  color: var(--secondary-orange);
+}
+
+/* Dropdown Menu */
+.oracle-nav-dropdown {
+  position: relative;
+}
+
+.oracle-nav-dropdown .oracle-nav-link {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.oracle-dropdown-arrow {
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.oracle-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background-color: var(--text-light);
+  border-radius: 4px;
+  box-shadow: var(--shadow-medium);
+  padding: 0.75rem 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all var(--transition-speed);
+  z-index: 1001;
+}
+
+.oracle-nav-dropdown:hover .oracle-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.oracle-dropdown-menu a {
+  display: block;
+  padding: 0.5rem 1.5rem;
+  color: var(--text-dark);
+  text-decoration: none;
+  transition: background-color var(--transition-speed);
+}
+
+.oracle-dropdown-menu a:hover {
+  background-color: var(--secondary-gray);
+  color: var(--primary-dark);
+}
+
+/* Header Search */
+.oracle-header-search {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+  margin: 0 1.5rem;
+}
+
+.oracle-header-search .oracle-search-input {
+  width: 100%;
+  padding: 0.75rem 3rem 0.75rem 1rem;
+  border: 1px solid var(--secondary-gray);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: all var(--transition-speed);
+}
+
+.oracle-header-search .oracle-search-input:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 2px rgba(205, 219, 192, 0.3);
+  outline: none;
+}
+
+.oracle-header-search .oracle-search-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 3rem;
+  background-color: transparent;
+  color: var(--primary-dark);
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color var(--transition-speed);
+}
+
+.oracle-header-search .oracle-search-btn:hover {
+  color: var(--secondary-orange);
+}
+
+/* Action Buttons */
+.oracle-nav-actions {
+  display: flex;
+  align-items: center;
+}
+
+.oracle-action-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-dark);
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  font-size: 1.2rem;
+}
+
+.oracle-action-btn:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+/* Mobile Menu Toggle */
+.oracle-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--primary-dark);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+/* Side Menu for Mobile */
+.oracle-side-menu {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100vh;
+  background-color: var(--text-light);
+  box-shadow: var(--shadow-medium);
+  z-index: 1010;
+  overflow-y: auto;
+  transition: right var(--transition-speed);
+}
+
+.oracle-side-menu.active {
+  right: 0;
+}
+
+.oracle-side-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+}
+
+.oracle-side-menu-logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.oracle-side-menu-icon {
+  margin-right: 0.75rem;
+}
+
+.oracle-side-menu-close {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.oracle-side-menu-search {
+  padding: 1rem;
+  border-bottom: 1px solid var(--secondary-gray);
+  position: relative;
+}
+
+.oracle-side-menu-nav {
+  padding: 1rem 0;
+}
+
+.oracle-side-menu-item {
+  position: relative;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.oracle-side-menu-link {
+  display: block;
+  padding: 1rem 1.5rem;
+  color: var(--text-dark);
+  text-decoration: none;
+  transition: background-color var(--transition-speed);
+}
+
+.oracle-side-menu-link:hover {
+  background-color: var(--secondary-gray);
+}
+
+.oracle-mobile-dropdown-arrow {
+  float: right;
+  transition: transform var(--transition-speed);
+}
+
+.oracle-side-menu-item.active .oracle-mobile-dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.oracle-side-menu-dropdown {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.oracle-side-menu-item.active .oracle-side-menu-dropdown {
+  display: block;
+}
+
+.oracle-side-menu-dropdown a {
+  display: block;
+  padding: 0.75rem 1.5rem 0.75rem 3rem;
+  color: var(--text-dark);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background-color var(--transition-speed);
+}
+
+.oracle-side-menu-dropdown a:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.oracle-side-menu-contacts {
+  padding: 1.5rem;
+  background-color: var(--secondary-gray);
+}
+
+.oracle-side-menu-contact-link {
+  display: block;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+  text-decoration: none;
+}
+
+.oracle-side-menu-contact-link:last-child {
+  margin-bottom: 0;
+}
+
+.oracle-side-menu-contact-link p {
+  display: flex;
+  align-items: center;
+}
+
+.oracle-side-menu-contact-link svg {
+  margin-right: 0.75rem;
+  color: var(--primary-dark);
+}
+
+/* Responsive Header */
+@media (max-width: 992px) {
+  .oracle-header-search {
+    display: none;
+  }
+  
+  .oracle-nav-links {
+    display: none;
+  }
+  
+  .oracle-mobile-toggle {
+    display: flex;
+  }
+  
+  .oracle-header-search.active {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background-color: var(--text-light);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-width: 100%;
+    margin: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .oracle-topbar-contact {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .oracle-topbar-item {
+    margin-bottom: 0.5rem;
+  }
+  
+  .oracle-topbar-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .oracle-logo a {
+    font-size: 1.5rem;
+  }
+  
+  .oracle-logo-img {
+    height: 35px;
+  }
+}
+
+@media (max-width: 576px) {
+  .oracle-topbar {
+    display: none;
+  }
+  
+  .oracle-action-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+}
+
+/* Hero Section - Improved with new background */
+.oracle-hero {
+  color: var(--text-light);
+  padding: 6rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-medium);
+  background-color: var(--primary-dark);
+}
+
+/* Medical Theme for Hero */
+.oracle-hero-medical .oracle-hero-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 200 200'%3E%3Cdefs%3E%3Cstyle%3E.cls-1 %7B fill: %23ffffff; fill-opacity: 0.08; %7D%3C/style%3E%3C/defs%3E%3Cpath class='cls-1' d='M67,67 L67,133 L133,133 L133,67 L67,67 Z M83,83 L117,83 L117,117 L83,117 L83,83 Z'/%3E%3Cpath class='cls-1' d='M0,0 L0,33 L33,33 L33,0 L0,0 Z M17,8 L25,8 L25,25 L17,25 L17,8 Z'/%3E%3Cpath class='cls-1' d='M0,67 L0,100 L33,100 L33,67 L0,67 Z M17,75 L25,75 L25,92 L17,92 L17,75 Z'/%3E%3Cpath class='cls-1' d='M0,133 L0,166 L33,166 L33,133 L0,133 Z M17,141 L25,141 L25,158 L17,158 L17,141 Z'/%3E%3Cpath class='cls-1' d='M0,200 L0,233 L33,233 L33,200 L0,200 Z M17,208 L25,208 L25,225 L17,225 L17,208 Z'/%3E%3Cpath class='cls-1' d='M67,0 L67,33 L100,33 L100,0 L67,0 Z M83,8 L92,8 L92,25 L83,25 L83,8 Z'/%3E%3Cpath class='cls-1' d='M67,133 L67,166 L100,166 L100,133 L67,133 Z M83,141 L92,141 L92,158 L83,158 L83,141 Z'/%3E%3Cpath class='cls-1' d='M67,200 L67,233 L100,233 L100,200 L67,200 Z M83,208 L92,208 L92,225 L83,225 L83,208 Z'/%3E%3Cpath class='cls-1' d='M133,0 L133,33 L166,33 L166,0 L133,0 Z M150,8 L158,8 L158,25 L150,25 L150,8 Z'/%3E%3Cpath class='cls-1' d='M133,67 L133,100 L166,100 L166,67 L133,67 Z M150,75 L158,75 L158,92 L150,92 L150,75 Z'/%3E%3Cpath class='cls-1' d='M133,133 L133,166 L166,166 L166,133 L133,133 Z M150,141 L158,141 L158,158 L150,158 L150,141 Z'/%3E%3Cpath class='cls-1' d='M133,200 L133,233 L166,233 L166,200 L133,200 Z M150,208 L158,208 L158,225 L150,225 L150,208 Z'/%3E%3Cpath class='cls-1' d='M200,0 L200,33 L233,33 L233,0 L200,0 Z M217,8 L225,8 L225,25 L217,25 L217,8 Z'/%3E%3Cpath class='cls-1' d='M200,67 L200,100 L233,100 L233,67 L200,67 Z M217,75 L225,75 L225,92 L217,92 L217,75 Z'/%3E%3Cpath class='cls-1' d='M200,133 L200,166 L233,166 L233,133 L200,133 Z M217,141 L225,141 L225,158 L217,158 L217,141 Z'/%3E%3Cpath class='cls-1' d='M200,200 L200,233 L233,233 L233,200 L200,200 Z M217,208 L225,208 L225,225 L217,225 L217,208 Z'/%3E%3C/svg%3E");
+  background-size: 100px 100px;
+  opacity: 1;
+}
+
+.oracle-hero-medical .oracle-hero-gradient {
+  background: linear-gradient(135deg, rgba(20, 63, 39, 0.95) 0%, rgba(38, 77, 54, 0.9) 100%);
+}
+
+.oracle-hero-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg %3E%3Cpath fill='%23173f2a' d='M486 705.8c-109.3-21.8-223.4-32.2-335.3-19.4C99.5 692.1 49 703 0 719.8V800h843.8c-115.9-33.2-230.8-68.1-347.6-92.2C492.8 707.1 489.4 706.5 486 705.8z'/%3E%3Cpath fill='%231c4b32' d='M1600 0H0v719.8c49-16.8 99.5-27.8 150.7-33.5c111.9-12.7 226-2.4 335.3 19.4c3.4 0.7 6.8 1.4 10.2 2c116.8 24 231.7 59 347.6 92.2H1600V0z'/%3E%3Cpath fill='%2321583b' d='M478.4 581c3.2 0.8 6.4 1.7 9.5 2.5c196.2 52.5 388.7 133.5 593.5 176.6c174.2 36.6 349.5 29.2 518.6-10.2V0H0v574.9c52.3-17.6 106.5-27.7 161.1-30.9C268.4 537.4 375.7 554.2 478.4 581z'/%3E%3Cpath fill='%23266543' d='M0 0v429.4c55.6-18.4 113.5-27.3 171.4-27.7c102.8-0.8 203.2 22.7 299.3 54.5c3 1 5.9 2 8.9 3c183.6 62 365.7 146.1 562.4 192.1c186.7 43.7 376.3 34.4 557.9-12.6V0H0z'/%3E%3Cpath fill='%232b724c' d='M181.8 259.4c98.2 6 191.9 35.2 281.3 72.1c2.8 1.1 5.5 2.3 8.3 3.4c171 71.6 342.7 158.5 531.3 207.7c198.8 51.8 403.4 40.8 597.3-14.8V0H0v283.2C59 263.6 120.6 255.7 181.8 259.4z'/%3E%3Cpath fill='%23307e53' d='M1600 0H0v136.3c62.3-20.9 127.7-27.5 192.2-19.2c93.6 12.1 180.5 47.7 263.3 89.6c2.6 1.3 5.1 2.6 7.7 3.9c158.4 81.1 319.7 170.9 500.3 223.2c210.5 61 430.8 49 636.6-16.6V0z'/%3E%3Cpath fill='%23358a5a' d='M454.9 86.3C600.7 177 751.6 269.3 924.1 325c208.6 67.4 431.3 60.8 637.9-5.3c12.8-4.1 25.4-8.4 38.1-12.9V0H288.1c56 21.3 108.7 50.6 159.7 82C450.2 83.4 452.5 84.9 454.9 86.3z'/%3E%3Cpath fill='%233a9761' d='M1600 0H498c118.1 85.8 243.5 164.5 386.8 216.2c191.8 69.2 400 74.7 595 21.1c40.8-11.2 81.1-25.2 120.3-41.7V0z'/%3E%3Cpath fill='%233fa368' d='M1397.5 154.8c47.2-10.6 93.6-25.3 138.6-43.8c21.7-8.9 43-18.8 63.9-29.5V0H643.4c62.9 41.7 129.7 78.2 202.1 107.4C1020.4 178.1 1214.2 196.1 1397.5 154.8z'/%3E%3Cpath fill='%2344af6f' d='M1315.3 72.4c75.3-12.6 148.9-37.1 216.8-72.4h-723C966.8 71 1144.7 101 1315.3 72.4z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: center;
+  opacity: 1;
+  z-index: 1;
+}
+
+.oracle-hero-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(20, 63, 39, 0.8) 0%, rgba(20, 63, 39, 0.6) 100%);
+  z-index: 1;
+}
+
+.oracle-hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  padding: 0 1.5rem;
+}
+
+.oracle-hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.oracle-hero-description {
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.oracle-hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* New Light Button Style */
+.oracle-btn-light {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--primary-dark);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+.oracle-btn-light:hover {
+  background-color: var(--text-light);
+  color: var(--secondary-dark-green);
+  border-color: var(--text-light);
+}
+
+/* Utility Classes */
+.oracle-mb-4 {
+  margin-bottom: 2rem;
+}
+
+.oracle-mr-2 {
+  margin-right: 1rem;
+}
+
+.oracle-mt-2 {
+  margin-top: 1rem;
+}
+
+/* Responsive Hero */
+@media (max-width: 768px) {
+  .oracle-hero {
+    padding: 4rem 0;
+  }
+  
+  .oracle-hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .oracle-hero-description {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .oracle-hero-title {
+    font-size: 2rem;
+  }
+  
+  .oracle-hero-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .oracle-btn {
+    width: 100%;
+  }
+}
+
+/* Cards */
+.oracle-card {
+  background-color: var(--text-light);
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.oracle-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-medium);
+}
+
+.oracle-card-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--primary-dark);
+}
+
+.oracle-card-icon {
+  font-size: 2rem;
+  color: var(--secondary-orange);
+  margin-bottom: 1rem;
+}
+
+/* Features Section */
+.oracle-features {
+  padding: 4rem 0;
+  background-color: var(--primary-light);
+}
+
+.oracle-feature-icon {
+  width: 60px;
+  height: 60px;
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+/* Products Grid */
+.oracle-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.oracle-product-card {
+  background-color: var(--text-light);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-light);
+  transition: transform var(--transition-speed);
+}
+
+.oracle-product-card:hover {
+  transform: translateY(-5px);
+}
+
+.oracle-product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.oracle-product-content {
+  padding: 1rem;
+}
+
+.oracle-product-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.oracle-product-price {
+  font-weight: 700;
+  color: var(--secondary-orange);
+  margin-bottom: 0.5rem;
+}
+
+/* Buttons */
+.oracle-btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  border: none;
+}
+
+.oracle-btn-primary {
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+}
+
+.oracle-btn-primary:hover {
+  background-color: var(--secondary-dark-green);
+  color: var(--text-light);
+}
+
+.oracle-btn-secondary {
+  background-color: var(--secondary-orange);
+  color: var(--text-light);
+}
+
+.oracle-btn-secondary:hover {
+  background-color: #e69722;
+  color: var(--text-light);
+}
+
+.oracle-btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--primary-dark);
+  color: var(--primary-dark);
+}
+
+.oracle-btn-outline:hover {
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+}
+
+.oracle-btn-block {
+  display: block;
+  width: 100%;
+}
+
+/* Categories Section */
+.oracle-categories {
+  padding: 3rem 0;
+}
+
+.oracle-category-card {
+  position: relative;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.oracle-category-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.oracle-category-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(20, 63, 39, 0.1), rgba(20, 63, 39, 0.8));
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+}
+
+.oracle-category-title {
+  color: var(--text-light);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* Testimonials */
+.oracle-testimonials {
+  background-color: var(--secondary-gray);
+  padding: 4rem 0;
+}
+
+.oracle-testimonial {
+  background-color: var(--text-light);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
+  margin-bottom: 1.5rem;
+}
+
+.oracle-testimonial-text {
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.oracle-testimonial-author {
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+/* Enhanced Footer Styles - Compact Version */
+.oracle-footer {
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+  padding: 2rem 0 0;
+  margin-top: 3rem;
+  font-size: 0.95rem;
+}
+
+.oracle-footer a {
+  color: var(--text-light);
+  opacity: 0.8;
+  transition: opacity var(--transition-speed);
+}
+
+.oracle-footer a:hover {
+  opacity: 1;
+  color: var(--secondary-orange);
+}
+
+.oracle-footer-main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.oracle-footer-brand {
+  flex: 1;
+  max-width: 300px;
+  margin-right: 2rem;
+}
+
+.oracle-footer-logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.oracle-footer-logo-icon {
+  margin-right: 0.5rem;
+  font-size: 1.5rem;
+  color: var(--secondary-orange);
+}
+
+.oracle-footer-about {
+  margin-bottom: 1rem;
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+.oracle-footer-nav {
+  flex: 2;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.oracle-footer-links-group {
+  flex: 1;
+  min-width: 160px;
+  margin-bottom: 1rem;
+  padding-right: 1rem;
+}
+
+.oracle-footer-title {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.oracle-footer-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  background-color: var(--secondary-orange);
+}
+
+.oracle-footer-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.oracle-footer-links li {
+  margin-bottom: 0.5rem;
+}
+
+.oracle-footer-contact {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.oracle-footer-contact li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.oracle-footer-icon {
+  margin-right: 0.5rem;
+  color: var(--secondary-orange);
+  font-size: 0.9rem;
+}
+
+.oracle-footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.oracle-footer-bottom p {
+  margin: 0;
+}
+
+.oracle-footer-social {
+  display: flex;
+}
+
+.oracle-footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  margin-left: 0.75rem;
+  transition: all var(--transition-speed);
+}
+
+.oracle-footer-social a:hover {
+  background-color: var(--secondary-orange);
+  color: var(--text-light);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .oracle-footer-main {
+    flex-direction: column;
+  }
+  
+  .oracle-footer-brand {
+    max-width: 100%;
+    margin-right: 0;
+    margin-bottom: 1.5rem;
+  }
+  
+  .oracle-footer-nav {
+    justify-content: space-between;
+  }
+  
+  .oracle-footer-links-group {
+    min-width: 140px;
+  }
+}
+
+@media (max-width: 576px) {
+  .oracle-footer {
+    padding-top: 1.5rem;
+  }
+  
+  .oracle-footer-nav {
+    flex-direction: column;
+  }
+  
+  .oracle-footer-links-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .oracle-footer-bottom {
+    flex-direction: column;
+  }
+  
+  .oracle-footer-social {
+    margin-top: 1rem;
+  }
+  
+  .oracle-footer-social a {
+    margin: 0 0.375rem;
+  }
+}
+
+/* Banner for promotions */
+.oracle-banner {
+  background-color: var(--secondary-orange);
+  color: var(--text-light);
+  padding: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Search bar */
+.oracle-search {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.oracle-search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  padding-right: 3rem;
+  border-radius: 4px;
+  border: 1px solid var(--secondary-gray);
+  font-size: 1rem;
+}
+
+.oracle-search-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 3rem;
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+/* Cart badge */
+.oracle-cart-badge {
+  position: relative;
+}
+
+.oracle-cart-badge::after {
+  content: attr(data-count);
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: var(--secondary-orange);
+  color: var(--text-light);
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Medicine categories colors */
+.oracle-category-prescription {
+  border-left: 4px solid #4CAF50;
+}
+
+.oracle-category-otc {
+  border-left: 4px solid #2196F3;
+}
+
+.oracle-category-supplements {
+  border-left: 4px solid #FF9800;
+}
+
+.oracle-category-personal-care {
+  border-left: 4px solid #9C27B0;
+}
+
+/* Sale badge */
+.oracle-sale-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--secondary-orange);
+  color: var(--text-light);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 4px;
+}
+
+/* Quote banner */
+.oracle-quote {
+  background-color: var(--primary-light);
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.oracle-quote p {
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--primary-dark);
+  margin-bottom: 0.5rem;
+}
+
+.oracle-quote span {
+  font-weight: 600;
+  color: var(--secondary-dark-green);
+}
+
+/* Image placeholder */
+.oracle-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--secondary-gray);
+  color: var(--primary-dark);
+  font-size: 2rem;
+}
+
+/* WhatsApp Floating Button */
+.oracle-floating-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background-color: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.oracle-floating-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  color: white;
+}
+
+/* Featured Products Section - Enhanced */
+.oracle-featured-products {
+  padding: 4rem 0;
+  background-color: var(--secondary-white);
+}
+
+.oracle-section-header {
+  margin-bottom: 2.5rem;
+}
+
+.oracle-section-subtitle {
+  font-size: 1.1rem;
+  color: var(--secondary-dark-green);
+  margin-top: -0.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Enhanced Product Cards */
+.oracle-product-card {
+  background-color: var(--text-light);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-light);
+  transition: all var(--transition-speed);
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.oracle-product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-medium);
+}
+
+.oracle-product-image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.oracle-product-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.oracle-product-card:hover .oracle-product-image {
+  transform: scale(1.05);
+}
+
+.oracle-product-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.3s ease;
+}
+
+.oracle-product-card:hover .oracle-product-actions {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.oracle-product-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--text-light);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  color: var(--primary-dark);
+}
+
+.oracle-product-action-btn:hover {
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+}
+
+.oracle-wishlist-btn:hover {
+  background-color: #ff5252;
+  color: var(--text-light);
+}
+
+.oracle-product-content {
+  padding: 1.25rem;
+}
+
+.oracle-product-category {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--secondary-dark-green);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.oracle-product-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--primary-dark);
+  line-height: 1.3;
+  height: 2.8rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.oracle-product-description {
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  margin-bottom: 0.75rem;
+  height: 2.7rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.oracle-product-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.oracle-stars {
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+
+.oracle-star {
+  color: #ddd;
+  font-size: 0.9rem;
+  margin-right: 2px;
+}
+
+.oracle-star.filled {
+  color: #ffc107;
+}
+
+.oracle-star.half {
+  position: relative;
+  color: #ddd;
+}
+
+.oracle-star.half::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background-color: #ffc107;
+  overflow: hidden;
+}
+
+.oracle-reviews-count {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.oracle-product-price-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.oracle-product-price {
+  font-weight: 700;
+  color: var(--primary-dark);
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
+  margin-bottom: 0;
+}
+
+.oracle-product-old-price {
+  font-size: 0.95rem;
+  color: #999;
+  text-decoration: line-through;
+  margin-bottom: 0;
+}
+
+.oracle-sale-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: var(--secondary-orange);
+  color: var(--text-light);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 4px;
+  z-index: 2;
+}
+
+/* Responsive Product Grid */
+@media (max-width: 992px) {
+  .oracle-products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .oracle-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .oracle-products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .oracle-product-image {
+    height: 200px;
+  }
+}
+
+/* Products Page Styles */
+.oracle-products-hero {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark-green) 100%);
+  color: var(--text-light);
+  padding: 3rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.oracle-products-wrapper {
+  display: flex;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+/* Sidebar Filters */
+.oracle-products-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background-color: var(--text-light);
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
+  padding: 1.5rem;
+  align-self: flex-start;
+  position: sticky;
+  top: 100px;
+}
+
+.oracle-filter-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--secondary-gray);
+}
+
+.oracle-filter-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.oracle-filter-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-bottom: 1rem;
+}
+
+.oracle-filter-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.oracle-filter-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+
+.oracle-filter-option input {
+  margin-right: 0.75rem;
+  cursor: pointer;
+}
+
+.oracle-filter-option span {
+  font-size: 0.95rem;
+}
+
+.oracle-price-range {
+  margin-top: 1rem;
+}
+
+.oracle-price-slider {
+  width: 100%;
+  margin-bottom: 1rem;
+  accent-color: var(--primary-dark);
+}
+
+.oracle-price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.oracle-price-input {
+  width: 80px;
+  padding: 0.5rem;
+  border: 1px solid var(--secondary-gray);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.oracle-sort-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--secondary-gray);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  background-color: var(--text-light);
+  cursor: pointer;
+}
+
+/* Products Content */
+.oracle-products-content {
+  flex: 1;
+}
+
+.oracle-products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.oracle-products-count {
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.oracle-products-sort-mobile {
+  display: none;
+}
+
+.oracle-products-sort-mobile select {
+  padding: 0.5rem;
+  border: 1px solid var(--secondary-gray);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background-color: var(--text-light);
+}
+
+/* Filter Toggle Button (Mobile) */
+.oracle-filter-toggle-btn {
+  display: none;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--text-light);
+  border: 1px solid var(--secondary-gray);
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  text-align: left;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.oracle-toggle-icon {
+  transition: transform 0.3s ease;
+}
+
+.oracle-toggle-icon.active {
+  transform: rotate(180deg);
+}
+
+/* Loading and Error States */
+.oracle-loading, .oracle-error, .oracle-no-products {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.oracle-error {
+  color: #d32f2f;
+}
+
+.oracle-no-products {
+  padding: 3rem 0;
+}
+
+.oracle-no-products p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+/* Product Title Link */
+.oracle-product-title-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.oracle-product-title-link:hover .oracle-product-title {
+  color: var(--secondary-orange);
+}
+
+/* Out of Stock Badge */
+.oracle-out-of-stock-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: var(--text-light);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 4px;
+  z-index: 2;
+}
+
+.oracle-sale-badge + .oracle-out-of-stock-badge {
+  top: 45px;
+}
+
+/* Disabled Button */
+.oracle-btn-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--secondary-gray) !important;
+  color: var(--text-dark) !important;
+  border-color: var(--secondary-gray) !important;
+}
+
+.oracle-product-action-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Pagination */
+.oracle-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 0.5rem;
+}
+
+.oracle-pagination-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--secondary-gray);
+  background-color: var(--text-light);
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.oracle-pagination-btn:hover:not(:disabled) {
+  background-color: var(--primary-light);
+  border-color: var(--primary-light);
+}
+
+.oracle-pagination-btn.active {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  color: var(--text-light);
+}
+
+.oracle-pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive Styles for Products Page */
+@media (max-width: 992px) {
+  .oracle-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .oracle-products-wrapper {
+    flex-direction: column;
+  }
+  
+  .oracle-products-sidebar {
+    width: 100%;
+    position: static;
+    display: none;
+  }
+  
+  .oracle-products-sidebar.active {
+    display: block;
+  }
+  
+  .oracle-filter-toggle-btn {
+    display: flex;
+  }
+  
+  .oracle-products-sort-mobile {
+    display: block;
+  }
+  
+  .oracle-products-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .oracle-products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .oracle-pagination {
+    flex-wrap: wrap;
+  }
+}
