@@ -37,31 +37,6 @@ const Header = () => {
 
     return (
         <>
-            {/* Top Info Bar */}
-            <div className="oracle-topbar">
-                <div className="oracle-container">
-                    <div className="oracle-topbar-content">
-                        <div className="oracle-topbar-contact">
-                            <a href="tel:+77780988948" className="oracle-topbar-item">
-                                <FaPhone className="oracle-topbar-icon" />
-                                <span>8 (778) 098-89-48</span>
-                            </a>
-                            <a href="mailto:oracle@pharmacy.kz" className="oracle-topbar-item">
-                                <FaEnvelope className="oracle-topbar-icon" />
-                                <span>oracle@pharmacy.kz</span>
-                            </a>
-                            <a href="https://2gis.kz/astana/inside/9570784863331562/firm/70000001068924455?m=71.413628%2C51.133916%2F18.31" 
-                               target="_blank" 
-                               rel="noopener noreferrer" 
-                               className="oracle-topbar-item">
-                                <FaMapMarkerAlt className="oracle-topbar-icon" />
-                                <span>Ул. Кабанбай батыр проспект, 17</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             {/* Main Header */}
             <div className={`oracle-header ${isScrolled ? 'oracle-header-scrolled' : ''}`}>
                 <div className="oracle-container">
@@ -93,15 +68,6 @@ const Header = () => {
                             </li>
                             <li className="oracle-nav-item">
                                 <Link to="/products" className="oracle-nav-link">Каталог</Link>
-                            </li>
-                            <li className="oracle-nav-item oracle-nav-dropdown">
-                                <span className="oracle-nav-link">Категории <span className="oracle-dropdown-arrow">▾</span></span>
-                                <div className="oracle-dropdown-menu">
-                                    <Link to="/category/prescription">Рецептурные препараты</Link>
-                                    <Link to="/category/otc">Безрецептурные препараты</Link>
-                                    <Link to="/category/supplements">Витамины и добавки</Link>
-                                    <Link to="/category/personal-care">Товары для здоровья</Link>
-                                </div>
                             </li>
                             <li className="oracle-nav-item">
                                 <Link to="/about" className="oracle-nav-link">О нас</Link>

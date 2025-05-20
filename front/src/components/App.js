@@ -17,6 +17,7 @@ import CreateProduct from "./online-shop/CreateProduct";
 import Cart from "./online-shop/Cart";
 import UpdateProduct from "./online-shop/UpdateProduct";
 import Products from "./Products";
+import Contacts from "./contacts";
 
 // Компонент для автоматической прокрутки вверх при переходе между страницами
 function ScrollToTop() {
@@ -63,6 +64,7 @@ function App() {
         <Route path="/create_product/" element={<CreateProduct />} />
         <Route path="/update_product/:id" element={<UpdateProduct />} />
         <Route path="/cart/" element={<Cart />} />
+        <Route path="/contacts" element={<Contacts />} />
       </Routes>
     </AppLayout>
   );

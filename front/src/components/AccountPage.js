@@ -143,7 +143,7 @@ const AccountPage = () => {
         return (
             <div className="page-wrapper">
                 <Header />
-                <div className="page-container">
+                <div className="oracle-container">
                     <p className="text-center my-3">Загрузка...</p>
                 </div>
                 <Footer />
@@ -155,11 +155,11 @@ const AccountPage = () => {
         return (
             <div className="page-wrapper">
                 <Header />
-                <div className="page-container">
-                    <div className="error-message text-center my-3">{error}</div>
+                <div className="oracle-container">
+                    <div className="oracle-error text-center my-3">{error}</div>
                     <div className="text-center">
                         <button 
-                            className="button button-primary" 
+                            className="oracle-btn oracle-btn-primary" 
                             onClick={() => navigate("/login")}
                         >
                             Войти в аккаунт
@@ -178,91 +178,125 @@ const AccountPage = () => {
 
     return (
         <div className="page-wrapper">
-            <Header />
-            <div className="page-container">
-                <div className="hero-container">
-                    <div className="hero-content">
-                        <h1>Личный кабинет</h1>
-                        <p>Управление аккаунтом и настройки</p>
+            <div className="oracle-container">
+                <div className="oracle-hero oracle-hero-medical">
+                    <div className="oracle-hero-content">
+                        <h1 className="oracle-hero-title">Личный кабинет</h1>
+                        <p className="oracle-hero-description">Управление аккаунтом и настройки</p>
                     </div>
                 </div>
 
-                <div className="grid grid-2">
-                    <div className="card">
-                        <div className="user-info">
-                            <div className="avatar-section">
-                                <div className="avatar-circle">
-                                    <img src={user?.avatar || "/avatars/defaultPhoto.jpg"} alt="Аватар" />
+                <div className="oracle-section">
+                    <div className="oracle-row">
+                        <div className="oracle-col">
+                            <div className="oracle-card">
+                                <div className="user-info">
+                                    <div className="avatar-section text-center mb-4">
+                                        <div>
+                                            <img 
+                                                src={user?.avatar || "/avatars/defaultPhoto.jpg"} 
+                                                alt="Аватар" 
+                                                className="avatar-circle mx-auto mb-3 oracle-avatar-circle"
+                                            />
+                                        </div>
+                                        {showAvatarForm ? (
+                                            <AvatarUploader 
+                                                onSave={handleAvatarUpload} 
+                                                onCancel={() => setShowAvatarForm(false)}
+                                            />
+                                        ) : (
+                                            <button 
+                                                className="oracle-btn oracle-btn-secondary"
+                                                onClick={toggleAvatarForm}
+                                            >
+                                                Поменять аватарку
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="user-details">
+                                        <h2 className="oracle-card-title">Профиль</h2>
+                                        <p className="mb-2"><strong>Имя:</strong> {user.userName}</p>
+                                        <p className="mb-2"><strong>Почта:</strong> {user.email}</p>
+                                        <p className="mb-2"><strong>Роль:</strong> {user.role}</p>
+                                        <button 
+                                            onClick={handleLogout}
+                                            className="oracle-btn oracle-btn-outline mt-3"
+                                        >
+                                            Выйти из аккаунта
+                                        </button>
+                                    </div>
                                 </div>
-                                {showAvatarForm ? (
-                                    <AvatarUploader 
-                                        onSave={handleAvatarUpload} 
-                                        onCancel={() => setShowAvatarForm(false)}
-                                    />
-                                ) : (
-                                    <button 
-                                        className="button button-secondary"
-                                        onClick={toggleAvatarForm}
-                                    >
-                                        Поменять аватарку
+                            </div>
+                        </div>
+
+                        <div className="oracle-col">
+                            <div className="oracle-card">
+                                <h2 className="oracle-card-title">Смена пароля</h2>
+                                <form onSubmit={handlePasswordChange}>
+                                    <div className="form-group mb-3">
+                                        <input 
+                                            type="password" 
+                                            className="oracle-search-input" 
+                                            placeholder="Текущий пароль" 
+                                            value={oldPassword} 
+                                            onChange={(e) => setOldPassword(e.target.value)} 
+                                            required 
+                                        />
+                                    </div>
+                                    <div className="form-group mb-3">
+                                        <input 
+                                            type="password" 
+                                            className="oracle-search-input" 
+                                            placeholder="Новый пароль" 
+                                            value={password} 
+                                            onChange={(e) => setPassword(e.target.value)} 
+                                            required 
+                                        />
+                                    </div>
+                                    <div className="form-group mb-3">
+                                        <input 
+                                            type="password" 
+                                            className="oracle-search-input" 
+                                            placeholder="Повторите новый пароль" 
+                                            value={confirmPassword} 
+                                            onChange={(e) => setConfirmPassword(e.target.value)} 
+                                            required 
+                                        />
+                                    </div>
+                                    <button type="submit" className="oracle-btn oracle-btn-primary oracle-btn-block">
+                                        Изменить пароль
                                     </button>
-                                )}
-                            </div>
-                            <div className="user-details">
-                                <h2 className="section-title">Профиль</h2>
-                                <p>Имя: {user.userName}</p>
-                                <p>Почта: {user.email}</p>
-                                <p>Роль: {user.role}</p>
+                                </form>
                             </div>
                         </div>
                     </div>
 
-                    <div className="card">
-                        <h2 className="section-title">Смена пароля</h2>
-                        <form onSubmit={handlePasswordChange}>
-                            <div className="form-group">
-                                <input type="password" className="form-input" placeholder="Текущий пароль" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} required />
+                    <div className="oracle-row mt-4">
+                        
+
+                        {user?.role === 'ADMIN' && (
+                            <div className="oracle-col">
+                                <div className="oracle-card">
+                                    <h2 className="oracle-card-title">Админ панель</h2>
+                                    <div className="flex flex-col gap-2">
+                                        <Link to="/create_news" className="oracle-btn oracle-btn-primary oracle-btn-block">
+                                            Создать новость
+                                        </Link>
+                                        <Link to="/create_course" className="oracle-btn oracle-btn-primary oracle-btn-block">
+                                            Создать курс
+                                        </Link>
+                                        <Link to="/create_product" className="oracle-btn oracle-btn-primary oracle-btn-block">
+                                            Добавить товар
+                                        </Link>
+                                        <Link to="/users_list" className="oracle-btn oracle-btn-primary oracle-btn-block">
+                                            Список пользователей
+                                        </Link>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="form-group">
-                                <input type="password" className="form-input" placeholder="Новый пароль" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                            </div>
-                            <div className="form-group">
-                                <input type="password" className="form-input" placeholder="Повторите новый пароль" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-                            </div>
-                            <button type="submit" className="button button-primary">Изменить пароль</button>
-                        </form>
+                        )}
                     </div>
                 </div>
-
-                <div className="grid grid-2">
-                    <div className="card">
-                        <h2 className="section-title">Мое обучение</h2>
-                        <p className="section-description">Курс первой помощи</p>
-                        <button className="button button-primary">Продолжить обучение</button>
-                    </div>
-
-                    {user?.role === 'ADMIN' && (
-                        <div className="card">
-                            <h2 className="section-title">Админ панель</h2>
-                            <div className="flex flex-col gap-1">
-                                <Link to="/create_news" className="button button-primary">
-                                    Создать новость
-                                </Link>
-                                <Link to="/create_course" className="button button-primary">
-                                    Создать курс
-                                </Link>
-                                <Link to="/create_product" className="button button-primary">
-                                    Добавить товар
-                                </Link>
-                                <Link to="/users_list" className="button button-primary">
-                                    Список пользователей
-                                </Link>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                
             </div>
             <Footer />
         </div>

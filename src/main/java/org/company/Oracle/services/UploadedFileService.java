@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -30,7 +31,7 @@ public class UploadedFileService {
 
     private static final Logger logger = LoggerFactory.getLogger(UploadedFileService.class);
 
-    private static final List<String> ALLOWED_EXTENSIONS = List.of(
+    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(
             "jpg", "jpeg", "png", "gif", "bmp", "webp", "tiff", "svg",
             "mp4", "mov", "avi", "mkv", "webm", "wmv", "flv",
             "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "csv", "rtf", "odt", "ods", "odp"

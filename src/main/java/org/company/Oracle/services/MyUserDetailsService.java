@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -30,7 +31,7 @@ public class MyUserDetailsService implements UserDetailsService {
         boolean accountNonLocked = true;
 
         return new org.springframework.security.core.userdetails.User(
-            user.getEmail(), user.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, List.of(new SimpleGrantedAuthority(user.getRole().toString()))
+            user.getEmail(), user.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, Arrays.asList(new SimpleGrantedAuthority(user.getRole().toString()))
         );
     }
 }

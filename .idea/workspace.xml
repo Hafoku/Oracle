@@ -4,11 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eb620641-0baf-4930-ae75-1f5e0e1da3db" name="Changes" comment="" />
+    <list default="true" id="eb620641-0baf-4930-ae75-1f5e0e1da3db" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/DataInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/AccountPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/AccountPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/MyUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/MyUserDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/UploadedFileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/UploadedFileService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/data.sql" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -24,6 +41,9 @@
   &quot;associatedIndex&quot;: 0
 }</component>
   <component name="ProjectId" id="2wJV4tqh0cLGkDAX69gknc42u4O" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />

@@ -78,6 +78,7 @@ a:hover {
 
 .oracle-col {
   padding: 0 15px;
+  margin-top: 50px;
   flex: 1;
 }
 
@@ -1723,4 +1724,16 @@ a:hover {
   .oracle-pagination {
     flex-wrap: wrap;
   }
+}
+
+.oracle-avatar-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f7f5;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
