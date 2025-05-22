@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"; // Используем Link вмест
 import "./App.css"; // Подключаем стили
 import logo from './assets/static/logo.png'; // Добавляем импорт логотипа
 import { FaBars, FaTimes, FaMapMarkerAlt, FaPhone, FaEnvelope, FaShoppingCart, FaPills, FaSearch, FaUserMd } from 'react-icons/fa';
+import ThemeToggle from './ThemeToggle';
 
 const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -79,6 +80,7 @@ const Header = () => {
 
                         {/* Action Buttons */}
                         <div className="oracle-nav-actions">
+                            <ThemeToggle />
                             <button className="oracle-action-btn" onClick={toggleSearch}>
                                 <FaSearch />
                             </button>

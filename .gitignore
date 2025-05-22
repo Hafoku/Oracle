@@ -10,3 +10,58 @@
 # OS-specific files
 .DS_Store
 Thumbs.db
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Gradle
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+*.log
+logs.log
+
+# Node
+**/node_modules/
+
+# Custom ignores (проверь, нужны ли они)
+front/yarn.lock
+/uploads
+/files
+/product
+/news
+
+# Config
+#src/main/resources/application.properties
+
+# Ignore all config files
+#src/main/java/org/company/AiMed/config/
+#front/src/axios_helper.js

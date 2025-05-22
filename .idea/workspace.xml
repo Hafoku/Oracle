@@ -5,15 +5,73 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eb620641-0baf-4930-ae75-1f5e0e1da3db" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/DataInitializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/AccountPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/AccountPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/components/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/Header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/MyUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/MyUserDetailsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/UploadedFileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/UploadedFileService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/log4j2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/OracleApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/config/SecurityConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/config/WebConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/controllers/CartController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/controllers/LoginController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/controllers/NewsController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/controllers/OnlineShopController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/controllers/PageController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/controllers/UploadedFileController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/controllers/UserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/controllers/UserPageController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/dto/ErrorDto$ErrorDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/dto/ErrorDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/dto/NewsDto$NewsDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/dto/NewsDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/dto/ProductDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/dto/UserDTO$UserDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/dto/UserDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/exceptions/UserAlreadyExistException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/exceptions/UserAuthenticationEntryPoint.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/filter/JwtFilter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/Cart$CartBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/Cart.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/CartItem$CartItemBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/CartItem.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/News$NewsBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/News.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/Product$ProductBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/Product.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/ProfilePicture$ProfilePictureBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/ProfilePicture.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/Role$RoleBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/Role.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/UploadedFiles$UploadedFilesBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/UploadedFiles.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/User$UserBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/models/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/repositories/CartItemRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/repositories/CartRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/repositories/NewsRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/repositories/ProductRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/repositories/ProfilePictureRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/repositories/RoleRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/repositories/UploadedFileRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/repositories/UserRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/services/CartService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/services/DataInitializer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/services/IUserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/services/JWTService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/services/MyUserDetailsService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/services/NewsService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/services/ProductService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/services/ProfilePictureService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/services/UploadedFileService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/services/UserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/validation/EmailValidator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/validation/PasswordMatches.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/validation/PasswordMatchesValidator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/company/Oracle/validation/ValidEmail.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/avatars/defaultPhoto.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
