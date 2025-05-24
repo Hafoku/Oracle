@@ -36,6 +36,7 @@ build/
 *.iml
 *.ipr
 *.iws
+*.xml
 
 # NetBeans
 /nbproject/private/
@@ -58,6 +59,13 @@ front/yarn.lock
 /files
 /product
 /news
+
+# Gzipped files
+*.gz
+
+# Package.json (⚠️ WARNING: not typical!)
+package.json
+package-lock.json
 
 # Config
 #src/main/resources/application.properties

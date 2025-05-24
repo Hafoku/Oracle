@@ -4,60 +4,12 @@ import "./App.css";
 import Header from './Header';
 import Footer from './Footer';
 import { Link } from "react-router-dom";
-import { FaBootstrap, FaGraduationCap, FaFlask, FaUserTie, FaShoppingCart, FaCheck, FaSearch, FaPills, FaClinicMedical, FaHeartbeat, FaUserMd, FaStar, FaHeart } from "react-icons/fa";
-import { BsHospital } from "react-icons/bs";
+import { FaShoppingCart, FaSearch, FaPills, FaClinicMedical, FaHeartbeat, FaUserMd, FaStar, FaHeart } from "react-icons/fa";
 
 const HomePage = () => {
-  const [featuredProducts, setFeaturedProducts] = useState([
-    {
-      id: 1,
-      name: "Витамин C 1000мг",
-      price: 1200,
-      oldPrice: 1500,
-      image: "https://via.placeholder.com/300x200?text=Vitamin+C",
-      sale: true,
-      category: "supplements",
-      rating: 4.8,
-      reviews: 124,
-      description: "Поддержка иммунной системы и антиоксидантная защита"
-    },
-    {
-      id: 2,
-      name: "Парацетамол 500мг",
-      price: 450,
-      oldPrice: null,
-      image: "https://via.placeholder.com/300x200?text=Paracetamol",
-      sale: false,
-      category: "otc",
-      rating: 4.5,
-      reviews: 89,
-      description: "Жаропонижающее и обезболивающее средство"
-    },
-    {
-      id: 3,
-      name: "Омега-3 рыбий жир",
-      price: 2500,
-      oldPrice: 2800,
-      image: "https://via.placeholder.com/300x200?text=Omega+3",
-      sale: true,
-      category: "supplements",
-      rating: 4.7,
-      reviews: 56,
-      description: "Поддержка сердечно-сосудистой системы"
-    },
-    {
-      id: 4,
-      name: "Антисептический гель",
-      price: 800,
-      oldPrice: null,
-      image: "https://via.placeholder.com/300x200?text=Hand+Sanitizer",
-      sale: false,
-      category: "personal-care",
-      rating: 4.6,
-      reviews: 42,
-      description: "Дезинфекция рук без воды и мыла"
-    }
-  ]);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const categories = [
     {
@@ -138,6 +90,24 @@ const HomePage = () => {
     return stars;
   };
 
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('http://localhost:5000/api/products/featured');
+        setFeaturedProducts(response.data);
+        setError(null);
+      } catch (err) {
+        setError('Ошибка при загрузке товаров. Пожалуйста, попробуйте позже.');
+        console.error('Error fetching featured products:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeaturedProducts();
+  }, []);
+
   return (
     <div className="oracle-page-wrapper">
         
@@ -199,53 +169,65 @@ const HomePage = () => {
             <p className="oracle-section-subtitle oracle-text-center">Качественные товары для вашего здоровья</p>
           </div>
           
-          <div className="oracle-products-grid">
-            {featuredProducts.map(product => (
-              <div className="oracle-product-card" key={product.id}>
-                {product.sale && <div className="oracle-sale-badge">Скидка</div>}
-                <div className="oracle-product-image-wrapper">
-                  <ImageWithFallback 
-                    src={product.image} 
-                    alt={product.name} 
-                    className="oracle-product-image" 
-                  />
-                  <div className="oracle-product-actions">
-                    <button className="oracle-product-action-btn oracle-wishlist-btn" title="Добавить в избранное">
-                      <FaHeart />
-                    </button>
-                    <button className="oracle-product-action-btn oracle-cart-btn" title="Добавить в корзину">
-                      <FaShoppingCart />
-                    </button>
-                  </div>
-                </div>
-                <div className="oracle-product-content">
-                  <div className="oracle-product-category">{product.category === "supplements" ? "Витамины и добавки" : 
-                                                           product.category === "otc" ? "Безрецептурные препараты" : 
-                                                           product.category === "personal-care" ? "Личная гигиена" :
-                                                           product.category === "medical-supplies" ? "Медицинские товары" : 
-                                                           "Другое"}</div>
-                  <h3 className="oracle-product-title">{product.name}</h3>
-                  <p className="oracle-product-description">{product.description}</p>
-                  <div className="oracle-product-rating">
-                    <div className="oracle-stars">
-                      {renderRating(product.rating)}
+          {loading ? (
+            <div className="oracle-loading oracle-text-center">
+              Загрузка товаров...
+            </div>
+          ) : error ? (
+            <div className="oracle-error oracle-text-center">
+              {error}
+            </div>
+          ) : (
+            <>
+              <div className="oracle-products-grid">
+                {featuredProducts.map(product => (
+                  <div className="oracle-product-card" key={product._id}>
+                    {product.sale && <div className="oracle-sale-badge">Скидка</div>}
+                    <div className="oracle-product-image-wrapper">
+                      <ImageWithFallback 
+                        src={product.image} 
+                        alt={product.name} 
+                        className="oracle-product-image" 
+                      />
+                      <div className="oracle-product-actions">
+                        <button className="oracle-product-action-btn oracle-wishlist-btn" title="Добавить в избранное">
+                          <FaHeart />
+                        </button>
+                        <button className="oracle-product-action-btn oracle-cart-btn" title="Добавить в корзину">
+                          <FaShoppingCart />
+                        </button>
+                      </div>
                     </div>
-                    <span className="oracle-reviews-count">({product.reviews})</span>
+                    <div className="oracle-product-content">
+                      <div className="oracle-product-category">{product.category === "supplements" ? "Витамины и добавки" : 
+                                                               product.category === "otc" ? "Безрецептурные препараты" : 
+                                                               product.category === "personal-care" ? "Личная гигиена" :
+                                                               product.category === "medical-supplies" ? "Медицинские товары" : 
+                                                               "Другое"}</div>
+                      <h3 className="oracle-product-title">{product.name}</h3>
+                      <p className="oracle-product-description">{product.description}</p>
+                      <div className="oracle-product-rating">
+                        <div className="oracle-stars">
+                          {renderRating(product.rating || 0)}
+                        </div>
+                        <span className="oracle-reviews-count">({product.reviews || 0})</span>
+                      </div>
+                      <div className="oracle-product-price-wrapper">
+                        <p className="oracle-product-price">{product.price} ₸</p>
+                        {product.oldPrice && <p className="oracle-product-old-price">{product.oldPrice} ₸</p>}
+                      </div>
+                      <button className="oracle-btn oracle-btn-primary oracle-btn-block">
+                        В корзину
+                      </button>
+                    </div>
                   </div>
-                  <div className="oracle-product-price-wrapper">
-                    <p className="oracle-product-price">{product.price} ₸</p>
-                    {product.oldPrice && <p className="oracle-product-old-price">{product.oldPrice} ₸</p>}
-                  </div>
-                  <button className="oracle-btn oracle-btn-primary oracle-btn-block">
-                    В корзину
-                  </button>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="oracle-text-center oracle-mt-4">
-            <Link to="/products" className="oracle-btn oracle-btn-secondary">Все товары</Link>
-          </div>
+              <div className="oracle-text-center oracle-mt-4">
+                <Link to="/products" className="oracle-btn oracle-btn-secondary">Все товары</Link>
+              </div>
+            </>
+          )}
         </div>
       </section>
 

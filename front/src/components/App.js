@@ -7,8 +7,6 @@ import RegistrationForm from "./RegistrationForm";
 import AuthContent from "./Musor/AppContent";
 import AccountPage from "./AccountPage";
 import AboutUs from "./AboutUs";
-import School from "./School";
-import Library from "./Library";
 import News from "./News/News";
 import UpdateNews from "./News/UpdateNews";
 import CreateNews from "./News/CreateNews";
@@ -18,6 +16,7 @@ import Cart from "./online-shop/Cart";
 import UpdateProduct from "./online-shop/UpdateProduct";
 import Products from "./Products";
 import Contacts from "./contacts";
+import ChatBot from "./ChatBot";
 
 // Компонент для автоматической прокрутки вверх при переходе между страницами
 function ScrollToTop() {
@@ -39,6 +38,7 @@ function AppLayout({ children }) {
     <>
       {shouldShowHeader && <Header />}
       <main className="main-content">{children}</main>
+      {shouldShowHeader && <ChatBot />}
     </>
   );
 }
@@ -54,8 +54,6 @@ function App() {
         <Route path="/messages" element={<AuthContent />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/about" element={<AboutUs />} />
-        <Route path="/school" element={<School />} />
-        <Route path="/library" element={<Library />} />
         <Route path="/news/:id" element={<News />} />
         <Route path="/update_news/:id" element={<UpdateNews />} />
         <Route path="/create_news" element={<CreateNews />} />
