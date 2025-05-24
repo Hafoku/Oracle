@@ -23,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:3005");
+        config.addAllowedOrigin("http://localhost:3004");
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
@@ -41,12 +41,4 @@ public class WebConfig implements WebMvcConfigurer {
         bean.setOrder(-102);
         return bean;
     }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry){
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:/C:/Users/admin1/Documents/GitHub/AiMed/uploads/");
-    }
-
-
 }

@@ -91,21 +91,22 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    const fetchFeaturedProducts = async () => {
+    const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:5000/api/products/featured');
-        setFeaturedProducts(response.data);
+        const response = await axios.get('/api/products');
+        const products = Array.from(response.data).slice(0, 4);
+        setFeaturedProducts(products);
         setError(null);
       } catch (err) {
         setError('Ошибка при загрузке товаров. Пожалуйста, попробуйте позже.');
-        console.error('Error fetching featured products:', err);
+        console.error('Error fetching products:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFeaturedProducts();
+    fetchProducts();
   }, []);
 
   return (
@@ -166,7 +167,6 @@ const HomePage = () => {
         <div className="oracle-container">
           <div className="oracle-section-header">
             <h2 className="oracle-title oracle-text-center">Популярные товары</h2>
-            <p className="oracle-section-subtitle oracle-text-center">Качественные товары для вашего здоровья</p>
           </div>
           
           {loading ? (
@@ -181,14 +181,25 @@ const HomePage = () => {
             <>
               <div className="oracle-products-grid">
                 {featuredProducts.map(product => (
-                  <div className="oracle-product-card" key={product._id}>
+                  <div className="oracle-product-card" key={product.id}>
+                    {console.log(product)}
                     {product.sale && <div className="oracle-sale-badge">Скидка</div>}
                     <div className="oracle-product-image-wrapper">
-                      <ImageWithFallback 
-                        src={product.image} 
-                        alt={product.name} 
-                        className="oracle-product-image" 
-                      />
+                      {product.avatar ? (
+                        <img
+                          src={`/uploads/files/${product.avatar.id}`}
+                          alt={product.name}
+                          className="oracle-product-image"
+                          onError={e => {
+                            e.target.onerror = null;
+                            e.target.src = "/images/no-image.png";
+                          }}
+                        />
+                      ) : (
+                        <div className="oracle-product-card__placeholder">
+                          <i className="fas fa-image"></i>
+                        </div>
+                      )}
                       <div className="oracle-product-actions">
                         <button className="oracle-product-action-btn oracle-wishlist-btn" title="Добавить в избранное">
                           <FaHeart />
@@ -199,11 +210,7 @@ const HomePage = () => {
                       </div>
                     </div>
                     <div className="oracle-product-content">
-                      <div className="oracle-product-category">{product.category === "supplements" ? "Витамины и добавки" : 
-                                                               product.category === "otc" ? "Безрецептурные препараты" : 
-                                                               product.category === "personal-care" ? "Личная гигиена" :
-                                                               product.category === "medical-supplies" ? "Медицинские товары" : 
-                                                               "Другое"}</div>
+                      <div className="oracle-product-category">{product.category}</div>
                       <h3 className="oracle-product-title">{product.name}</h3>
                       <p className="oracle-product-description">{product.description}</p>
                       <div className="oracle-product-rating">

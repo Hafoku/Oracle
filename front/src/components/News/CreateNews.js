@@ -4,6 +4,7 @@ import "../App.css";
 import { useNavigate } from "react-router-dom";
 import Header from '../Header';
 import Footer from '../Footer';
+import { FaArrowLeft, FaCheck, FaTimes } from "react-icons/fa";
 
 const CreateNews = () => {
   const navigate = useNavigate();
@@ -179,69 +180,19 @@ const CreateNews = () => {
   return (
     <div className="page-wrapper">
       {message.text && (
-        <div 
-          className="modal-overlay"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 9999,
-          }}
-        >
-          <div 
-            className={`modal-content ${message.type}`}
-            style={{
-              backgroundColor: 'white',
-              borderRadius: '10px',
-              padding: '2rem',
-              maxWidth: '450px',
-              width: '90%',
-              textAlign: 'center',
-              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
-              position: 'relative',
-              animation: 'fadeInDown 0.3s ease-out'
-            }}
-          >
-            <div 
-              className="modal-icon"
-              style={{
-                width: '70px',
-                height: '70px',
-                borderRadius: '50%',
-                backgroundColor: message.type === 'success' ? '#28a745' : '#dc3545',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                margin: '0 auto 1.5rem',
-                color: 'white',
-                fontSize: '2.5rem',
-                boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)'
-              }}
-            >
-              {message.type === 'success' ? '✓' : '✗'}
+        <div className="modal-overlay">
+          <div className={`modal-content ${message.type}`}>
+            <div className="modal-icon">
+              {message.type === 'success' ? <FaCheck /> : <FaTimes />}
             </div>
-            <h2 style={{ 
-              fontSize: '1.8rem', 
-              marginBottom: '1rem',
-              color: message.type === 'success' ? '#28a745' : '#dc3545',
-            }}>
-              {message.text}
-            </h2>
-            <p style={{ color: '#666', marginBottom: '1.5rem' }}>
+            <h2 className={`modal-title modal-title-${message.type}`}>{message.text}</h2>
+            <p className="modal-desc">
               {message.type === 'success' 
                 ? 'Новость успешно добавлена в базу данных.' 
                 : 'Пожалуйста, проверьте данные и попробуйте снова.'}
             </p>
             {message.type === 'success' && (
-              <p style={{ color: '#888', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-                Это окно закроется автоматически через 30 секунд
-              </p>
+              <p className="modal-timer">Это окно закроется автоматически через 30 секунд</p>
             )}
             <button 
               onClick={() => {
@@ -250,185 +201,128 @@ const CreateNews = () => {
                   navigate(`/news/${createdNewsId}`); 
                 }
               }}
-              style={{
-                padding: '0.8rem 2rem',
-                backgroundColor: message.type === 'success' ? '#28a745' : '#dc3545',
-                color: 'white',
-                border: 'none',
-                borderRadius: '30px',
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                transition: 'all 0.3s ease'
-              }}
+              className={`news-btn ${message.type === 'success' ? 'news-btn-primary' : 'news-btn-outline'}`}
             >
               {message.type === 'success' ? 'Перейти к новости' : 'Понятно'}
             </button>
           </div>
         </div>
       )}
-      
-      <style>
-        {`
-          @keyframes fadeInDown {
-            from {
-              opacity: 0;
-              transform: translateY(-20px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-        `}
-      </style>
-      
-      <Header />
-      <div className="page-container">
-        <div className="hero-container">
-          <div className="hero-content">
-            <h1>Создание новости</h1>
-            <p>Поделитесь важной информацией с медицинским сообществом</p>
+      <div className="create-news-hero">
+        <div className="create-news-title">Создание новости</div>
+        <div className="create-news-subtitle">Поделитесь важной информацией с медицинским сообществом</div>
+      </div>
+      <div className="news-card">
+        <form onSubmit={handleSubmit} className="news-form">
+          <div className="form-group">
+            <label htmlFor="title" className="form-label">Заголовок новости</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              className="form-input"
+              value={formData.title}
+              onChange={handleInputChange}
+              placeholder="Введите заголовок новости"
+            />
+            {errors.title && <div className="error-message">{errors.title}</div>}
           </div>
-        </div>
-        
-        <div className="card">
-          <form onSubmit={handleSubmit} className="news-form">
-            <div className="form-group">
-              <label htmlFor="title" className="form-label">Заголовок новости</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                className="form-input"
-                value={formData.title}
-                onChange={handleInputChange}
-                placeholder="Введите заголовок новости"
-              />
-              {errors.title && <div className="error-message">{errors.title}</div>}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="description" className="form-label">Краткое описание</label>
-              <textarea
-                id="description"
-                name="description"
-                className="form-input"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Введите краткое описание (до 200 символов)"
-                rows="3"
-              />
-              {errors.description && <div className="error-message">{errors.description}</div>}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="file" className="form-label">Главное изображение</label>
-              <input
-                type="file"
-                id="file"
-                name="file"
-                className="form-input"
-                onChange={handleAvatarChange}
-                accept="image/*"
-              />
-              {previewAvatar && (
-                <div className="image-preview mt-1">
-                  <img src={previewAvatar} alt="Предпросмотр" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: 'var(--radius)' }} />
-                </div>
-              )}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="images" className="form-label">
-                Дополнительные изображения 
-                {formData.images.length > 0 && ` (Выбрано: ${formData.images.length})`}
-              </label>
-              <input
-                type="file"
-                id="images"
-                name="images"
-                className="form-input"
-                onChange={handleImagesChange}
-                accept="image/*"
-                multiple
-              />
-              <small className="text-gray mt-1 mb-2" style={{ display: 'block', opacity: '0.7' }}>
-                Вы можете выбрать несколько изображений одновременно
-              </small>
-              
-              {previewImages.length > 0 && (
-                <div className="images-preview-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '10px', marginTop: '10px' }}>
-                  {previewImages.map((preview, index) => (
-                    <div key={index} className="preview-item" style={{ position: 'relative', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
-                      <img src={preview} alt={`Предпросмотр ${index + 1}`} style={{ width: '100%', height: '100px', objectFit: 'cover' }} />
-                      <button
-                        type="button"
-                        className="remove-image"
-                        onClick={() => removeImage(index)}
-                        style={{ 
-                          position: 'absolute', 
-                          top: '5px', 
-                          right: '5px', 
-                          background: 'rgba(0,0,0,0.5)', 
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '50%',
-                          width: '25px',
-                          height: '25px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="content" className="form-label">Содержание новости</label>
-              <textarea
-                id="content"
-                name="content"
-                className="form-input"
-                value={formData.content}
-                onChange={handleInputChange}
-                rows="10"
-                placeholder="Введите полный текст новости..."
-              ></textarea>
-              {errors.content && <div className="error-message">{errors.content}</div>}
-            </div>
-            
-            <div className="highlight-box mb-2">
-              <p>Перед публикацией убедитесь, что информация достоверна и соответствует этическим нормам медицинского сообщества.</p>
-            </div>
-            
-            <div className="flex justify-between items-center">
-              <button 
-                type="button" 
-                className="button button-secondary"
-                onClick={() => navigate(`/news/${createdNewsId}`)}
-              >
-                Отмена
-              </button>
-              <button 
-                type="submit" 
-                className="button button-primary"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Публикация...' : 'Опубликовать новость'}
-              </button>
-            </div>
-          </form>
-        </div>
-        
-        
+          <div className="form-group">
+            <label htmlFor="description" className="form-label">Краткое описание</label>
+            <textarea
+              id="description"
+              name="description"
+              className="form-input"
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="Введите краткое описание (до 200 символов)"
+              rows="3"
+            />
+            {errors.description && <div className="error-message">{errors.description}</div>}
+          </div>
+          <div className="form-group">
+            <label htmlFor="file" className="form-label">Главное изображение</label>
+            <input
+              type="file"
+              id="file"
+              name="file"
+              className="form-input"
+              onChange={handleAvatarChange}
+              accept="image/*"
+            />
+            {previewAvatar && (
+              <div className="image-preview mt-1">
+                <img src={previewAvatar} alt="Предпросмотр" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: 'var(--radius)' }} />
+              </div>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="images" className="form-label">
+              Дополнительные изображения
+              {formData.images.length > 0 && ` (Выбрано: ${formData.images.length})`}
+            </label>
+            <input
+              type="file"
+              id="images"
+              name="images"
+              className="form-input"
+              onChange={handleImagesChange}
+              accept="image/*"
+              multiple
+            />
+            <small className="text-gray mt-1 mb-2" style={{ display: 'block', opacity: '0.7' }}>
+              Вы можете выбрать несколько изображений одновременно
+            </small>
+            {previewImages.length > 0 && (
+              <div className="images-preview-grid">
+                {previewImages.map((preview, index) => (
+                  <div key={index} className="preview-item">
+                    <img src={preview} alt={`Предпросмотр ${index + 1}`} />
+                    <button
+                      type="button"
+                      className="remove-image"
+                      onClick={() => removeImage(index)}
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="content" className="form-label">Содержание новости</label>
+            <textarea
+              id="content"
+              name="content"
+              className="form-input"
+              value={formData.content}
+              onChange={handleInputChange}
+              rows="10"
+              placeholder="Введите полный текст новости..."
+            ></textarea>
+            {errors.content && <div className="error-message">{errors.content}</div>}
+          </div>
+          <div className="highlight-box mb-2">
+            <p>Перед публикацией убедитесь, что информация достоверна и соответствует этическим нормам медицинского сообщества.</p>
+          </div>
+          <div className="flex justify-between items-center">
+            <button 
+              type="button" 
+              className="news-btn news-btn-outline"
+              onClick={() => navigate(createdNewsId ? `/news/${createdNewsId}` : '/news')}
+            >
+              <FaArrowLeft style={{marginRight: 8}} /> Отмена
+            </button>
+            <button 
+              type="submit" 
+              className="news-btn news-btn-primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Публикация...' : 'Опубликовать новость'}
+            </button>
+          </div>
+        </form>
       </div>
       <Footer />
     </div>

@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
+import '../styles/auth.css';
+import { FaArrowLeft, FaPlus } from "react-icons/fa";
+
 
 const CreateProduct = () => {
     const navigate = useNavigate();
@@ -32,11 +35,10 @@ const CreateProduct = () => {
         }));
     };
 
-    
     const token = localStorage.getItem('jwtToken');
     if (!token) {
       navigate('/login');
-      return;
+      return null;
     }
 
     const handleImageChange = (e) => {
@@ -78,17 +80,16 @@ const CreateProduct = () => {
     };
 
     return (
-        <div className="page-container">
-            <div className="auth-box" style={{ maxWidth: '600px' }}>
-                <h1 className="section-title text-center">Создание продукта</h1>
-                
-                {error && (
-                    <div className="error-message mb-2">
-                        {error}
-                    </div>
-                )}
-
-                <form onSubmit={handleSubmit}>
+        <div className="page-wrapper">
+            <div className="create-news-hero">
+                <div className="create-news-title">Создание продукта</div>
+                <div className="create-news-subtitle">Добавьте новый товар в каталог магазина</div>
+            </div>
+            <div className="news-card">
+                <form onSubmit={handleSubmit} className="news-form">
+                    {error && (
+                        <div className="news-error mb-2">{error}</div>
+                    )}
                     <div className="form-group">
                         <label className="form-label">Название продукта</label>
                         <input
@@ -100,9 +101,8 @@ const CreateProduct = () => {
                             required
                         />
                     </div>
-
                     <div className="form-group">
-                        <label className="form-label">Цена (₽)</label>
+                        <label className="form-label">Цена (₸)</label>
                         <input
                             type="number"
                             name="price"
@@ -113,7 +113,6 @@ const CreateProduct = () => {
                             required
                         />
                     </div>
-
                     <div className="form-group">
                         <label className="form-label">Категория</label>
                         <select
@@ -130,7 +129,6 @@ const CreateProduct = () => {
                             ))}
                         </select>
                     </div>
-
                     <div className="form-group">
                         <label className="form-label">Описание</label>
                         <textarea
@@ -142,23 +140,15 @@ const CreateProduct = () => {
                             required
                         />
                     </div>
-
                     <div className="form-group">
                         <label className="form-label">Изображение продукта</label>
-                        <div className="file-upload-container">
-                            <input
-                                type="file"
-                                onChange={handleImageChange}
-                                accept="image/*"
-                                className="file-input"
-                                id="product-image"
-                            />
-                            <label htmlFor="product-image" className="file-upload-label">
-                                <i className="fas fa-cloud-upload-alt upload-icon"></i>
-                                <span className="upload-text">Выберите изображение</span>
-                                <span className="upload-hint">PNG, JPG до 5MB</span>
-                            </label>
-                        </div>
+                        <input
+                            type="file"
+                            onChange={handleImageChange}
+                            accept="image/*"
+                            className="form-input"
+                            id="product-image"
+                        />
                         {previewImage && (
                             <div className="image-preview mt-2">
                                 <img
@@ -174,23 +164,20 @@ const CreateProduct = () => {
                             </div>
                         )}
                     </div>
-
-                    <div className="flex gap-2">
-                        <button
-                            type="submit"
-                            className="button button-primary"
-                            disabled={loading}
-                            style={{ flex: 1 }}
-                        >
-                            {loading ? 'Создание...' : 'Создать продукт'}
-                        </button>
+                    <div className="flex justify-between items-center mt-3">
                         <button
                             type="button"
-                            className="button button-secondary"
+                            className="news-btn news-btn-outline"
                             onClick={() => navigate('/shop')}
-                            style={{ flex: 1 }}
                         >
-                            Отмена
+                            <FaArrowLeft style={{marginRight: 8}} /> Отмена
+                        </button>
+                        <button
+                            type="submit"
+                            className="news-btn news-btn-primary"
+                            disabled={loading}
+                        >
+                            {loading ? 'Создание...' : <>Создать продукт <FaPlus style={{marginLeft: 8}} /></>}
                         </button>
                     </div>
                 </form>

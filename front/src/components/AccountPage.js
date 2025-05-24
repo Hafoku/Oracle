@@ -5,6 +5,7 @@ import axios from "axios";
 import AvatarUploader from "./Musor/AvatarUploader";
 import Header from './Header';
 import Footer from './Footer';
+import { FaSignOutAlt, FaKey, FaPlus, FaUsers, FaNewspaper, FaUserCircle } from "react-icons/fa";
 
 const AccountPage = () => {
     const [showAvatarForm, setShowAvatarForm] = useState(false);
@@ -154,7 +155,6 @@ const AccountPage = () => {
     if (error) {
         return (
             <div className="page-wrapper">
-                <Header />
                 <div className="oracle-container">
                     <div className="oracle-error text-center my-3">{error}</div>
                     <div className="text-center">
@@ -220,9 +220,9 @@ const AccountPage = () => {
                                         <p className="mb-2"><strong>Роль:</strong> {user.role}</p>
                                         <button 
                                             onClick={handleLogout}
-                                            className="oracle-btn oracle-btn-outline mt-3"
+                                            className="oracle-btn-acc oracle-btn-acc-outline mt-3"
                                         >
-                                            Выйти из аккаунта
+                                            <FaSignOutAlt className="oracle-btn-icon" /> Выйти из аккаунта
                                         </button>
                                     </div>
                                 </div>
@@ -264,7 +264,7 @@ const AccountPage = () => {
                                         />
                                     </div>
                                     <button type="submit" className="oracle-btn oracle-btn-primary oracle-btn-block">
-                                        Изменить пароль
+                                        <FaKey className="oracle-btn-icon" /> Изменить пароль
                                     </button>
                                 </form>
                             </div>
@@ -279,17 +279,14 @@ const AccountPage = () => {
                                 <div className="oracle-card">
                                     <h2 className="oracle-card-title">Админ панель</h2>
                                     <div className="flex flex-col gap-2">
-                                        <Link to="/create_news" className="oracle-btn oracle-btn-primary oracle-btn-block">
-                                            Создать новость
+                                        <Link to="/create_news" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block" style={{marginBottom: '20px'}}>
+                                            Создать новость <FaNewspaper className="oracle-btn-icon" />
                                         </Link>
-                                        <Link to="/create_course" className="oracle-btn oracle-btn-primary oracle-btn-block">
-                                            Создать курс
+                                        <Link to="/create_product" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block" style={{marginBottom: '20px'}}>
+                                            Добавить товар <FaPlus className="oracle-btn-icon" />
                                         </Link>
-                                        <Link to="/create_product" className="oracle-btn oracle-btn-primary oracle-btn-block">
-                                            Добавить товар
-                                        </Link>
-                                        <Link to="/users_list" className="oracle-btn oracle-btn-primary oracle-btn-block">
-                                            Список пользователей
+                                        <Link to="/users_list" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block">
+                                            Список пользователей <FaUsers className="oracle-btn-icon" />
                                         </Link>
                                     </div>
                                 </div>

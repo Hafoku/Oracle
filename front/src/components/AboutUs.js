@@ -1,8 +1,54 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import './App.css';
 import Header from './Header';
 import Footer from './Footer';
 import { FaCheckCircle, FaHistory, FaMedkit, FaUsers, FaHandshake, FaAward } from 'react-icons/fa';
+
+const YANDEX_MAP_API_KEY = process.env.REACT_APP_YANDEX_MAP;
+
+const YandexMap = () => {
+  const mapRef = useRef(null);
+
+  useEffect(() => {
+    if (!YANDEX_MAP_API_KEY) return;
+    // Проверяем, был ли уже загружен скрипт
+    if (!window.ymaps) {
+      const script = document.createElement('script');
+      script.src = `https://api-maps.yandex.ru/2.1/?apikey=${YANDEX_MAP_API_KEY}&lang=ru_RU`;
+      script.type = 'text/javascript';
+      script.onload = () => initMap();
+      document.body.appendChild(script);
+    } else {
+      initMap();
+    }
+    function initMap() {
+      window.ymaps.ready(() => {
+        if (mapRef.current && !mapRef.current.hasMap) {
+          const map = new window.ymaps.Map(mapRef.current, {
+            center: [51.169392, 71.449074], // Астана, Казахстан
+            zoom: 14,
+            controls: ['zoomControl', 'fullscreenControl']
+          });
+          map.geoObjects.add(new window.ymaps.Placemark([51.169392, 71.449074], {
+            balloonContent: 'Oracle Pharmacy',
+            hintContent: 'Oracle Pharmacy'
+          }, {
+            preset: 'islands#icon',
+            iconColor: '#4CAF50'
+          }));
+          mapRef.current.hasMap = true;
+        }
+      });
+    }
+    // eslint-disable-next-line
+  }, []);
+
+  return (
+    <div style={{ width: '100%', height: '350px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 24px rgba(44,62,80,0.08)', margin: '0 auto' }}>
+      <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
+    </div>
+  );
+};
 
 const AboutUs = () => {
   return (
@@ -142,6 +188,14 @@ const AboutUs = () => {
             <p className="oracle-mb-3">
               Все аптеки сети Oracle имеют необходимые лицензии на фармацевтическую деятельность и сертификаты соответствия стандартам качества. Наши сотрудники регулярно проходят обучение и повышение квалификации, чтобы обеспечивать высокий уровень обслуживания.
             </p>
+          </div>
+        </section>
+
+        {/* Карта */}
+        <section className="oracle-section">
+          <div className="oracle-card">
+            <h2 className="oracle-card-title">Мы на карте</h2>
+            <YandexMap />
           </div>
         </section>
       </div>

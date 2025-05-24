@@ -1,71 +1,123 @@
 import React, { useState } from "react";
 import "./App.css";
-import { request } from "../axios_helper"; // Убедись, что импорт корректный
+import "./styles/auth.css";
+import { request } from "../axios_helper";
+import { FaUser, FaLock, FaEnvelope, FaArrowRight, FaHome } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const LoginForm = () => {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError(null);
+        setIsLoading(true);
         
         try {
-            console.log("Отправляем запрос на сервер...");
             const response = await request("POST", "/user/login", {
-                email: login, // Используем email вместо name
+                email: login,
                 password: password,
             });
 
             if (response.status === 200) {
                 const token = response.data;
                 localStorage.setItem("jwtToken", token);
-                console.log("Успешный вход! Токен сохранён.");
-                window.location.href = "/account"; // Перенаправляем на страницу сообщений
+                window.location.href = "/account";
             } else {
                 setError("Ошибка входа. Проверьте логин и пароль.");
             }
         } catch (error) {
             setError("Ошибка соединения с сервером.");
             console.error("Ошибка запроса:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <div className="auth-wrapper">
-            <div className="auth-box">
-                <h1 className="section-title text-center">Вход в аккаунт</h1>
-                {error && <div className="error-message">{error}</div>}
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <input
-                            type="text"
-                            className="form-input"
-                            placeholder="Email"
-                            value={login}
-                            onChange={(e) => setLogin(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            type="password"
-                            className="form-input"
-                            placeholder="Пароль"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button type="submit" className="button button-primary w-full">Войти</button>
-                </form>
-                <div className="text-center mt-2">
-                    <span>Ещё нет аккаунта? </span>
-                    <a href="/registration" className="button button-secondary">Создать аккаунт</a>
+        <div className="oracle-auth-container">
+            <div className="oracle-auth-box">
+                <div className="oracle-auth-header">
+                    <h1 className="oracle-auth-title">Добро пожаловать в Oracle</h1>
+                    <p className="oracle-auth-subtitle">Войдите в свой аккаунт для продолжения</p>
                 </div>
-                <div className="text-center mt-2">
-                    <a href="/" className="button button-primary w-full">Вернуться на главную страницу</a>
+
+                {error && (
+                    <div className="oracle-auth-error">
+                        <span className="oracle-error-icon">!</span>
+                        {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="oracle-auth-form">
+                    <div className="oracle-form-group">
+                        <div className="oracle-input-wrapper">
+                            <FaEnvelope className="oracle-input-icon" />
+                            <input
+                                type="email"
+                                className="oracle-form-input"
+                                placeholder="Email"
+                                value={login}
+                                onChange={(e) => setLogin(e.target.value)}
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div className="oracle-form-group">
+                        <div className="oracle-input-wrapper">
+                            <FaLock className="oracle-input-icon" />
+                            <input
+                                type="password"
+                                className="oracle-form-input"
+                                placeholder="Пароль"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div className="oracle-form-group">
+                        <button 
+                            type="submit" 
+                            className="oracle-btn oracle-btn-primary oracle-btn-block"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? (
+                                <span className="oracle-spinner"></span>
+                            ) : (
+                                <>
+                                    Войти <FaArrowRight className="oracle-btn-icon" />
+                                </>
+                            )}
+                        </button>
+                    </div>
+
+                    <div className="oracle-auth-links">
+                        <Link to="/forgot-password" className="oracle-link">
+                            Забыли пароль?
+                        </Link>
+                    </div>
+                </form>
+
+                <div className="oracle-auth-divider">
+                    <span>или</span>
+                </div>
+
+                <div className="oracle-auth-footer">
+                    <p className="oracle-auth-footer-text">
+                        Ещё нет аккаунта?{" "}
+                        <Link to="/registration" className="oracle-link oracle-link-primary">
+                            Создать аккаунт
+                        </Link>
+                    </p>
+                    <Link to="/" className="oracle-btn oracle-btn-outline oracle-btn-block oracle-mt-2">
+                        <FaHome className="oracle-btn-icon" /> Вернуться на главную
+                    </Link>
                 </div>
             </div>
         </div>

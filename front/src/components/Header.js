@@ -45,7 +45,6 @@ const Header = () => {
                         <div className="oracle-logo">
                             <Link to="/">
                                 <img src={logo} alt="Oracle Pharmacy" className="oracle-logo-img" />
-                                <span>Oracle</span>
                             </Link>
                         </div>
 
