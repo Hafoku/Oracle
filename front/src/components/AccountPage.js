@@ -175,7 +175,7 @@ const AccountPage = () => {
         navigate("/login");
         return null;
     }
-
+    console.log("user.avatar.id: ", user.avatar.id);
     return (
         <div className="page-wrapper">
             <div className="oracle-container">
@@ -194,7 +194,7 @@ const AccountPage = () => {
                                     <div className="avatar-section text-center mb-4">
                                         <div>
                                             <img 
-                                                src={user?.avatar || "/avatars/defaultPhoto.jpg"} 
+                                                src={`http://localhost:8082/api/product/files/${user.avatar.id}` || "/avatars/defaultPhoto.jpg"} 
                                                 alt="Аватар" 
                                                 className="avatar-circle mx-auto mb-3 oracle-avatar-circle"
                                             />

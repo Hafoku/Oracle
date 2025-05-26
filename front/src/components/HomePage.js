@@ -90,6 +90,14 @@ const HomePage = () => {
     return stars;
   };
 
+
+  const getImageUrl = (id) => {
+    axios.get(`/api/product/files/${id}`).then(response => {
+      console.log("полученный путь изображения: ", response.data);
+      return response.data.url;
+    }) ;
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -187,7 +195,7 @@ const HomePage = () => {
                     <div className="oracle-product-image-wrapper">
                       {product.avatar ? (
                         <img
-                          src={`/uploads/files/${product.avatar.id}`}
+                          src={`http://localhost:8082/api/product/files/${product.avatar.id}`}
                           alt={product.name}
                           className="oracle-product-image"
                           onError={e => {

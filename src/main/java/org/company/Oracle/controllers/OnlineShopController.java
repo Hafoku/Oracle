@@ -69,6 +69,7 @@ public class    OnlineShopController {
 
     @GetMapping("/product/files/{id}")
     public ResponseEntity<Resource> showProductImages(@PathVariable("id") Long id) throws IOException {
+        logger.info("Айди изображения: {}", id);
         ProfilePicture image = profilePictureRepository.findById(id).orElseThrow(() -> new RuntimeException("Фотография продукта не найден"));
         Path path = Paths.get(image.getFilePath().replace("\\", "/"));
         Resource resource = new UrlResource(path.toUri());
@@ -76,6 +77,7 @@ public class    OnlineShopController {
             logger.error("Файл не существует/нечитаемый. Файл: {}", resource);
             throw new RuntimeException("Файл не существует/нечитаемый");
         }
+        logger.info("Идёт запрос на получение изображение продукта: {}, c путём:{}", image.getName(), resource);
         return ResponseEntity.ok()
                 .contentType((MediaType.parseMediaType(image.getType())))
                 .body(resource);

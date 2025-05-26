@@ -1,5 +1,6 @@
 package org.company.Oracle.controllers;
 
+import org.company.Oracle.models.ProfilePicture;
 import org.company.Oracle.models.User;
 import org.company.Oracle.repositories.ProfilePictureRepository;
 import org.company.Oracle.services.ProfilePictureService;
@@ -46,7 +47,10 @@ public class UserPageController {
         if (user.getAvatar() != null) {
             String fullPath = user.getAvatar().getFilePath();
             String relativePath = fullPath.substring(fullPath.indexOf("uploads")).replace("\\", "/");
-            response.put("avatar", "http://localhost:8082/" + relativePath);
+            ProfilePicture avatar_id = profilePictureRepository.findById(user.getAvatar().getId()).orElseThrow(() -> new RuntimeException("Фотография не найдена"));
+            response.put("avatar", avatar_id);
+            logger.info("Найдена аватарка с айди: {}", avatar_id);
+//            response.put("avatar", "http://localhost:8082/" + relativePath);
             logger.info("Путь аватарки: {} новый путь: {}", fullPath, relativePath);
         }
         return ResponseEntity.ok(response);
