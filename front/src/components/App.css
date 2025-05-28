@@ -731,11 +731,15 @@ a:hover {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: var(--shadow-light);
-  transition: transform var(--transition-speed);
+  transition: box-shadow var(--transition-speed);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .oracle-product-card:hover {
   transform: translateY(-5px);
+  box-shadow: var(--shadow-medium);
 }
 
 .oracle-product-image {
@@ -745,13 +749,24 @@ a:hover {
 }
 
 .oracle-product-content {
-  padding: 1rem;
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .oracle-product-title {
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
+  color: var(--primary-dark);
+  line-height: 1.3;
+  height: 2.8rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  transition: color var(--transition-speed);
 }
 
 .oracle-product-price {
@@ -1312,9 +1327,13 @@ a:hover {
   font-size: 0.8rem;
   text-transform: uppercase;
   color: var(--secondary-dark-green);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.5px;
+  background-color: var(--secondary-light-green);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
 }
 
 .oracle-product-title {
@@ -1631,23 +1650,6 @@ a:hover {
   color: var(--secondary-orange);
 }
 
-/* Out of Stock Badge */
-.oracle-out-of-stock-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: var(--text-light);
-  padding: 0.25rem 0.75rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  border-radius: 4px;
-  z-index: 2;
-}
-
-.oracle-sale-badge + .oracle-out-of-stock-badge {
-  top: 45px;
-}
 
 /* Disabled Button */
 .oracle-btn-disabled {
@@ -1918,4 +1920,234 @@ a:hover {
 
 [data-theme="dark"] .theme-toggle:hover {
   background-color: var(--secondary-gray);
+}
+
+.oracle-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.oracle-reset-filters-btn {
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 1px solid var(--secondary-gray);
+  border-radius: 4px;
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.oracle-reset-filters-btn:hover {
+  background-color: var(--secondary-gray);
+  color: var(--primary-dark);
+}
+
+[data-theme="dark"] .oracle-reset-filters-btn {
+  border-color: var(--border-color);
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .oracle-reset-filters-btn:hover {
+  background-color: var(--secondary-gray);
+  color: var(--text-light);
+}
+
+.oracle-product-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform var(--transition-speed);
+}
+
+.oracle-product-card-link:hover {
+  transform: translateY(-5px);
+}
+
+.oracle-product-card-link:hover .oracle-product-card {
+  box-shadow: var(--shadow-medium);
+}
+
+.oracle-product-card-link:hover .oracle-product-title {
+  color: var(--secondary-orange);
+}
+
+/* Product Details Page */
+.oracle-product-details {
+  padding: 2rem 0;
+}
+
+.oracle-product-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  background-color: var(--text-light);
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
+  overflow: hidden;
+}
+
+.oracle-product-gallery {
+  padding: 2rem;
+}
+
+.oracle-product-detail-image {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.oracle-product-info {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.oracle-product-detail-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.oracle-product-detail-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.oracle-product-detail-price-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: var(--secondary-white);
+  border-radius: 8px;
+}
+
+.oracle-product-detail-price-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.oracle-product-detail-price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.oracle-product-detail-old-price {
+  font-size: 1.2rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.oracle-btn-large {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+.oracle-product-admin-actions {
+  margin-top: 1rem;
+}
+
+.oracle-product-specifications {
+  margin-top: 2rem;
+}
+
+.oracle-section-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-bottom: 1rem;
+}
+
+.oracle-specifications-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.oracle-specification-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background-color: var(--secondary-white);
+  border-radius: 4px;
+}
+
+.oracle-specification-label {
+  color: var(--text-dark);
+  opacity: 0.8;
+}
+
+.oracle-specification-value {
+  font-weight: 500;
+  color: var(--primary-dark);
+}
+
+/* Responsive Product Details */
+@media (max-width: 992px) {
+  .oracle-product-details-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .oracle-product-gallery {
+    padding: 1rem;
+  }
+  
+  .oracle-product-info {
+    padding: 1rem;
+  }
+  
+  .oracle-product-detail-title {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .oracle-product-details {
+    padding: 1rem 0;
+  }
+  
+  .oracle-product-detail-title {
+    font-size: 1.5rem;
+  }
+  
+  .oracle-product-detail-price {
+    font-size: 1.8rem;
+  }
+  
+  .oracle-btn-large {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* Dark Theme for Product Details */
+[data-theme="dark"] .oracle-product-details-grid {
+  background-color: var(--card-background);
+}
+
+[data-theme="dark"] .oracle-product-detail-price-box {
+  background-color: var(--secondary-gray);
+}
+
+[data-theme="dark"] .oracle-specification-item {
+  background-color: var(--secondary-gray);
+}
+
+[data-theme="dark"] .oracle-specification-label {
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .oracle-specification-value {
+  color: var(--text-light);
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
+import Logger from '../Logger';
 
 const ProductDetails = () => {
     const [product, setProduct] = useState(null);
@@ -20,17 +21,21 @@ const ProductDetails = () => {
 
         const fetchData = async () => {
             try {
+                Logger.logInfo('Fetching product details', { productId: id });
+                
                 // Получаем данные о продукте
-                const productResponse = await axios.get(`http://localhost:8082/product/${id}`, {
+                const productResponse = await axios.get(`/products/${id}`, {
                     headers: { 
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
+                
+                Logger.logSuccess('Product details fetched successfully', { productId: id });
                 setProduct(productResponse.data);
                 
                 // Получаем данные о текущем пользователе
-                const userResponse = await axios.get(`http://localhost:8082/user/current`, {
+                const userResponse = await axios.get(`/user/current`, {
                     headers: { 
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -43,11 +48,20 @@ const ProductDetails = () => {
                 }
                 
             } catch (err) {
+                Logger.logError('Error fetching product details', { 
+                    productId: id, 
+                    error: err.response?.data || err.message 
+                });
+
                 if (err.response?.status === 401) {
                     localStorage.removeItem("jwtToken");
                     navigate("/login");
+                } else if (err.response?.status === 404) {
+                    setError('Товар не найден');
+                } else if (err.response?.status === 500) {
+                    setError('Ошибка сервера при загрузке товара. Пожалуйста, попробуйте позже.');
                 } else {
-                    setError('Ошибка загрузки данных');
+                    setError('Ошибка при загрузке данных товара');
                 }
             } finally {
                 setLoading(false);
@@ -65,7 +79,9 @@ const ProductDetails = () => {
         }
 
         try {
-            await axios.post(`http://localhost:8082/cart/add`, null, {
+            Logger.logInfo('Adding product to cart', { productId: id });
+            
+            await axios.post(`/cart/add`, null, {
                 params: { 
                     productId: Number(id),
                     quantity: 1
@@ -75,8 +91,15 @@ const ProductDetails = () => {
                     'Content-Type': 'application/json'
                 }
             });
+            
+            Logger.logSuccess('Product added to cart successfully', { productId: id });
             alert('Товар добавлен в корзину!');
         } catch (err) {
+            Logger.logError('Error adding product to cart', { 
+                productId: id, 
+                error: err.response?.data || err.message 
+            });
+
             if (err.response?.status === 401) {
                 localStorage.removeItem("jwtToken");
                 navigate("/login");
@@ -90,60 +113,108 @@ const ProductDetails = () => {
         navigate(`/update_product/${id}`);
     };
 
-    if (loading) return <div className="page-container">Загрузка...</div>;
-    if (error) return <div className="page-container">{error}</div>;
-    if (!product) return <div className="page-container">Товар не найден</div>;
+    if (loading) return (
+        <div className="oracle-container">
+            <div className="oracle-loading">Загрузка товара...</div>
+        </div>
+    );
+    
+    if (error) return (
+        <div className="oracle-container">
+            <div className="oracle-error">
+                <h2>Ошибка</h2>
+                <p>{error}</p>
+                <button 
+                    className="oracle-btn oracle-btn-primary"
+                    onClick={() => navigate('/products')}
+                >
+                    Вернуться к списку товаров
+                </button>
+            </div>
+        </div>
+    );
+    
+    if (!product) return (
+        <div className="oracle-container">
+            <div className="oracle-error">
+                <h2>Товар не найден</h2>
+                <p>Запрашиваемый товар не существует или был удален.</p>
+                <button 
+                    className="oracle-btn oracle-btn-primary"
+                    onClick={() => navigate('/products')}
+                >
+                    Вернуться к списку товаров
+                </button>
+            </div>
+        </div>
+    );
 
     return (
-        <div className="page-container">
-            <div className="card">
-                <div className="grid-2">
-                    <div className="product-gallery">
-                        <div className="card-image">
+        <div className="oracle-container">
+            <div className="oracle-product-details">
+                <div className="oracle-product-details-grid">
+                    <div className="oracle-product-gallery">
+                        <div className="oracle-product-image-wrapper">
                             {product.avatar ? (
                                 <img 
-                                    src={`http://localhost:8082/files/${product.avatar.id}`}
+                                    src={`/product/files/${product.avatar.id}`}
                                     alt={product.name}
+                                    className="oracle-product-detail-image"
                                 />
                             ) : (
                                 <img 
                                     src="/images/no-image.png"
                                     alt="Изображение отсутствует"
+                                    className="oracle-product-detail-image"
                                 />
                             )}
                         </div>
                     </div>
-                    <div className="product-info">
-                        <h1 className="section-title">{product.name}</h1>
-                        <div className="badge mb-2">{product.type}</div>
-                        <p className="section-description">{product.description}</p>
-                        <div className="highlight-box">
-                            <div className="flex justify-between items-center">
-                                <span className="price">{product.price} ₽</span>
-                                <button className="button button-primary" onClick={addToCart}>
-                                    Добавить в корзину
-                                </button>
+                    <div className="oracle-product-info">
+                        <h1 className="oracle-product-detail-title">{product.name}</h1>
+                        <div className="oracle-product-category">
+                            {product.type === "first-aid" ? "Аптечки первой помощи" :
+                             product.type === "equipment" ? "Медицинское оборудование" :
+                             product.type === "medicine" ? "Медикаменты" :
+                             product.type === "prescription" ? "Рецептурные препараты" : 
+                             product.type === "otc" ? "Безрецептурные препараты" : 
+                             product.type === "supplements" ? "Витамины и добавки" :
+                             "Другое"}
+                        </div>
+                        <p className="oracle-product-detail-description">{product.description}</p>
+                        <div className="oracle-product-detail-price-box">
+                            <div className="oracle-product-detail-price-wrapper">
+                                <span className="oracle-product-detail-price">{product.price} ₸</span>
+                                {product.oldPrice && (
+                                    <span className="oracle-product-detail-old-price">{product.oldPrice} ₸</span>
+                                )}
                             </div>
+                            <button 
+                                className="oracle-btn oracle-btn-primary oracle-btn-large"
+                                onClick={addToCart}
+                                disabled={product.stock === 0}
+                            >
+                                {product.stock === 0 ? 'Нет в наличии' : 'Добавить в корзину'}
+                            </button>
                         </div>
                         {isAdmin && (
-                            <div className="mt-2">
+                            <div className="oracle-product-admin-actions">
                                 <button 
-                                    className="button button-secondary"
+                                    className="oracle-btn oracle-btn-secondary"
                                     onClick={navigateToUpdate}
-                                    style={{ width: '100%' }}
                                 >
                                     Редактировать товар
                                 </button>
                             </div>
                         )}
                         {product.specifications && (
-                            <div className="mt-3">
-                                <h3 className="mb-2">Характеристики</h3>
-                                <div className="grid-1 gap-1">
+                            <div className="oracle-product-specifications">
+                                <h3 className="oracle-section-title">Характеристики</h3>
+                                <div className="oracle-specifications-grid">
                                     {Object.entries(product.specifications).map(([key, value]) => (
-                                        <div key={key} className="flex justify-between">
-                                            <span className="text-gray">{key}</span>
-                                            <span>{value}</span>
+                                        <div key={key} className="oracle-specification-item">
+                                            <span className="oracle-specification-label">{key}</span>
+                                            <span className="oracle-specification-value">{value}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -152,40 +223,6 @@ const ProductDetails = () => {
                     </div>
                 </div>
             </div>
-            {product.relatedProducts && product.relatedProducts.length > 0 && (
-                <div className="mt-3">
-                    <h2 className="section-title">Похожие товары</h2>
-                    <div className="grid-4">
-                        {product.relatedProducts.map(relatedProduct => (
-                            <div key={relatedProduct.id} className="card">
-                                <div className="card-image">
-                                    {relatedProduct.image ? (
-                                        <img 
-                                            src={`http://localhost:8082/files/${relatedProduct.image.id}`}
-                                            alt={relatedProduct.name}
-                                        />
-                                    ) : (
-                                        <img 
-                                            src="/images/no-image.png"
-                                            alt="Изображение отсутствует"
-                                        />
-                                    )}
-                                </div>
-                                <div className="card-content">
-                                    <h3>{relatedProduct.name}</h3>
-                                    <p>{relatedProduct.description}</p>
-                                    <div className="card-meta">
-                                        <span className="price">{relatedProduct.price} ₽</span>
-                                        <button className="button button-primary">
-                                            Подробнее
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

@@ -29,13 +29,12 @@ const Products = () => {
   // Categories
   const categories = [
     { id: 'all', name: 'Все товары' },
+    { id: 'first-aid', name: 'Аптечки первой помощи' },
+    { id: 'equipment', name: 'Медицинское оборудование' },
+    { id: 'medicine', name: 'Медикаменты' },
     { id: 'prescription', name: 'Рецептурные препараты' },
     { id: 'otc', name: 'Безрецептурные препараты' },
-    { id: 'supplements', name: 'Витамины и добавки' },
-    { id: 'personal-care', name: 'Товары для гигиены' },
-    { id: 'medical-supplies', name: 'Медицинские товары' },
-    { id: 'mother-child', name: 'Мать и дитя' },
-    { id: 'cosmetics', name: 'Лечебная косметика' }
+    { id: 'supplements', name: 'Витамины и добавки' }
   ];
 
   // Fetch products from API
@@ -55,7 +54,7 @@ const Products = () => {
           price: product.price,
           oldPrice: product.oldPrice,
           image: product.avatar ? `http://localhost:8082/product/files/${product.avatar.id}` : '/images/no-image.png',
-          category: product.category,
+          category: product.type,
           rating: product.rating || 0,
           reviews: product.reviews || 0,
           description: product.description,
@@ -178,6 +177,15 @@ const Products = () => {
     return stars;
   };
 
+  // Reset all filters
+  const resetFilters = () => {
+    Logger.logUserAction('Reset all filters');
+    setSearchQuery('');
+    setSelectedCategory('all');
+    setPriceRange({ min: 0, max: 10000 });
+    setSortBy('popularity');
+  };
+
   return (
     <div className="oracle-page-wrapper">
       {/* Hero Section */}
@@ -212,7 +220,15 @@ const Products = () => {
           {/* Sidebar Filters */}
           <div className={`oracle-products-sidebar ${showFilters ? 'active' : ''}`}>
             <div className="oracle-filter-section">
-              <h3 className="oracle-filter-title">Категории</h3>
+              <div className="oracle-filter-header">
+                <h3 className="oracle-filter-title">Фильтры</h3>
+                <button 
+                  className="oracle-reset-filters-btn"
+                  onClick={resetFilters}
+                >
+                  Сбросить все
+                </button>
+              </div>
               <ul className="oracle-filter-list">
                 {categories.map(category => (
                   <li key={category.id}>
@@ -319,72 +335,84 @@ const Products = () => {
 
                 <div className="oracle-products-grid">
                   {currentProducts.map(product => (
-                    <div className="oracle-product-card" key={product.id}>
-                      {product.sale && <div className="oracle-sale-badge">Скидка</div>}
-                      {product.stock === 0 && <div className="oracle-out-of-stock-badge">Нет в наличии</div>}
-                      
-                      <div className="oracle-product-image-wrapper">
-                        <img 
-                          src={product.image} 
-                          alt={product.name} 
-                          className="oracle-product-image" 
-                        />
-                        <div className="oracle-product-actions">
-                          <button 
-                            className="oracle-product-action-btn oracle-wishlist-btn" 
-                            title={wishlist.includes(product.id) ? "Удалить из избранного" : "Добавить в избранное"}
-                            onClick={() => toggleWishlist(product.id)}
-                          >
-                            {wishlist.includes(product.id) ? <FaHeart /> : <FaRegHeart />}
-                          </button>
-                          <button 
-                            className={`oracle-product-action-btn oracle-cart-btn ${product.stock === 0 ? 'disabled' : ''}`} 
-                            title="Добавить в корзину"
-                            disabled={product.stock === 0}
-                          >
-                            <FaShoppingCart />
-                          </button>
-                        </div>
-                      </div>
-                      
-                      <div className="oracle-product-content">
-                        <div className="oracle-product-category">
-                          {product.category === "prescription" ? "Рецептурные препараты" : 
-                           product.category === "otc" ? "Безрецептурные препараты" : 
-                           product.category === "supplements" ? "Витамины и добавки" :
-                           product.category === "personal-care" ? "Товары для гигиены" :
-                           product.category === "medical-supplies" ? "Медицинские товары" :
-                           product.category === "mother-child" ? "Мать и дитя" :
-                           product.category === "cosmetics" ? "Лечебная косметика" : 
-                           "Другое"}
-                        </div>
-                        
-                        <Link to={`/product/${product.id}`} className="oracle-product-title-link">
-                          <h3 className="oracle-product-title">{product.name}</h3>
-                        </Link>
-                        
-                        <p className="oracle-product-description">{product.description}</p>
-                        
-                        <div className="oracle-product-rating">
-                          <div className="oracle-stars">
-                            {renderRating(product.rating)}
+                    <Link 
+                      to={`/product/${product.id}`} 
+                      className="oracle-product-card-link" 
+                      key={product.id}
+                    >
+                      <div className="oracle-product-card">
+                        <div className="oracle-product-image-wrapper">
+                          <img 
+                            src={product.image} 
+                            alt={product.name} 
+                            className="oracle-product-image" 
+                          />
+                          <div className="oracle-product-actions">
+                            <button 
+                              className="oracle-product-action-btn oracle-wishlist-btn" 
+                              title={wishlist.includes(product.id) ? "Удалить из избранного" : "Добавить в избранное"}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                toggleWishlist(product.id);
+                              }}
+                            >
+                              {wishlist.includes(product.id) ? <FaHeart /> : <FaRegHeart />}
+                            </button>
+                            <button 
+                              className={`oracle-product-action-btn oracle-cart-btn ${product.stock === 0 ? 'disabled' : ''}`} 
+                              title="Добавить в корзину"
+                              disabled={product.stock === 0}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                              }}
+                            >
+                              <FaShoppingCart />
+                            </button>
                           </div>
-                          <span className="oracle-reviews-count">({product.reviews})</span>
                         </div>
                         
-                        <div className="oracle-product-price-wrapper">
-                          <p className="oracle-product-price">{product.price} ₸</p>
-                          {product.oldPrice && <p className="oracle-product-old-price">{product.oldPrice} ₸</p>}
+                        <div className="oracle-product-content">
+                          <div className="oracle-product-category">
+                            {product.category === "first-aid" ? "Аптечки первой помощи" :
+                             product.category === "equipment" ? "Медицинское оборудование" :
+                             product.category === "medicine" ? "Медикаменты" :
+                             product.category === "prescription" ? "Рецептурные препараты" : 
+                             product.category === "otc" ? "Безрецептурные препараты" : 
+                             product.category === "supplements" ? "Витамины и добавки" :
+                             "Другое"}
+                          </div>
+                          
+                          <h3 className="oracle-product-title">{product.name}</h3>
+                          
+                          <p className="oracle-product-description">{product.description}</p>
+                          
+                          <div className="oracle-product-rating">
+                            <div className="oracle-stars">
+                              {renderRating(product.rating)}
+                            </div>
+                            <span className="oracle-reviews-count">({product.reviews})</span>
+                          </div>
+                          
+                          <div className="oracle-product-price-wrapper">
+                            <p className="oracle-product-price">{product.price} ₸</p>
+                            {product.oldPrice && <p className="oracle-product-old-price">{product.oldPrice} ₸</p>}
+                          </div>
+                          
+                          <button 
+                            className={`oracle-btn oracle-btn-primary oracle-btn-block ${product.stock === 0 ? 'oracle-btn-disabled' : ''}`}
+                            disabled={product.stock === 0}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                          >
+                            {product.stock === 0 ? 'Нет в наличии' : 'В корзину'}
+                          </button>
                         </div>
-                        
-                        <button 
-                          className={`oracle-btn oracle-btn-primary oracle-btn-block ${product.stock === 0 ? 'oracle-btn-disabled' : ''}`}
-                          disabled={product.stock === 0}
-                        >
-                          {product.stock === 0 ? 'Нет в наличии' : 'В корзину'}
-                        </button>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
 

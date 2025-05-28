@@ -21,10 +21,11 @@ const CreateProduct = () => {
 
     const productTypes = [
         { id: 'first-aid', name: 'Аптечки' },
-        { id: 'education', name: 'Учебные материалы' },
         { id: 'equipment', name: 'Оборудование' },
         { id: 'medicine', name: 'Медикаменты' },
-        { id: 'accessories', name: 'Аксессуары' }
+        { id: 'prescription', name: 'Рецептурные препараты' },
+        { id: 'otc', name: 'Безрецептурные препараты'},
+        { id: 'supplements', name: 'Витамины и добавки'}
     ];
 
     const handleInputChange = (e) => {
@@ -37,8 +38,8 @@ const CreateProduct = () => {
 
     const token = localStorage.getItem('jwtToken');
     if (!token) {
-      navigate('/login');
-      return null;
+        navigate('/login');
+        return null;
     }
 
     const handleImageChange = (e) => {
@@ -71,7 +72,7 @@ const CreateProduct = () => {
                 }
             });
 
-            navigate('/shop');
+            navigate('/products');
         } catch (err) {
             setError(err.response?.data?.message || 'Произошла ошибка при создании продукта');
         } finally {
@@ -170,14 +171,14 @@ const CreateProduct = () => {
                             className="news-btn news-btn-outline"
                             onClick={() => navigate('/shop')}
                         >
-                            <FaArrowLeft style={{marginRight: 8}} /> Отмена
+                            <FaArrowLeft style={{ marginRight: 8 }} /> Отмена
                         </button>
                         <button
                             type="submit"
                             className="news-btn news-btn-primary"
                             disabled={loading}
                         >
-                            {loading ? 'Создание...' : <>Создать продукт <FaPlus style={{marginLeft: 8}} /></>}
+                            {loading ? 'Создание...' : <>Создать продукт <FaPlus style={{ marginLeft: 8 }} /></>}
                         </button>
                     </div>
                 </form>

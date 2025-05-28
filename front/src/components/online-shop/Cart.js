@@ -92,7 +92,7 @@ const Cart = () => {
                         <p>Ваша корзина пуста</p>
                         <button 
                             className="button button-primary mt-2"
-                            onClick={() => navigate('/shop')}
+                            onClick={() => navigate('/products')}
                         >
                             Перейти в магазин
                         </button>
