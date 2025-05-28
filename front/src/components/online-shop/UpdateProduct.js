@@ -38,7 +38,7 @@ const UpdateProduct = () => {
     
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`http://localhost:8082/api/product/${id}`, {
+                const response = await axios.get(`http://localhost:8082/product/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -107,7 +107,7 @@ const UpdateProduct = () => {
                 formDataToSend.append("avatar", image);
             }
     
-            await axios.put(`http://localhost:8082/api/product/${id}`, formDataToSend, {
+            await axios.put(`http://localhost:8082/product/${id}`, formDataToSend, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`
@@ -207,7 +207,7 @@ const UpdateProduct = () => {
                                 <img
                                     src={
                                         imagePreview ||
-                                        `http://localhost:8082/api/product/files/${existingImageId}`
+                                        `http://localhost:8082/product/files/${existingImageId}`
                                     }
                                     alt="Предпросмотр"
                                     style={{

@@ -21,7 +21,7 @@ const ProductDetails = () => {
         const fetchData = async () => {
             try {
                 // Получаем данные о продукте
-                const productResponse = await axios.get(`http://localhost:8082/api/product/${id}`, {
+                const productResponse = await axios.get(`http://localhost:8082/product/${id}`, {
                     headers: { 
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ const ProductDetails = () => {
         }
 
         try {
-            await axios.post(`http://localhost:8082/api/cart/add`, null, {
+            await axios.post(`http://localhost:8082/cart/add`, null, {
                 params: { 
                     productId: Number(id),
                     quantity: 1
@@ -102,7 +102,7 @@ const ProductDetails = () => {
                         <div className="card-image">
                             {product.avatar ? (
                                 <img 
-                                    src={`http://localhost:8082/api/files/${product.avatar.id}`}
+                                    src={`http://localhost:8082/files/${product.avatar.id}`}
                                     alt={product.name}
                                 />
                             ) : (
@@ -161,7 +161,7 @@ const ProductDetails = () => {
                                 <div className="card-image">
                                     {relatedProduct.image ? (
                                         <img 
-                                            src={`http://localhost:8082/api/files/${relatedProduct.image.id}`}
+                                            src={`http://localhost:8082/files/${relatedProduct.image.id}`}
                                             alt={relatedProduct.name}
                                         />
                                     ) : (

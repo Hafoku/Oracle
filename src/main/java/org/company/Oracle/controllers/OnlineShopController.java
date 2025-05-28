@@ -22,14 +22,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 public class    OnlineShopController {
 
     @Autowired
@@ -101,4 +102,67 @@ public class    OnlineShopController {
         Product updatedProduct= productService.updateProduct(newProduct, oldProduct, file);
         return ResponseEntity.ok().body(updatedProduct);
     }
+
+    @DeleteMapping("/user/avatar/{id}")
+    public ResponseEntity<String> deleteAvatar(@PathVariable("id") Long id) {
+        logger.info("Запрос на удаление аватара с ID: {}", id);
+
+        // 1. Получаем изображение из БД
+        ProfilePicture avatar = profilePictureRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.warn("Аватар с ID {} не найден в базе данных", id);
+                    return new RuntimeException("Аватар не найден");
+                });
+
+        // 2. Получаем текущего пользователя
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        logger.info("Аутентифицированный пользователь: {}", email);
+
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            logger.error("Пользователь с email {} не найден", email);
+            throw new UsernameNotFoundException("Пользователь не найден");
+        }
+
+
+        // 3. Проверка принадлежности
+        if (user.getAvatar() == null) {
+            logger.warn("У пользователя {} нет установленного аватара", email);
+            return ResponseEntity.badRequest().body("Аватар не установлен");
+        }
+
+        if (!user.getAvatar().getId().equals(id)) {
+            logger.warn("Попытка удалить аватар, не принадлежащий пользователю {}. ID аватара: {}, у пользователя: {}",
+                    email, id, user.getAvatar().getId());
+            return ResponseEntity.status(403).body("Вы не можете удалить этот аватар");
+        }
+
+        // 4. Удаление файла и записи
+        try {
+            Path filePath = Paths.get(avatar.getFilePath().replace("\\", "/"));
+            logger.info("Попытка удалить файл по пути: {}", filePath);
+
+            boolean deleted = Files.deleteIfExists(filePath);
+            if (deleted) {
+                logger.info("Файл {} успешно удалён", filePath);
+            } else {
+                logger.warn("Файл {} не найден при попытке удаления", filePath);
+            }
+
+            profilePictureRepository.delete(avatar);
+            logger.info("Запись ProfilePicture с ID {} удалена из базы данных", id);
+
+            user.setAvatar(null);
+            userRepository.save(user);
+            logger.info("У пользователя {} поле avatar обнулено", email);
+
+            return ResponseEntity.ok("Аватар успешно удалён");
+
+        } catch (IOException e) {
+            logger.error("Ошибка при удалении файла аватара: {}", e.getMessage());
+            return ResponseEntity.status(500).body("Ошибка при удалении аватара");
+        }
+    }
+
 }

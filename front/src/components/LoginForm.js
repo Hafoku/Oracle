@@ -4,6 +4,7 @@ import "./styles/auth.css";
 import { request } from "../axios_helper";
 import { FaUser, FaLock, FaEnvelope, FaArrowRight, FaHome } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Logger from "./Logger";
 
 const LoginForm = () => {
     const [login, setLogin] = useState("");
@@ -16,6 +17,8 @@ const LoginForm = () => {
         setError(null);
         setIsLoading(true);
         
+        Logger.logAuth('Login attempt', { email: login });
+        
         try {
             const response = await request("POST", "/user/login", {
                 email: login,
@@ -24,14 +27,16 @@ const LoginForm = () => {
 
             if (response.status === 200) {
                 const token = response.data;
+                Logger.logSuccess('Login successful');
                 localStorage.setItem("jwtToken", token);
                 window.location.href = "/account";
             } else {
+                Logger.logWarning('Login failed', { status: response.status });
                 setError("Ошибка входа. Проверьте логин и пароль.");
             }
         } catch (error) {
+            Logger.logError(error);
             setError("Ошибка соединения с сервером.");
-            console.error("Ошибка запроса:", error);
         } finally {
             setIsLoading(false);
         }

@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { FaUser, FaEnvelope, FaLock, FaArrowRight, FaHome } from "react-icons/fa";
 import './App.css';
 import './styles/auth.css';
+import Logger from "./Logger";
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
@@ -60,16 +61,21 @@ const RegistrationForm = () => {
     setServerError(null);
     
     if (!validateForm()) {
+      Logger.logWarning('Registration validation failed', { errors });
       return;
     }
 
     setIsLoading(true);
+    Logger.logAuth('Registration attempt', { email: formData.email });
+    
     try {
       await request("POST", "/user/registration", formData);
+      Logger.logSuccess('Registration successful');
       navigate("/login", { 
         state: { message: "Регистрация успешна! Теперь вы можете войти в свой аккаунт." }
       });
     } catch (error) {
+      Logger.logError(error);
       if (error.response?.data) {
         setErrors(error.response.data);
       } else {

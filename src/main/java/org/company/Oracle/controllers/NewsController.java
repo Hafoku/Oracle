@@ -65,20 +65,20 @@ public class NewsController {
         return ResponseEntity.ok().body(Optional.of(news));
     }
 
-    @GetMapping("/api/news/{id}")
+    @GetMapping("/news/{id}")
     public ResponseEntity<News> showNews(@PathVariable("id") Long id) throws IOException {
         News news = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("Новость не найдена"));
         logger.info("Размер списк изображений новости: {}", news.getImages().size());
         return ResponseEntity.ok().body(news);
     }
 
-    @DeleteMapping("/api/news/{id}")
+    @DeleteMapping("/news/{id}")
     public void deleteNews(@PathVariable("id") Long id){
         News news = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("Новость не найдена"));
         newsRepository.delete(news);
     }
 
-    @GetMapping("api/files/{id}")
+    @GetMapping("/files/{id}")
     public ResponseEntity<Resource> showNewsImages(@PathVariable("id") Long id) throws IOException {
         ProfilePicture image = profilePictureRepository.findById(id).orElseThrow(() -> new RuntimeException("Новость не найдена"));
         Path path = Paths.get(image.getFilePath().replace("\\", "/"));
@@ -92,7 +92,7 @@ public class NewsController {
                 .body(resource);
     }
 
-    @GetMapping("/api/news")
+    @GetMapping("/news")
     public ResponseEntity<List<News>> getAllNews() {
         Iterable<News> newsIterable = newsRepository.findAll();
         List<News> newsList = new ArrayList<>();
@@ -100,7 +100,7 @@ public class NewsController {
         return ResponseEntity.ok().body(newsList);
     }
 
-    @DeleteMapping("/api/news/{newsId}/images/{imageId}")
+    @DeleteMapping("/news/{newsId}/images/{imageId}")
     public ResponseEntity<?> deleteImageFromListNews(@PathVariable("newsId") Long newsId, @PathVariable("imageId") Long imageId) {
         ProfilePicture image = profilePictureRepository.findById(imageId).orElseThrow(() -> new RuntimeException("Файл не найден"));
         News news = newsRepository.findById(newsId).orElseThrow(() -> new RuntimeException("Новость не найдена"));
@@ -121,7 +121,7 @@ public class NewsController {
         return ResponseEntity.ok("Фотография удалена.");
     }
 
-    @PutMapping("/api/news/{id}")
+    @PutMapping("/news/{id}")
     public ResponseEntity<?> updateNews(@PathVariable("id") Long id, @RequestPart NewsDto newNews, @RequestPart(value = "avatar", required = false) MultipartFile avatar, @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
         logger.info("Получен JSON для обновления новости: {}", newNews);
         News news = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("Новость не найдена"));

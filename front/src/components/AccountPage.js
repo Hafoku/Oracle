@@ -6,6 +6,7 @@ import AvatarUploader from "./Musor/AvatarUploader";
 import Header from './Header';
 import Footer from './Footer';
 import { FaSignOutAlt, FaKey, FaPlus, FaUsers, FaNewspaper, FaUserCircle } from "react-icons/fa";
+import Logger from "./Logger";
 
 const AccountPage = () => {
     const [showAvatarForm, setShowAvatarForm] = useState(false);
@@ -20,20 +21,22 @@ const AccountPage = () => {
 
     // Немедленная проверка токена при загрузке компонента
     useEffect(() => {
-        const token = localStorage.getItem("jwtToken"); 
-        
+        const token = localStorage.getItem("jwtToken");
+
         if (!token) {
-            console.log("Токен отсутствует, перенаправление на страницу входа");
+            Logger.logWarning('No token found, redirecting to login');
             navigate("/login");
             return;
         }
+
+        Logger.logInfo('Fetching user data');
 
         // Глобальный перехватчик для всех запросов
         const interceptor = axios.interceptors.response.use(
             response => response,
             error => {
                 if (error.response?.status === 401) {
-                    console.log("Ошибка 401: Токен истёк или недействителен");
+                    Logger.logWarning('Token expired or invalid');
                     localStorage.removeItem("jwtToken");
                     navigate("/login");
                 }
@@ -42,30 +45,32 @@ const AccountPage = () => {
         );
 
         // Пробуем загрузить данные пользователя
-        axios.get("http://localhost:8082/user", {
-            headers: { 
+        axios.get("/user", {
+            headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => {
-            if (response.data) {
-                setUser(response.data);
+            .then(response => {
+                if (response.data) {
+                    Logger.logSuccess('User data received');
+                    setUser(response.data);
+                    setLoading(false);
+                } else {
+                    Logger.logError('No user data in response');
+                    throw new Error('Нет данных пользователя');
+                }
+            })
+            .catch(error => {
+                Logger.logError(error);
+                if (error.response?.status === 401) {
+                    localStorage.removeItem("jwtToken");
+                    navigate("/login");
+                } else {
+                    setError("");
+                }
                 setLoading(false);
-            } else {
-                throw new Error('Нет данных пользователя');
-            }
-        })
-        .catch(error => {
-            console.error("Ошибка загрузки:", error);
-            if (error.response?.status === 401) {
-                localStorage.removeItem("jwtToken");
-                navigate("/login");
-            } else {
-                setError("");
-            }
-            setLoading(false);
-        });
+            });
 
         // Очистка перехватчика
         return () => {
@@ -73,62 +78,87 @@ const AccountPage = () => {
         };
     }, [navigate]);
 
+    const handleAvatarDelete = async () => {
+        const token = localStorage.getItem("jwtToken");
+        if (!token) {
+            Logger.logError("No token found for avatar delete");
+            return;
+        }
+
+        try {
+            Logger.logFile("Attempting avatar delete");
+            await axios.delete(`/user/avatar/${user.avatar.id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            Logger.logSuccess("Avatar deleted successfully");
+            window.location.reload();
+        } catch (error) {
+            Logger.logError(error);
+        }
+    };
+
     const handlePasswordChange = async (e) => {
         e.preventDefault();
-        
+
         if (password !== confirmPassword) {
+            Logger.logWarning('Passwords do not match');
             setErrorMessage("Пароли не совпадают");
             return;
         }
-    
+
         setErrorMessage("");
-    
+        Logger.logAuth('Attempting password change');
+
         const token = localStorage.getItem("jwtToken");
         const requestData = {
             password: password,
             oldpassword: oldPassword
         };
-    
+
         try {
-            const response = await axios.post("http://localhost:8082/user/updatePassword", requestData, {
+            const response = await axios.post("/user/updatePassword", requestData, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 }
             });
-    
-            console.log("Ответ сервера:", response.data);
+
+            Logger.logSuccess('Password changed successfully');
         } catch (error) {
-            console.error("Ошибка при смене пароля:", error);
+            Logger.logError(error);
         }
     };
-    
+
 
     const handleAvatarUpload = async (croppedImage) => {
         const token = localStorage.getItem("jwtToken");
         if (!token) {
-            console.error("Токен отсутствует");
+            Logger.logError('No token found for avatar upload');
             return;
         }
-    
+
+        Logger.logFile('Attempting avatar upload');
         const formData = new FormData();
-        formData.append("image", croppedImage, "avatar.png"); 
-    
+        formData.append("image", croppedImage, "avatar.png");
+
         try {
-            const response = await axios.post("http://localhost:8082/user/changeAvatar", formData, {
+            const response = await axios.post("/user/changeAvatar", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`
                 }
             });
-    
-            console.log("Аватар успешно загружен:", response.data);
-            window.location.reload(); 
+
+            Logger.logSuccess('Avatar uploaded successfully');
+            window.location.reload();
         } catch (error) {
-            console.error("Ошибка загрузки аватарки:", error);
+            Logger.logError(error);
         }
-    };    
-    
+    };
+
 
     const toggleAvatarForm = () => {
         setShowAvatarForm(!showAvatarForm);
@@ -136,6 +166,7 @@ const AccountPage = () => {
 
 
     const handleLogout = () => {
+        Logger.logAuth('User logged out');
         localStorage.removeItem("jwtToken"); // Используем "jwtToken"
         navigate("/login");
     };
@@ -151,15 +182,15 @@ const AccountPage = () => {
             </div>
         );
     }
-    
+
     if (error) {
         return (
             <div className="page-wrapper">
                 <div className="oracle-container">
                     <div className="oracle-error text-center my-3">{error}</div>
                     <div className="text-center">
-                        <button 
-                            className="oracle-btn oracle-btn-primary" 
+                        <button
+                            className="oracle-btn oracle-btn-primary"
                             onClick={() => navigate("/login")}
                         >
                             Войти в аккаунт
@@ -170,12 +201,12 @@ const AccountPage = () => {
             </div>
         );
     }
-    
+
     if (!user) {
         navigate("/login");
         return null;
     }
-    console.log("user.avatar.id: ", user.avatar.id);
+    console.log("user.avatar.id:", user?.avatar?.id ?? "нет аватара");
     return (
         <div className="page-wrapper">
             <div className="oracle-container">
@@ -193,24 +224,38 @@ const AccountPage = () => {
                                 <div className="user-info">
                                     <div className="avatar-section text-center mb-4">
                                         <div>
-                                            <img 
-                                                src={`http://localhost:8082/api/product/files/${user.avatar.id}` || "/avatars/defaultPhoto.jpg"} 
-                                                alt="Аватар" 
+                                            <img
+                                                src={
+                                                    user?.avatar?.id
+                                                        ? `http://localhost:8082/product/files/${user.avatar.id}`
+                                                        : "/avatars/defaultPhoto.jpg"
+                                                }
+                                                alt="Аватар"
                                                 className="avatar-circle mx-auto mb-3 oracle-avatar-circle"
                                             />
                                         </div>
                                         {showAvatarForm ? (
-                                            <AvatarUploader 
-                                                onSave={handleAvatarUpload} 
+                                            <AvatarUploader
+                                                onSave={handleAvatarUpload}
                                                 onCancel={() => setShowAvatarForm(false)}
                                             />
                                         ) : (
-                                            <button 
-                                                className="oracle-btn oracle-btn-secondary"
-                                                onClick={toggleAvatarForm}
-                                            >
-                                                Поменять аватарку
-                                            </button>
+                                            <>
+                                                <button
+                                                    className="oracle-btn oracle-btn-secondary"
+                                                    onClick={toggleAvatarForm}
+                                                >
+                                                    Поменять аватарку
+                                                </button>
+                                                {user?.avatar?.id && (
+                                                    <button
+                                                        className="oracle-btn oracle-btn-danger mt-2"
+                                                        onClick={handleAvatarDelete}
+                                                    >
+                                                        Удалить аватарку
+                                                    </button>
+                                                )}
+                                            </>
                                         )}
                                     </div>
                                     <div className="user-details">
@@ -218,7 +263,7 @@ const AccountPage = () => {
                                         <p className="mb-2"><strong>Имя:</strong> {user.userName}</p>
                                         <p className="mb-2"><strong>Почта:</strong> {user.email}</p>
                                         <p className="mb-2"><strong>Роль:</strong> {user.role}</p>
-                                        <button 
+                                        <button
                                             onClick={handleLogout}
                                             className="oracle-btn-acc oracle-btn-acc-outline mt-3"
                                         >
@@ -234,33 +279,33 @@ const AccountPage = () => {
                                 <h2 className="oracle-card-title">Смена пароля</h2>
                                 <form onSubmit={handlePasswordChange}>
                                     <div className="form-group mb-3">
-                                        <input 
-                                            type="password" 
-                                            className="oracle-search-input" 
-                                            placeholder="Текущий пароль" 
-                                            value={oldPassword} 
-                                            onChange={(e) => setOldPassword(e.target.value)} 
-                                            required 
+                                        <input
+                                            type="password"
+                                            className="oracle-search-input"
+                                            placeholder="Текущий пароль"
+                                            value={oldPassword}
+                                            onChange={(e) => setOldPassword(e.target.value)}
+                                            required
                                         />
                                     </div>
                                     <div className="form-group mb-3">
-                                        <input 
-                                            type="password" 
-                                            className="oracle-search-input" 
-                                            placeholder="Новый пароль" 
-                                            value={password} 
-                                            onChange={(e) => setPassword(e.target.value)} 
-                                            required 
+                                        <input
+                                            type="password"
+                                            className="oracle-search-input"
+                                            placeholder="Новый пароль"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required
                                         />
                                     </div>
                                     <div className="form-group mb-3">
-                                        <input 
-                                            type="password" 
-                                            className="oracle-search-input" 
-                                            placeholder="Повторите новый пароль" 
-                                            value={confirmPassword} 
-                                            onChange={(e) => setConfirmPassword(e.target.value)} 
-                                            required 
+                                        <input
+                                            type="password"
+                                            className="oracle-search-input"
+                                            placeholder="Повторите новый пароль"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            required
                                         />
                                     </div>
                                     <button type="submit" className="oracle-btn oracle-btn-primary oracle-btn-block">
@@ -272,17 +317,17 @@ const AccountPage = () => {
                     </div>
 
                     <div className="oracle-row mt-4">
-                        
+
 
                         {user?.role === 'ADMIN' && (
                             <div className="oracle-col">
                                 <div className="oracle-card">
                                     <h2 className="oracle-card-title">Админ панель</h2>
                                     <div className="flex flex-col gap-2">
-                                        <Link to="/create_news" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block" style={{marginBottom: '20px'}}>
+                                        <Link to="/create_news" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block" style={{ marginBottom: '20px' }}>
                                             Создать новость <FaNewspaper className="oracle-btn-icon" />
                                         </Link>
-                                        <Link to="/create_product" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block" style={{marginBottom: '20px'}}>
+                                        <Link to="/create_product" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block" style={{ marginBottom: '20px' }}>
                                             Добавить товар <FaPlus className="oracle-btn-icon" />
                                         </Link>
                                         <Link to="/users_list" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block">

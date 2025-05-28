@@ -20,7 +20,7 @@ const Cart = () => {
 
     const fetchCartItems = async () => {
         try {
-            const response = await axios.get('http://localhost:8082/api/cart', {
+            const response = await axios.get('http://localhost:8082/cart', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
                 }
@@ -45,7 +45,7 @@ const Cart = () => {
         console.log(delta);
         
         try {
-            await axios.put(`http://localhost:8082/api/cart/items/${itemId}`, delta, {
+            await axios.put(`http://localhost:8082/cart/items/${itemId}`, delta, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
                     'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ const Cart = () => {
 
     const removeItem = async (itemId) => {
         try {
-            await axios.delete(`http://localhost:8082/api/cart/items/${itemId}`, {
+            await axios.delete(`http://localhost:8082/cart/items/${itemId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
                 }
@@ -106,7 +106,7 @@ const Cart = () => {
                                         <div className="product-image" style={{ width: '100px', height: '100px' }}>
                                             {item.product.avatar ? (
                                                 <img 
-                                                    src={`http://localhost:8082/api/files/${item.product.avatar.id}`}
+                                                    src={`http://localhost:8082/files/${item.product.avatar.id}`}
                                                     alt={item.product.name}
                                                 />
                                             ) : (

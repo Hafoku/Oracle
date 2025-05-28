@@ -43,7 +43,7 @@ const Products = () => {
       try {
         setLoading(true);
         // In a real app, this would be an API call
-        // await axios.get('/api/products')
+        // await axios.get('/products')
         
         // Mock data
         const mockProducts = Array(24).fill().map((_, index) => ({
