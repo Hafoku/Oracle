@@ -69,6 +69,9 @@ public class ProfilePictureService {
         logger.info("Сохранения изображения для продукта");
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Продукт не найден. Айди:" + productId));
         ProfilePicture savedFile = createFolder(file, Paths.get(PRODUCT_FOLDER_PATH, product.getId().toString()).toString());
+        product.setAvatar(savedFile);
+        productRepository.save(product);
+        logger.info("Устанавливается аватарока {} для продукта {}", savedFile.getName(), product.getName());
         logger.info("Файл {} был сохранён в базу данных", savedFile.getName());
         return savedFile;
     }

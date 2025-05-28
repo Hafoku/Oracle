@@ -6,21 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="eb620641-0baf-4930-ae75-1f5e0e1da3db" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/components/AccountPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/AccountPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/HomePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/HomePage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/LoginForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/LoginForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/News/News.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/News/News.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/News/UpdateNews.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/News/UpdateNews.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/Products.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/Products.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/RegistrationForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/RegistrationForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/Cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/Cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/CreateProduct.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/CreateProduct.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/ProductDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/ProductDetails.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/UpdateProduct.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/UpdateProduct.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/CartController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/NewsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/NewsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/Musor/AvatarUploader.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/Musor/AvatarUploader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/front/yarn.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/OnlineShopController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/OnlineShopController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/PageController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/UserPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/UserPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/models/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/ProfilePictureService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/ProfilePictureService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,22 +49,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "Application.AiMedApplication.executor": "Run",
-    "Application.OracleApplication.executor": "Run",
-    "Application.Start.executor": "Run",
-    "Maven.AiMed [clean].executor": "Run",
-    "Maven.AiMed [install].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Aslanbek3/Documents/GitHub/Oracle",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;Application.AiMedApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.OracleApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Start.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.AiMed [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.AiMed [install].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Aslanbek3/Documents/GitHub/Oracle&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.OracleApplication">
     <configuration name="OracleApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.company.Oracle.OracleApplication" />

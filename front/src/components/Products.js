@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import './App.css';
 import Header from './Header';
 import Footer from './Footer';
 import { FaSearch, FaFilter, FaShoppingCart, FaHeart, FaRegHeart, FaStar, FaChevronDown } from 'react-icons/fa';
+import Logger from './Logger';
 
 const Products = () => {
   // State for products
@@ -36,58 +38,36 @@ const Products = () => {
     { id: 'cosmetics', name: 'Лечебная косметика' }
   ];
 
-  // Mock product data (in a real app, this would come from an API)
+  // Fetch products from API
   useEffect(() => {
-    // Simulate API call with setTimeout
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        // In a real app, this would be an API call
-        // await axios.get('/products')
+        Logger.logInfo('Fetching products from API');
         
-        // Mock data
-        const mockProducts = Array(24).fill().map((_, index) => ({
-          id: index + 1,
-          name: [
-            'Парацетамол 500мг', 
-            'Витамин C 1000мг', 
-            'Омега-3 рыбий жир', 
-            'Антисептический гель',
-            'Мультивитамины',
-            'Бинт стерильный',
-            'Аспирин 325мг',
-            'Ибупрофен 200мг'
-          ][index % 8],
-          price: Math.floor(Math.random() * 9000) + 500,
-          oldPrice: Math.random() > 0.5 ? Math.floor(Math.random() * 10000) + 1000 : null,
-          image: `https://via.placeholder.com/300x200?text=Product+${index + 1}`,
-          category: [
-            'prescription', 
-            'otc', 
-            'supplements', 
-            'personal-care', 
-            'medical-supplies', 
-            'mother-child', 
-            'cosmetics'
-          ][index % 7],
-          rating: (Math.random() * 2 + 3).toFixed(1),
-          reviews: Math.floor(Math.random() * 200),
-          description: [
-            'Жаропонижающее и обезболивающее средство',
-            'Поддержка иммунной системы и антиоксидантная защита',
-            'Поддержка сердечно-сосудистой системы',
-            'Дезинфекция рук без воды и мыла',
-            'Комплекс необходимых витаминов и минералов',
-            'Для обработки ран и травм'
-          ][index % 6],
-          stock: Math.random() > 0.2 ? Math.floor(Math.random() * 100) + 10 : 0,
-          sale: Math.random() > 0.7
+        const response = await axios.get('/products');
+        Logger.logSuccess('Products fetched successfully', { count: response.data.length });
+        
+        // Преобразуем данные из API в нужный формат
+        const formattedProducts = response.data.map(product => ({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          oldPrice: product.oldPrice,
+          image: product.avatar ? `http://localhost:8082/product/files/${product.avatar.id}` : '/images/no-image.png',
+          category: product.category,
+          rating: product.rating || 0,
+          reviews: product.reviews || 0,
+          description: product.description,
+          stock: product.stock || 0,
+          sale: product.sale || false
         }));
-        
-        setProducts(mockProducts);
-        setFilteredProducts(mockProducts);
+
+        setProducts(formattedProducts);
+        setFilteredProducts(formattedProducts);
         setLoading(false);
       } catch (err) {
+        Logger.logError(err);
         setError('Ошибка при загрузке товаров. Пожалуйста, попробуйте позже.');
         setLoading(false);
       }
@@ -98,13 +78,20 @@ const Products = () => {
 
   // Filter products when search query, category, or price range changes
   useEffect(() => {
+    Logger.logInfo('Applying filters', { 
+      searchQuery, 
+      category: selectedCategory, 
+      priceRange, 
+      sortBy 
+    });
+
     let result = products;
     
     // Filter by search query
     if (searchQuery) {
       result = result.filter(product => 
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase())
+        (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
     
@@ -138,6 +125,11 @@ const Products = () => {
         break;
     }
     
+    Logger.logInfo('Filters applied', { 
+      filteredCount: result.length,
+      totalCount: products.length 
+    });
+    
     setFilteredProducts(result);
     setCurrentPage(1); // Reset to first page when filters change
   }, [searchQuery, selectedCategory, priceRange, sortBy, products]);
@@ -149,10 +141,14 @@ const Products = () => {
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => {
+    Logger.logUserAction('Page changed', { page: pageNumber });
+    setCurrentPage(pageNumber);
+  };
 
   // Toggle wishlist
   const toggleWishlist = (productId) => {
+    Logger.logUserAction('Wishlist toggle', { productId });
     if (wishlist.includes(productId)) {
       setWishlist(wishlist.filter(id => id !== productId));
     } else {

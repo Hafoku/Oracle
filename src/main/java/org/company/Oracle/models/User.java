@@ -28,7 +28,7 @@ public class User {
     @JoinColumn(name="role_id", nullable = false)
     private Role role;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "avatar_id")
     private ProfilePicture avatar;
 }

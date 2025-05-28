@@ -39,9 +39,6 @@ const AvatarUploader = ({ onSave, onCancel }) => {
               onChange={handleFileChange}
               className="file-input"
             />
-            <span className="upload-icon">📷</span>
-            <span className="upload-text">Выберите изображение</span>
-            <span className="upload-hint">Рекомендуемый размер: 200x200</span>
           </label>
         </div>
       ) : (

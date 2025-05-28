@@ -3,6 +3,7 @@ package org.company.Oracle.controllers;
 import org.company.Oracle.models.ProfilePicture;
 import org.company.Oracle.models.User;
 import org.company.Oracle.repositories.ProfilePictureRepository;
+import org.company.Oracle.repositories.UserRepository;
 import org.company.Oracle.services.ProfilePictureService;
 import org.company.Oracle.services.UserService;
 import org.slf4j.Logger;
@@ -24,11 +25,13 @@ public class UserPageController {
     private final UserService userService;
     private final ProfilePictureService profilePictureService;
     private final ProfilePictureRepository profilePictureRepository;
+    private final UserRepository userRepository;
 
-    public UserPageController(UserService userService, ProfilePictureService profilePictureService, ProfilePictureRepository profilePictureRepository) {
+    public UserPageController(UserService userService, ProfilePictureService profilePictureService, ProfilePictureRepository profilePictureRepository, UserRepository userRepository) {
         this.userService = userService;
         this.profilePictureService = profilePictureService;
         this.profilePictureRepository = profilePictureRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/user")
@@ -62,10 +65,14 @@ public class UserPageController {
     public ResponseEntity<String> setAvatar(@RequestParam("image") MultipartFile image) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findAuthenticatedUser(authentication);
-
         logger.info("Файл {} получен", image.getOriginalFilename());
+        if (user.getAvatar() != null){
+            ProfilePicture oldAvatar = user.getAvatar();
+            profilePictureRepository.delete(oldAvatar);
+            user.setAvatar(null);
+            logger.info("Найдена старая аватарка {} для юзера {}, идёт удаление", oldAvatar, user.getName());
+        }
         profilePictureService.uploadFileToDataSystem(image, user.getId(), "User");
-
         return ResponseEntity.ok("Аватар успешно изменён");
     }
 

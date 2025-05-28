@@ -174,11 +174,9 @@ const AccountPage = () => {
     if (loading) {
         return (
             <div className="page-wrapper">
-                <Header />
                 <div className="oracle-container">
                     <p className="text-center my-3">Загрузка...</p>
                 </div>
-                <Footer />
             </div>
         );
     }
@@ -230,32 +228,34 @@ const AccountPage = () => {
                                                         ? `http://localhost:8082/product/files/${user.avatar.id}`
                                                         : "/avatars/defaultPhoto.jpg"
                                                 }
+                                                onError={(e) => {
+                                                    e.target.onerror = null; // предотвращает бесконечный цикл
+                                                    e.target.src = "/avatars/defaultPhoto.jpg";
+                                                }}
                                                 alt="Аватар"
                                                 className="avatar-circle mx-auto mb-3 oracle-avatar-circle"
                                             />
                                         </div>
                                         {showAvatarForm ? (
-                                            <AvatarUploader
-                                                onSave={handleAvatarUpload}
-                                                onCancel={() => setShowAvatarForm(false)}
-                                            />
-                                        ) : (
                                             <>
+                                                <AvatarUploader
+                                                    onSave={handleAvatarUpload}
+                                                    onCancel={() => setShowAvatarForm(false)}
+                                                />
                                                 <button
-                                                    className="oracle-btn oracle-btn-secondary"
-                                                    onClick={toggleAvatarForm}
+                                                    className="oracle-btn oracle-btn-danger mt-2"
+                                                    onClick={() => setShowAvatarForm(false)}
                                                 >
-                                                    Поменять аватарку
+                                                    Отмена
                                                 </button>
-                                                {user?.avatar?.id && (
-                                                    <button
-                                                        className="oracle-btn oracle-btn-danger mt-2"
-                                                        onClick={handleAvatarDelete}
-                                                    >
-                                                        Удалить аватарку
-                                                    </button>
-                                                )}
                                             </>
+                                        ) : (
+                                            <button
+                                                className="oracle-btn oracle-btn-secondary"
+                                                onClick={toggleAvatarForm}
+                                            >
+                                                Поменять аватарку
+                                            </button>
                                         )}
                                     </div>
                                     <div className="user-details">
@@ -309,7 +309,7 @@ const AccountPage = () => {
                                         />
                                     </div>
                                     <button type="submit" className="oracle-btn oracle-btn-primary oracle-btn-block">
-                                        <FaKey className="oracle-btn-icon" /> Изменить пароль
+                                        Изменить пароль
                                     </button>
                                 </form>
                             </div>
@@ -325,13 +325,16 @@ const AccountPage = () => {
                                     <h2 className="oracle-card-title">Админ панель</h2>
                                     <div className="flex flex-col gap-2">
                                         <Link to="/create_news" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block" style={{ marginBottom: '20px' }}>
-                                            Создать новость <FaNewspaper className="oracle-btn-icon" />
+                                            Создать новость
                                         </Link>
                                         <Link to="/create_product" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block" style={{ marginBottom: '20px' }}>
-                                            Добавить товар <FaPlus className="oracle-btn-icon" />
+                                            Добавить товар
+                                        </Link>
+                                        <Link to="/create_product_ai" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block" style={{ marginBottom: '20px' }}>
+                                            Добавить товар с помощью ИИ
                                         </Link>
                                         <Link to="/users_list" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block">
-                                            Список пользователей <FaUsers className="oracle-btn-icon" />
+                                            Список пользователей
                                         </Link>
                                     </div>
                                 </div>
