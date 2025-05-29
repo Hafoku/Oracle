@@ -16,9 +16,9 @@ const LoginForm = () => {
         event.preventDefault();
         setError(null);
         setIsLoading(true);
-        
+
         Logger.logAuth('Login attempt', { email: login });
-        
+
         try {
             const response = await request("POST", "/user/login", {
                 email: login,
@@ -32,11 +32,16 @@ const LoginForm = () => {
                 window.location.href = "/account";
             } else {
                 Logger.logWarning('Login failed', { status: response.status });
-                setError("Ошибка входа. Проверьте логин и пароль.");
+                setError("Неправильный логин или пароль.");
             }
         } catch (error) {
             Logger.logError(error);
-            setError("Ошибка соединения с сервером.");
+
+            if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                setError("Неправильный логин или пароль.");
+            } else {
+                setError("Ошибка соединения с сервером.");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -87,8 +92,8 @@ const LoginForm = () => {
                     </div>
 
                     <div className="oracle-form-group">
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             className="oracle-btn oracle-btn-primary oracle-btn-block"
                             disabled={isLoading}
                         >

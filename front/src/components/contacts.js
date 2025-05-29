@@ -435,28 +435,6 @@ const Contacts = () => {
                     <FaYoutube />
                   </a>
                 </div>
-                
-                <div style={{maxWidth: "500px", margin: "0 auto"}}>
-                  <h3 style={{fontSize: "1.2rem", marginBottom: "15px", color: "white"}}>
-                    <FaEnvelopeOpenText style={{marginRight: 8}}/>Подпишитесь на нашу рассылку
-                  </h3>
-                  <div style={{display: "flex", gap: "10px"}}>
-                    <input 
-                      type="email" 
-                      placeholder="Введите ваш e-mail" 
-                      style={{
-                        flex: 1,
-                        padding: "12px 15px",
-                        borderRadius: "8px",
-                        border: "none",
-                        fontSize: "1rem"
-                      }}
-                    />
-                    <button className="oracle-btn oracle-btn-secondary">
-                      <FaPaperPlane style={{marginRight: 8}}/>Подписаться
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

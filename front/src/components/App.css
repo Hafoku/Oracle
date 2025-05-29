@@ -800,6 +800,7 @@ a:hover {
 .oracle-btn-secondary {
   background-color: var(--secondary-orange);
   color: var(--text-light);
+  margin-top: 2rem;
 }
 
 .oracle-btn-secondary:hover {
@@ -815,7 +816,6 @@ a:hover {
 
 .oracle-btn-outline:hover {
   background-color: var(--primary-dark);
-  color: var(--text-light);
 }
 
 .oracle-btn-block {
@@ -2150,4 +2150,99 @@ a:hover {
 
 [data-theme="dark"] .oracle-specification-value {
   color: var(--text-light);
+}
+
+/* Avatar Uploader Styles */
+.avatar-uploader {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--text-light);
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
+}
+
+.file-upload-container {
+  text-align: center;
+  padding: 2rem;
+  border: 2px dashed var(--secondary-gray);
+  border-radius: 8px;
+  transition: all var(--transition-speed);
+}
+
+.file-upload-container:hover {
+  border-color: var(--primary-dark);
+  background-color: var(--secondary-white);
+}
+
+.file-upload-label {
+  display: inline-block;
+  cursor: pointer;
+  padding: 1rem 2rem;
+  transition: all var(--transition-speed);
+}
+
+.file-input {
+  display: none;
+}
+
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.avatar-editor {
+  box-shadow: var(--shadow-light);
+}
+
+.scale-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.scale-container span {
+  min-width: 80px;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.scale-slider {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  background: var(--secondary-gray);
+  border-radius: 3px;
+  outline: none;
+}
+
+.scale-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--primary-dark);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.scale-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  background: var(--secondary-dark-green);
+}
+
+.buttons-container {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.buttons-container .oracle-btn {
+  flex: 1;
+  text-align: center;
 }
