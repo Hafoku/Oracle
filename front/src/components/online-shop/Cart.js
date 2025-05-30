@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
+import './Cart.css';
+import { FaShoppingCart, FaTrash, FaMinus, FaPlus, FaArrowLeft } from 'react-icons/fa';
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -79,103 +81,128 @@ const Cart = () => {
         return cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0);
     };
 
-    if (loading) return <div className="page-container">Загрузка...</div>;
-    if (error) return <div className="page-container">{error}</div>;
+    if (loading) {
+        return (
+            <div className="oracle-page-wrapper">
+                <div className="oracle-container">
+                    <div className="oracle-loading">
+                        <div className="loader"></div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="oracle-page-wrapper">
+                <div className="oracle-container">
+                    <div className="oracle-error-message">
+                        <span>{error}</span>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className="page-container">
-            <div className="auth-box" style={{ maxWidth: '800px' }}>
-                <h1 className="section-title">Корзина</h1>
-                
-                {cartItems.length === 0 ? (
-                    <div className="text-center mb-3">
-                        <p>Ваша корзина пуста</p>
-                        <button 
-                            className="button button-primary mt-2"
-                            onClick={() => navigate('/products')}
-                        >
-                            Перейти в магазин
-                        </button>
-                    </div>
-                ) : (
-                    <>
-                        {cartItems.map(item => (
-                            <div key={item.id} className="card mb-2">
-                                <div className="grid-2" style={{ alignItems: 'center' }}>
-                                    <div className="flex items-center gap-2">
-                                        <div className="product-image" style={{ width: '100px', height: '100px' }}>
-                                            {item.product.avatar ? (
+        <div className="oracle-page-wrapper">
+            {/* Hero Section */}
+            <div className="oracle-products-hero">
+                <div className="oracle-container">
+                    <h1 className="oracle-hero-title">Корзина</h1>
+                    <p className="oracle-hero-subtitle">Ваши выбранные товары</p>
+                </div>
+            </div>
+
+            <div className="oracle-container">
+                <div className="oracle-form-container">
+                    {cartItems.length === 0 ? (
+                        <div className="oracle-empty-cart">
+                            <FaShoppingCart className="oracle-empty-cart-icon" />
+                            <h2>Ваша корзина пуста</h2>
+                            <p>Добавьте товары из нашего каталога</p>
+                            <button 
+                                className="oracle-btn oracle-btn-primary"
+                                onClick={() => navigate('/products')}
+                            >
+                                Перейти в магазин
+                            </button>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="oracle-cart-items">
+                                {cartItems.map(item => (
+                                    <div key={item.id} className="oracle-cart-item">
+                                        <div className="oracle-cart-item-content">
+                                            <div className="oracle-cart-item-image">
                                                 <img 
-                                                    src={`http://localhost:8082/files/${item.product.avatar.id}`}
+                                                    src={
+                                                        item.product.avatar 
+                                                            ? `http://localhost:8082/files/${item.product.avatar.id}`
+                                                            : '/images/no-image.png'
+                                                    }
                                                     alt={item.product.name}
+                                                    onError={(e) => {
+                                                        e.target.src = '/images/no-image.png';
+                                                    }}
                                                 />
-                                            ) : (
-                                                <img 
-                                                    src="/images/no-image.png"
-                                                    alt="Изображение отсутствует"
-                                                />
-                                            )}
-                                        </div>
-                                        <div>
-                                            <h3 style={{ margin: 0 }}>{item.product.name}</h3>
-                                            <p className="price">{item.product.price} ₽</p>
+                                            </div>
+                                            <div className="oracle-cart-item-details">
+                                                <h3 className="oracle-cart-item-title">{item.product.name}</h3>
+                                                <p className="oracle-cart-item-price">{item.product.price} ₽</p>
+                                            </div>
+                                            <div className="oracle-cart-item-actions">
+                                                <div className="oracle-quantity-controls">
+                                                    <button 
+                                                        className="oracle-btn oracle-btn-secondary oracle-btn-icon"
+                                                        onClick={() => updateQuantity(item.id, -1)}
+                                                    >
+                                                        <FaMinus />
+                                                    </button>
+                                                    <span className="oracle-quantity">{item.quantity}</span>
+                                                    <button 
+                                                        className="oracle-btn oracle-btn-secondary oracle-btn-icon"
+                                                        onClick={() => updateQuantity(item.id, 1)}
+                                                    >
+                                                        <FaPlus />
+                                                    </button>
+                                                </div>
+                                                <button 
+                                                    className="oracle-btn oracle-btn-icon oracle-btn-danger"
+                                                    onClick={() => removeItem(item.id)}
+                                                >
+                                                    <FaTrash />
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-between gap-2">
-                                        <div className="flex items-center gap-1">
-                                            <button 
-                                                className="button button-secondary"
-                                                onClick={() => updateQuantity(item.id, -1)}
-                                                style={{ padding: '0.5rem 1rem' }}
-                                            >
-                                                -
-                                            </button>
-                                            <span className="mx-2">{item.quantity}</span>
-                                            <button 
-                                                className="button button-secondary"
-                                                onClick={() => updateQuantity(item.id, 1)}
-                                                style={{ padding: '0.5rem 1rem' }}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                        <button 
-                                            className="button button-secondary"
-                                            onClick={() => removeItem(item.id)}
-                                            style={{ padding: '0.5rem 1rem' }}
-                                        >
-                                            Удалить
-                                        </button>
-                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="oracle-cart-summary">
+                                <div className="oracle-cart-total">
+                                    <span>Итого:</span>
+                                    <span className="oracle-cart-total-price">{calculateTotal()} ₽</span>
+                                </div>
+                                <div className="oracle-cart-actions">
+                                    <button 
+                                        className="oracle-btn oracle-btn-secondary"
+                                        onClick={() => navigate('/shop')}
+                                    >
+                                        <FaArrowLeft /> Продолжить покупки
+                                    </button>
+                                    <button 
+                                        className="oracle-btn oracle-btn-primary"
+                                        onClick={() => navigate('/checkout')}
+                                    >
+                                        Оформить заказ
+                                    </button>
                                 </div>
                             </div>
-                        ))}
-
-                        <div className="highlight-box mt-3">
-                            <div className="flex justify-between items-center">
-                                <h3>Итого:</h3>
-                                <span className="price">{calculateTotal()} ₽</span>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-2 mt-3">
-                            <button 
-                                className="button button-primary"
-                                style={{ flex: 1 }}
-                                onClick={() => navigate('/checkout')}
-                            >
-                                Оформить заказ
-                            </button>
-                            <button 
-                                className="button button-secondary"
-                                style={{ flex: 1 }}
-                                onClick={() => navigate('/shop')}
-                            >
-                                Продолжить покупки
-                            </button>
-                        </div>
-                    </>
-                )}
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     );

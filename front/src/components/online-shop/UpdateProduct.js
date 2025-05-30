@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
+import { FaExclamationCircle, FaUpload } from 'react-icons/fa';
 
 const UpdateProduct = () => {
     const navigate = useNavigate();
@@ -133,113 +134,142 @@ const UpdateProduct = () => {
     }
 
     return (
-        <div className="page-container">
-            <div className="auth-box" style={{ maxWidth: '600px' }}>
-                <h1 className="section-title text-center">Обновление продукта</h1>
+        <div className="oracle-page-wrapper">
+            {/* Hero Section */}
+            <div className="oracle-products-hero">
+                <div className="oracle-container">
+                    <h1 className="oracle-hero-title">Обновление продукта</h1>
+                    <p className="oracle-hero-subtitle">Измените информацию о товаре</p>
+                </div>
+            </div>
 
-                {error && <div className="error-message mb-2">{error}</div>}
+            <div className="oracle-container">
+                <div className="oracle-form-container">
+                    {error && (
+                        <div className="oracle-error-message">
+                            <FaExclamationCircle />
+                            <span>{error}</span>
+                        </div>
+                    )}
 
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label className="form-label">Название продукта</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            className="form-input"
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label className="form-label">Цена (₽)</label>
-                        <input
-                            type="number"
-                            name="price"
-                            value={formData.price}
-                            onChange={handleInputChange}
-                            className="form-input"
-                            min="1"
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label className="form-label">Категория</label>
-                        <select
-                            name="type"
-                            value={formData.type}
-                            onChange={handleInputChange}
-                            className="form-input"
-                            required
-                        >
-                            {productTypes.map((type) => (
-                                <option key={type.id} value={type.id}>
-                                    {type.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="form-group">
-                        <label className="form-label">Описание</label>
-                        <textarea
-                            name="description"
-                            value={formData.description}
-                            onChange={handleInputChange}
-                            className="form-input"
-                            rows="4"
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label className="form-label">Изображение продукта</label>
-                        <input
-                            type="file"
-                            onChange={handleImageChange}
-                            accept="image/*"
-                            className="form-input"
-                        />
-                        {(imagePreview || existingImageId) && (
-                            <div className="image-preview mt-2">
-                                <img
-                                    src={
-                                        imagePreview ||
-                                        `http://localhost:8082/product/files/${existingImageId}`
-                                    }
-                                    alt="Предпросмотр"
-                                    style={{
-                                        maxWidth: '100%',
-                                        maxHeight: '200px',
-                                        objectFit: 'cover',
-                                        borderRadius: 'var(--radius)'
-                                    }}
+                    <form onSubmit={handleSubmit} className="oracle-form">
+                        <div className="oracle-form-grid">
+                            <div className="oracle-form-group">
+                                <label className="oracle-form-label">Название продукта</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    className="oracle-form-input"
+                                    required
                                 />
                             </div>
-                        )}
-                    </div>
 
-                    <div className="flex gap-2">
-                        <button
-                            type="submit"
-                            className="button button-primary"
-                            disabled={submitting}
-                            style={{ flex: 1 }}
-                        >
-                            {submitting ? 'Обновление...' : 'Обновить продукт'}
-                        </button>
-                        <button
-                            type="button"
-                            className="button button-secondary"
-                            onClick={() => navigate('/shop')}
-                            style={{ flex: 1 }}
-                        >
-                            Отмена
-                        </button>
-                    </div>
-                </form>
+                            <div className="oracle-form-group">
+                                <label className="oracle-form-label">Цена (₸)</label>
+                                <input
+                                    type="number"
+                                    name="price"
+                                    value={formData.price}
+                                    onChange={handleInputChange}
+                                    className="oracle-form-input"
+                                    min="1"
+                                    required
+                                />
+                            </div>
+
+                            <div className="oracle-form-group">
+                                <label className="oracle-form-label">Категория</label>
+                                <select
+                                    name="type"
+                                    value={formData.type}
+                                    onChange={handleInputChange}
+                                    className="oracle-form-input"
+                                    required
+                                >
+                                    {productTypes.map((type) => (
+                                        <option key={type.id} value={type.id}>
+                                            {type.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="oracle-form-group oracle-form-group-full">
+                                <label className="oracle-form-label">Описание</label>
+                                <textarea
+                                    name="description"
+                                    value={formData.description}
+                                    onChange={handleInputChange}
+                                    className="oracle-form-input"
+                                    rows="4"
+                                    required
+                                />
+                            </div>
+
+                            <div className="oracle-form-group oracle-form-group-full">
+                                <label className="oracle-form-label">Изображение продукта</label>
+                                <div className="oracle-image-upload">
+                                    <input
+                                        type="file"
+                                        onChange={handleImageChange}
+                                        accept="image/*"
+                                        className="oracle-form-input"
+                                        id="product-image"
+                                    />
+                                    <label htmlFor="product-image" className="oracle-upload-label">
+                                        <FaUpload />
+                                        <span>Выбрать изображение</span>
+                                    </label>
+                                </div>
+                                {(imagePreview || existingImageId) && (
+                                    <div className="oracle-image-preview">
+                                        <img
+                                            src={
+                                                imagePreview ||
+                                                (existingImageId 
+                                                    ? `http://localhost:8082/product/files/${existingImageId}`
+                                                    : '/images/no-image.png')
+                                            }
+                                            alt="Предпросмотр"
+                                            onError={(e) => {
+                                                console.error('Ошибка загрузки изображения:', e);
+                                                e.target.src = "/images/no-image.png";
+                                            }}
+                                            style={{
+                                                width: '400px',
+                                                height: '400px',
+                                                objectFit: 'contain',
+                                                maxWidth: '400px',
+                                                maxHeight: '400px',
+                                                minWidth: '400px',
+                                                minHeight: '400px'
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="oracle-form-actions">
+                            <button
+                                type="submit"
+                                className="oracle-btn oracle-btn-primary"
+                                disabled={submitting}
+                            >
+                                {submitting ? 'Обновление...' : 'Обновить продукт'}
+                            </button>
+                            <button
+                                type="button"
+                                className="oracle-btn oracle-btn-secondary"
+                                onClick={() => navigate('/shop')}
+                            >
+                                Отмена
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     );

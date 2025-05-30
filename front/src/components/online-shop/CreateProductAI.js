@@ -4,7 +4,7 @@ import axios from 'axios';
 import '../App.css';
 import '../styles/auth.css';
 import './CreateProductAI.css';
-import { FaArrowLeft, FaPlus, FaRobot, FaUpload, FaExclamationCircle } from "react-icons/fa";
+import { FaArrowLeft, FaRobot, FaUpload, FaExclamationCircle } from "react-icons/fa";
 
 const CreateProductAI = () => {
     const navigate = useNavigate();
@@ -38,17 +38,6 @@ const CreateProductAI = () => {
         }
     }, [navigate]);
 
-    useEffect(() => {
-        if (imageSource === 'upload') {
-            setFormData(prev => ({
-                ...prev,
-                previewImage: null,
-                isGenerated: false,
-                hasGeneratedDetails: false
-            }));
-        }
-    }, [imageSource]);
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -60,11 +49,13 @@ const CreateProductAI = () => {
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            const preview = URL.createObjectURL(file);
             setFormData(prev => ({
                 ...prev,
                 image: file,
-                previewImage: URL.createObjectURL(file),
-                isGenerated: false
+                previewImage: preview,
+                isGenerated: false,
+                hasGeneratedDetails: true // Позволит отобразить остальные поля
             }));
         }
     };
@@ -74,36 +65,44 @@ const CreateProductAI = () => {
             setError('Пожалуйста, введите название продукта');
             return;
         }
-    
+
         setLoading(true);
         setError(null);
-    
+
         try {
             const response = await axios.post('http://localhost:8082/ai/generate', {
                 name: formData.name
             });
-    
+
             const { description, price, type, imageUrl } = response.data;
-    
+
             setFormData(prev => ({
                 ...prev,
                 description,
                 price,
                 type,
-                previewImage: imageUrl, // покажем как превью
-                image: null, // не загружаем файл вручную
+                previewImage: prev.image ? prev.previewImage : imageUrl,
+                image: prev.image ?? null,
                 isGenerated: true,
                 hasGeneratedDetails: true
             }));
-    
-            setImageSource('ai'); // переключимся на режим AI, чтобы показать превью
+
+            // Если пользователь выбрал AI-изображение, обновим source и preview
+            if (imageSource === 'ai' && !formData.image) {
+                setFormData(prev => ({
+                    ...prev,
+                    previewImage: imageUrl,
+                    image: null
+                }));
+            }
+
         } catch (err) {
             console.error(err);
             setError('Ошибка при генерации продукта с помощью ИИ');
         } finally {
             setLoading(false);
         }
-    };    
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -122,7 +121,10 @@ const CreateProductAI = () => {
             productData.append('price', formData.price);
             productData.append('description', formData.description);
             productData.append('type', formData.type);
-            if (formData.image) {
+
+            if (imageSource === 'ai' && formData.previewImage) {
+                productData.append('imageUrl', formData.previewImage);
+            } else if (formData.image) {
                 productData.append('file', formData.image);
             }
 
@@ -191,7 +193,7 @@ const CreateProductAI = () => {
                                     checked={imageSource === 'ai'}
                                     onChange={(e) => setImageSource(e.target.value)}
                                 />
-                                <span><FaRobot /> Сгенерировать с помощью ИИ</span>
+                                <span><FaRobot /> Сгенерировать изображение</span>
                             </label>
                         </div>
 
@@ -202,7 +204,6 @@ const CreateProductAI = () => {
                                     onChange={handleImageUpload}
                                     accept="image/*"
                                     className="form-input"
-                                    id="product-image"
                                 />
                             </div>
                         )}
@@ -225,31 +226,22 @@ const CreateProductAI = () => {
                         </button>
                     </div>
 
-                    {imageSource === 'ai' && formData.isGenerated && formData.previewImage && (
+                    {formData.previewImage && (
                         <div className="image-preview-container">
-                            <label className="form-label">Сгенерированное изображение</label>
+                            <label className="form-label">
+                                {imageSource === 'ai' ? 'Сгенерированное изображение' : 'Загруженное изображение'}
+                            </label>
                             <div className="image-preview">
                                 <img
                                     src={formData.previewImage}
-                                    alt="Сгенерированное изображение"
+                                    alt="Превью изображения"
+                                    style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain' }}
                                 />
                             </div>
                         </div>
                     )}
 
-                    {imageSource === 'upload' && formData.previewImage && (
-                        <div className="image-preview-container">
-                            <label className="form-label">Загруженное изображение</label>
-                            <div className="image-preview">
-                                <img
-                                    src={formData.previewImage}
-                                    alt="Загруженное изображение"
-                                />
-                            </div>
-                        </div>
-                    )}
-
-                    {formData.hasGeneratedDetails && (
+                    {(formData.hasGeneratedDetails || imageSource === 'upload') && (
                         <>
                             <div className="form-group">
                                 <label className="form-label">Цена (₸)</label>
@@ -308,7 +300,7 @@ const CreateProductAI = () => {
                             className="btn btn-primary"
                             disabled={loading || !formData.previewImage}
                         >
-                            {loading ? 'Создание...' : <>Создать продукт </>}
+                            {loading ? 'Создание...' : 'Создать продукт'}
                         </button>
                     </div>
                 </form>

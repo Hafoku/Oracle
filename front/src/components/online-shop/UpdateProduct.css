@@ -1,0 +1,172 @@
+.oracle-form-container {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 800px;
+}
+
+.oracle-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.oracle-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.oracle-form-group-full {
+    grid-column: 1 / -1;
+}
+
+.oracle-form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.img{
+    width: 400px;
+    height: 400px;
+}
+
+.oracle-form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    background: var(--input-bg);
+    color: var(--text-color);
+    transition: all 0.2s ease;
+}
+
+.oracle-form-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color-light);
+    outline: none;
+}
+
+.oracle-image-upload {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.oracle-upload-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--primary-color);
+    color: white;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.oracle-upload-label:hover {
+    background: var(--primary-color-dark);
+}
+
+.oracle-upload-label svg {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.oracle-image-upload input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.oracle-image-preview {
+    margin-top: 1rem;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 2px solid var(--border-color);
+    padding: 1rem;
+    background: var(--surface-color-light);
+    width: 400px !important;
+    height: 400px !important;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.oracle-image-preview:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.oracle-image-preview::before {
+    content: 'Предпросмотр изображения';
+    display: block;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-color-light);
+    margin-bottom: 0.5rem;
+}
+
+.oracle-image-preview img {
+    width: 400px;
+    height: 400px;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    background: white;
+    padding: 0.5rem;
+}
+
+.oracle-form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.oracle-form-actions .oracle-btn {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+}
+
+.oracle-error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--error-color-light);
+    color: var(--error-color);
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+}
+
+.oracle-error-message svg {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .oracle-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .oracle-form-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .oracle-form-actions {
+        flex-direction: column;
+    }
+} 

@@ -78,9 +78,6 @@ const Header = () => {
 
                         {/* Action Buttons */}
                         <div className="oracle-nav-actions">
-                            <button className="oracle-action-btn" onClick={toggleSearch}>
-                                <FaSearch />
-                            </button>
                             <Link to="/account" className="oracle-action-btn">
                                 <FaUserMd />
                             </Link>

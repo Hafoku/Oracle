@@ -24,7 +24,7 @@ const ProductDetails = () => {
                 Logger.logInfo('Fetching product details', { productId: id });
                 
                 // Получаем данные о продукте
-                const productResponse = await axios.get(`/products/${id}`, {
+                const productResponse = await axios.get(`/product/${id}`, {
                     headers: { 
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -155,19 +155,15 @@ const ProductDetails = () => {
                 <div className="oracle-product-details-grid">
                     <div className="oracle-product-gallery">
                         <div className="oracle-product-image-wrapper">
-                            {product.avatar ? (
-                                <img 
-                                    src={`/product/files/${product.avatar.id}`}
-                                    alt={product.name}
-                                    className="oracle-product-detail-image"
-                                />
-                            ) : (
-                                <img 
-                                    src="/images/no-image.png"
-                                    alt="Изображение отсутствует"
-                                    className="oracle-product-detail-image"
-                                />
-                            )}
+                            <img 
+                                src={product.avatar ? `http://localhost:8082/product/files/${product.avatar.id}` : '/images/no-image.png'}
+                                alt={product.name}
+                                className="oracle-product-detail-image"
+                                onError={(e) => {
+                                    console.error('Ошибка загрузки изображения:', e);
+                                    e.target.src = "/images/no-image.png";
+                                }}
+                            />
                         </div>
                     </div>
                     <div className="oracle-product-info">

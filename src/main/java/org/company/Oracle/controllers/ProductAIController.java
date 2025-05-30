@@ -24,7 +24,7 @@ public class ProductAIController {
             return ResponseEntity.badRequest().build();
         }
 
-        ProductGenerateResponse response = productAIService.generateProduct(request.getName());
+        ProductGenerateResponse response = productAIService.generateProduct(request);
         return ResponseEntity.ok(response);
     }
 }
