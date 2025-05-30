@@ -75,4 +75,13 @@ public class ProductService {
         }
         return productRepository.save(oldProduct);
     }
+
+    public Product save(Product product) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            User user = userService.findAuthenticatedUser(authentication);
+            product.setCreator(user);
+        }
+        return productRepository.save(product);
+    }
 }

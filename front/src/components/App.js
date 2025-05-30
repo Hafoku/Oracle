@@ -12,6 +12,7 @@ import UpdateNews from "./News/UpdateNews";
 import CreateNews from "./News/CreateNews";
 import ProductDetails from "./online-shop/ProductDetails";
 import CreateProduct from "./online-shop/CreateProduct";
+import CreateProductAI from "./online-shop/CreateProductAI";
 import Cart from "./online-shop/Cart";
 import UpdateProduct from "./online-shop/UpdateProduct";
 import Products from "./Products";
@@ -60,6 +61,7 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/create_product/" element={<CreateProduct />} />
+        <Route path="/create_product_ai/" element={<CreateProductAI />} />
         <Route path="/update_product/:id" element={<UpdateProduct />} />
         <Route path="/cart/" element={<Cart />} />
         <Route path="/contacts" element={<Contacts />} />

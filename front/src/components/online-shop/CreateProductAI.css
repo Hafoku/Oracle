@@ -1,0 +1,310 @@
+.create-product-ai {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.create-product-ai .hero {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-radius: var(--radius);
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.create-product-ai .hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.create-product-ai .hero-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.create-product-ai .form-container {
+    background: white;
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.create-product-ai .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.create-product-ai .form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.create-product-ai .form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.create-product-ai .form-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+    outline: none;
+}
+
+.create-product-ai .radio-group {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.create-product-ai .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.create-product-ai .radio-option:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(var(--primary-rgb), 0.05);
+}
+
+.create-product-ai .radio-option input[type="radio"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin: 0;
+    cursor: pointer;
+}
+
+.create-product-ai .radio-option input[type="radio"]:checked + span {
+    color: var(--primary-color);
+}
+
+.create-product-ai .image-preview-container {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+.create-product-ai .image-preview {
+    max-width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background-color: var(--bg-color);
+}
+
+.create-product-ai .image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.create-product-ai .button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.create-product-ai .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.create-product-ai .btn-primary {
+    background-color: var(--primary-dark);
+    color: var(--text-light);
+}
+
+.create-product-ai .btn-primary:hover:not(:disabled) {
+    background-color: var(--secondary-dark-green);
+    transform: translateY(-1px);
+}
+
+.create-product-ai .btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--primary-dark);
+    color: var(--primary-dark);
+}
+
+.create-product-ai .btn-outline:hover {
+    background-color: var(--primary-dark);
+    color: var(--text-light);
+}
+
+.create-product-ai .btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background-color: var(--secondary-gray);
+    color: var(--text-dark);
+}
+
+.create-product-ai .error-message {
+    background-color: var(--error-bg);
+    color: var(--error-color);
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.create-product-ai .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+    z-index: 10;
+}
+
+.create-product-ai .loading-message {
+    padding: 1rem;
+    background-color: var(--bg-color);
+    border-radius: var(--radius);
+    text-align: center;
+    color: var(--text-color);
+    font-weight: 500;
+    margin-top: 1rem;
+    border: 1px solid var(--border-color);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.create-product-ai .form-container {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .create-product-ai {
+        padding: 1rem;
+    }
+
+    .create-product-ai .hero {
+        padding: 1.5rem;
+    }
+
+    .create-product-ai .hero-title {
+        font-size: 2rem;
+    }
+
+    .create-product-ai .radio-group {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .create-product-ai .button-group {
+        flex-direction: column;
+    }
+
+    .create-product-ai .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Переменные для цветов */
+:root {
+    --primary-color: var(--primary-dark);
+    --primary-dark: var(--secondary-dark-green);
+    --primary-rgb: 20, 63, 39;
+    --secondary-color: var(--primary-light);
+    --text-color: var(--text-dark);
+    --border-color: var(--secondary-gray);
+    --bg-color: var(--secondary-white);
+    --error-color: #dc2626;
+    --error-bg: #fee2e2;
+    --radius: 0.5rem;
+}
+
+/* Обновляем стили для темной темы */
+[data-theme="dark"] {
+    --primary-color: var(--primary-light);
+    --primary-dark: var(--secondary-dark-green);
+    --primary-rgb: 205, 219, 192;
+    --secondary-color: var(--primary-dark);
+    --text-color: var(--text-light);
+    --border-color: var(--border-color);
+    --bg-color: var(--card-background);
+}
+
+.create-product-ai .generate-button-container {
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.create-product-ai .generate-button {
+    min-width: 250px;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    background-color: var(--primary-dark);
+    color: var(--text-light);
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.create-product-ai .generate-button:hover:not(:disabled) {
+    background-color: var(--secondary-dark-green);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.create-product-ai .generate-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    background-color: var(--secondary-gray);
+    color: var(--text-dark);
+}
+
+.create-product-ai .loading-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+} 
