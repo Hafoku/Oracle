@@ -150,7 +150,7 @@ const Cart = () => {
                                             </div>
                                             <div className="oracle-cart-item-details">
                                                 <h3 className="oracle-cart-item-title">{item.product.name}</h3>
-                                                <p className="oracle-cart-item-price">{item.product.price} ₽</p>
+                                                <p className="oracle-cart-item-price">Цена за 1 шт. товара: {item.product.price} ₸</p>
                                             </div>
                                             <div className="oracle-cart-item-actions">
                                                 <div className="oracle-quantity-controls">
@@ -182,13 +182,13 @@ const Cart = () => {
 
                             <div className="oracle-cart-summary">
                                 <div className="oracle-cart-total">
-                                    <span>Итого:</span>
-                                    <span className="oracle-cart-total-price">{calculateTotal()} ₽</span>
+                                    <span>Общая стоимость корзины:</span>
+                                    <span className="oracle-cart-total-price">{calculateTotal()} ₸</span>
                                 </div>
                                 <div className="oracle-cart-actions">
                                     <button 
-                                        className="oracle-btn oracle-btn-secondary"
-                                        onClick={() => navigate('/shop')}
+                                        className="oracle-btn oracle-btn-secondary-2"
+                                        onClick={() => navigate('/products')}
                                     >
                                         <FaArrowLeft /> Продолжить покупки
                                     </button>

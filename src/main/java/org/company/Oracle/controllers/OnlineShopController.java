@@ -5,6 +5,7 @@ import org.company.Oracle.dto.ProductDto;
 import org.company.Oracle.models.Product;
 import org.company.Oracle.models.ProfilePicture;
 import org.company.Oracle.models.User;
+import org.company.Oracle.repositories.CartItemRepository;
 import org.company.Oracle.repositories.ProductRepository;
 import org.company.Oracle.repositories.ProfilePictureRepository;
 import org.company.Oracle.repositories.UserRepository;
@@ -31,6 +32,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class    OnlineShopController {
 
     @Autowired
@@ -102,5 +104,32 @@ public class    OnlineShopController {
         Product oldProduct = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Продукт не найден"));
         Product updatedProduct= productService.updateProduct(newProduct, oldProduct, file);
         return ResponseEntity.ok().body(updatedProduct);
+    }
+
+    @Autowired
+    private CartItemRepository cartItemRepository;
+
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
+        logger.info("Удаление продукта с id: {}", id);
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Продукт не найден"));
+
+        // Удаление связанных cart_items
+        cartItemRepository.deleteByProduct(product);
+
+        // Удаление изображения
+        if (product.getAvatar() != null) {
+            ProfilePicture avatar = product.getAvatar();
+            try {
+                Path path = Paths.get(avatar.getFilePath().replace("\\", "/"));
+                Files.deleteIfExists(path);
+                profilePictureRepository.delete(avatar);
+            } catch (IOException e) {
+                logger.error("Ошибка при удалении изображения: {}", e.getMessage());
+            }
+        }
+
+        productRepository.delete(product);
+        return ResponseEntity.ok("Продукт успешно удален");
     }
 }

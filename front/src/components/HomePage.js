@@ -4,12 +4,18 @@ import "./App.css";
 import Header from './Header';
 import Footer from './Footer';
 import { Link } from "react-router-dom";
-import { FaShoppingCart, FaSearch, FaPills, FaClinicMedical, FaHeartbeat, FaUserMd, FaStar, FaHeart } from "react-icons/fa";
+import { FaShoppingCart, FaSearch, FaPills, FaClinicMedical, FaHeartbeat, FaUserMd, FaStar, FaHeart, FaEdit, FaTimes } from "react-icons/fa";
+import Logger from './Logger';
 
 const HomePage = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [modalLoading, setModalLoading] = useState(false);
 
   const categories = [
     {
@@ -99,16 +105,44 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+    const checkAdminStatus = async () => {
+      const token = localStorage.getItem("jwtToken");
+      if (token) {
+        try {
+          const response = await axios.get('/user/current', {
+            headers: { 
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          setIsAdmin(response.data.role?.name === 'ADMIN');
+        } catch (err) {
+          Logger.logError('Error checking admin status', err);
+          setIsAdmin(false);
+        }
+      }
+    };
+
+    checkAdminStatus();
+  }, []);
+
+  useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
         const response = await axios.get('/products');
-        const products = Array.from(response.data).slice(0, 4);
-        setFeaturedProducts(products);
+        const products = Array.from(response.data);
+        setAllProducts(products);
+        
+        // Get featured products (first 4 by default)
+        const featured = products.slice(0, 4);
+        setFeaturedProducts(featured);
+        setSelectedProducts(featured.map(p => p.id));
+        
         setError(null);
       } catch (err) {
         setError('Ошибка при загрузке товаров. Пожалуйста, попробуйте позже.');
-        console.error('Error fetching products:', err);
+        Logger.logError('Error fetching products:', err);
       } finally {
         setLoading(false);
       }
@@ -116,6 +150,46 @@ const HomePage = () => {
 
     fetchProducts();
   }, []);
+
+  const handleEditFeatured = () => {
+    setShowEditModal(true);
+  };
+
+  const handleSaveFeatured = async () => {
+    const token = localStorage.getItem("jwtToken");
+    if (!token) return;
+
+    try {
+      setModalLoading(true);
+      // Здесь будет запрос к бэкенду для сохранения выбранных товаров
+      // await axios.post('/admin/featured-products', { productIds: selectedProducts });
+      
+      // Временно обновляем локально
+      const newFeatured = allProducts.filter(p => selectedProducts.includes(p.id));
+      setFeaturedProducts(newFeatured);
+      setShowEditModal(false);
+      
+      Logger.logSuccess('Featured products updated successfully');
+    } catch (err) {
+      Logger.logError('Error updating featured products:', err);
+      alert('Ошибка при сохранении популярных товаров');
+    } finally {
+      setModalLoading(false);
+    }
+  };
+
+  const handleProductSelect = (productId) => {
+    setSelectedProducts(prev => {
+      if (prev.includes(productId)) {
+        return prev.filter(id => id !== productId);
+      } else if (prev.length < 4) {
+        return [...prev, productId];
+      } else {
+        alert('Можно выбрать максимум 4 товара');
+        return prev;
+      }
+    });
+  };
 
   return (
     <div className="oracle-page-wrapper">
@@ -175,6 +249,14 @@ const HomePage = () => {
         <div className="oracle-container">
           <div className="oracle-section-header">
             <h2 className="oracle-title oracle-text-center">Популярные товары</h2>
+            {isAdmin && (
+              <button 
+                className="oracle-btn oracle-btn-secondary oracle-btn-sm"
+                onClick={handleEditFeatured}
+              >
+                <FaEdit /> Редактировать
+              </button>
+            )}
           </div>
           
           {loading ? (
@@ -209,23 +291,24 @@ const HomePage = () => {
                         </div>
                       )}
                       <div className="oracle-product-actions">
-                        <button className="oracle-product-action-btn oracle-wishlist-btn" title="Добавить в избранное">
-                          <FaHeart />
-                        </button>
                         <button className="oracle-product-action-btn oracle-cart-btn" title="Добавить в корзину">
                           <FaShoppingCart />
                         </button>
                       </div>
                     </div>
                     <div className="oracle-product-content">
-                      <div className="oracle-product-category">{product.category}</div>
                       <h3 className="oracle-product-title">{product.name}</h3>
-                      <p className="oracle-product-description">{product.description}</p>
-                      <div className="oracle-product-rating">
-                        <div className="oracle-stars">
-                          {renderRating(product.rating || 0)}
-                        </div>
-                        <span className="oracle-reviews-count">({product.reviews || 0})</span>
+                      <div className="oracle-product-category">
+                        {product.type === "first-aid" ? "Аптечки первой помощи" :
+                         product.type === "equipment" ? "Медицинское оборудование" :
+                         product.type === "medicine" ? "Медикаменты" :
+                         product.type === "prescription" ? "Рецептурные препараты" : 
+                         product.type === "otc" ? "Безрецептурные препараты" : 
+                         product.type === "supplements" ? "Витамины и добавки" :
+                         "Другое"}
+                      </div>
+                      <div className="oracle-product-description-wrapper">
+                        <p className="oracle-product-description">{product.description}</p>
                       </div>
                       <div className="oracle-product-price-wrapper">
                         <p className="oracle-product-price">{product.price} ₸</p>
@@ -242,6 +325,79 @@ const HomePage = () => {
                 <Link to="/products" className="oracle-btn oracle-btn-secondary">Все товары</Link>
               </div>
             </>
+          )}
+
+          {/* Edit Modal */}
+          {showEditModal && (
+            <div className="oracle-modal-overlay">
+              <div className="oracle-modal">
+                <div className="oracle-modal-header">
+                  <h3>Выберите популярные товары</h3>
+                  <button 
+                    className="oracle-modal-close"
+                    onClick={() => setShowEditModal(false)}
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
+                <div className="oracle-modal-body">
+                  <p className="oracle-modal-info">
+                    Выберите до 4 товаров для отображения в разделе "Популярные товары"
+                  </p>
+                  <div className="oracle-modal-products-grid">
+                    {allProducts.map(product => (
+                      <div 
+                        key={product.id}
+                        className={`oracle-modal-product-card ${selectedProducts.includes(product.id) ? 'selected' : ''}`}
+                        onClick={() => handleProductSelect(product.id)}
+                      >
+                        <div className="oracle-modal-product-image">
+                          {product.avatar ? (
+                            <img
+                              src={`http://localhost:8082/product/files/${product.avatar.id}`}
+                              alt={product.name}
+                              onError={e => {
+                                e.target.onerror = null;
+                                e.target.src = "/images/no-image.png";
+                              }}
+                            />
+                          ) : (
+                            <div className="oracle-product-card__placeholder">
+                              <i className="fas fa-image"></i>
+                            </div>
+                          )}
+                        </div>
+                        <div className="oracle-modal-product-info">
+                          <h4>{product.name}</h4>
+                          <p>{product.price} ₸</p>
+                        </div>
+                        {selectedProducts.includes(product.id) && (
+                          <div className="oracle-modal-product-selected">
+                            <FaStar />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="oracle-modal-footer">
+                  <button 
+                    className="oracle-btn oracle-btn-secondary-2"
+                    onClick={() => setShowEditModal(false)}
+                    disabled={modalLoading}
+                  >
+                    Отмена
+                  </button>
+                  <button 
+                    className="oracle-btn oracle-btn-primary"
+                    onClick={handleSaveFeatured}
+                    disabled={modalLoading || selectedProducts.length === 0}
+                  >
+                    {modalLoading ? 'Сохранение...' : 'Сохранить'}
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </section>

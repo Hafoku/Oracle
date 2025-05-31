@@ -113,6 +113,45 @@ const ProductDetails = () => {
         navigate(`/update_product/${id}`);
     };
 
+    const deleteProduct = async () => {
+        if (!window.confirm('Вы уверены, что хотите удалить этот товар?')) {
+            return;
+        }
+
+        const token = localStorage.getItem("jwtToken");
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+
+        try {
+            Logger.logInfo('Deleting product', { productId: id });
+            
+            await axios.delete(`/product/${id}`, {
+                headers: { 
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            Logger.logSuccess('Product deleted successfully', { productId: id });
+            alert('Товар успешно удален!');
+            navigate('/products');
+        } catch (err) {
+            Logger.logError('Error deleting product', { 
+                productId: id, 
+                error: err.response?.data || err.message 
+            });
+
+            if (err.response?.status === 401) {
+                localStorage.removeItem("jwtToken");
+                navigate("/login");
+            } else {
+                alert('Ошибка при удалении товара');
+            }
+        }
+    };
+
     if (loading) return (
         <div className="oracle-container">
             <div className="oracle-loading">Загрузка товара...</div>
@@ -200,6 +239,13 @@ const ProductDetails = () => {
                                     onClick={navigateToUpdate}
                                 >
                                     Редактировать товар
+                                </button>
+                                <button 
+                                    className="oracle-btn oracle-btn-danger"
+                                    onClick={deleteProduct}
+                                    style={{ marginLeft: '10px' }}
+                                >
+                                    Удалить товар
                                 </button>
                             </div>
                         )}

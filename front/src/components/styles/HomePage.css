@@ -231,38 +231,7 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
-.oracle-product-rating {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-.oracle-stars {
-  display: flex;
-  align-items: center;
-  margin-right: 0.5rem;
-}
-.oracle-star {
-  color: #ddd;
-  font-size: 0.9rem;
-  margin-right: 2px;
-}
-.oracle-star.filled {
-  color: #ffc107;
-}
-.oracle-star.half {
-  position: relative;
-  color: #ddd;
-}
-.oracle-star.half::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background-color: #ffc107;
-  overflow: hidden;
-}
+
 .oracle-reviews-count {
   font-size: 0.8rem;
   color: #777;

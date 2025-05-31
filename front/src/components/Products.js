@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
 import Header from './Header';
@@ -26,6 +26,8 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(12);
 
+  const location = useLocation();
+
   // Categories
   const categories = [
     { id: 'all', name: 'Все товары' },
@@ -37,18 +39,16 @@ const Products = () => {
     { id: 'supplements', name: 'Витамины и добавки' }
   ];
 
-  // Fetch products from API
+  // Fetch products and initial data
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchInitialData = async () => {
       try {
         setLoading(true);
-        Logger.logInfo('Fetching products from API');
-        
-        const response = await axios.get('/products');
-        Logger.logSuccess('Products fetched successfully', { count: response.data.length });
-        
-        // Преобразуем данные из API в нужный формат
-        const formattedProducts = response.data.map(product => ({
+        Logger.logInfo('Fetching products and initial data');
+
+        // Fetch products
+        const productsResponse = await axios.get('/products');
+        const formattedProducts = productsResponse.data.map(product => ({
           id: product.id,
           name: product.name,
           price: product.price,
@@ -61,19 +61,43 @@ const Products = () => {
           stock: product.stock || 0,
           sale: product.sale || false
         }));
-
         setProducts(formattedProducts);
-        setFilteredProducts(formattedProducts);
+
+        // Fetch wishlist (only if token exists) - REMOVED WISHlist FETCH
+        const token = localStorage.getItem("jwtToken");
+        // if (token) {
+        //      try {
+        //         const wishlistResponse = await axios.get('/wishlist', {
+        //             headers: {
+        //                 Authorization: `Bearer ${token}`,
+        //             }
+        //         });
+        //         const initialWishlistIds = wishlistResponse.data.map(item => item.product.id);
+        //         setWishlist(initialWishlistIds);
+        //          Logger.logSuccess('Wishlist fetched successfully', { count: initialWishlistIds.length });
+        //     } catch (wishlistErr) {
+        //          Logger.logError('Error fetching wishlist', wishlistErr);
+        //          setWishlist([]);
+        //     }
+        // } else {
+             setWishlist([]); // Ensure wishlist is empty if not fetching
+        // }
+
+        // Set initial search query from URL
+        const params = new URLSearchParams(location.search);
+        const initialSearch = params.get('search') || '';
+        setSearchQuery(initialSearch);
+
         setLoading(false);
       } catch (err) {
-        Logger.logError(err);
-        setError('Ошибка при загрузке товаров. Пожалуйста, попробуйте позже.');
+        Logger.logError('Error fetching products or initial data:', err);
+        setError('Ошибка при загрузке данных. Пожалуйста, попробуйте позже.');
         setLoading(false);
       }
     };
-    
-    fetchProducts();
-  }, []);
+
+    fetchInitialData();
+  }, [location.search]); // Rerun effect when search query changes in URL or on initial mount
 
   // Filter products when search query, category, or price range changes
   useEffect(() => {
@@ -145,14 +169,47 @@ const Products = () => {
     setCurrentPage(pageNumber);
   };
 
-  // Toggle wishlist
+  // Toggle wishlist - REMOVED WISHlist API CALLS
   const toggleWishlist = (productId) => {
-    Logger.logUserAction('Wishlist toggle', { productId });
-    if (wishlist.includes(productId)) {
-      setWishlist(wishlist.filter(id => id !== productId));
-    } else {
-      setWishlist([...wishlist, productId]);
-    }
+    // const token = localStorage.getItem("jwtToken");
+    // if (!token) {
+    //   alert('Пожалуйста, войдите, чтобы добавить товар в избранное');
+    //   // navigate("/login");
+    //   return;
+    // }
+
+    // const isCurrentlyInWishlist = wishlist.includes(productId);
+    // Logger.logUserAction(`${isCurrentlyInWishlist ? 'Removing from' : 'Adding to'} wishlist`, { productId });
+
+    // try {
+    //   if (isCurrentlyInWishlist) {
+    //     await axios.delete(`/wishlist/remove/${productId}`, { headers: { Authorization: `Bearer ${token}`, }});
+    //     setWishlist(wishlist.filter(id => id !== productId));
+    //     Logger.logSuccess('Removed from wishlist', { productId });
+    //   } else {
+    //     await axios.post(`/wishlist/add/${productId}`, null, { headers: { Authorization: `Bearer ${token}`, }});
+    //     setWishlist([...wishlist, productId]);
+    //     Logger.logSuccess('Added to wishlist', { productId });
+    //   }
+    // } catch (err) {
+    //   Logger.logError(`Error ${isCurrentlyInWishlist ? 'removing from' : 'adding to'} wishlist`, { 
+    //       productId, 
+    //       error: err.response?.data || err.message 
+    //   });
+    //    if (err.response?.status === 401) {
+    //       localStorage.removeItem("jwtToken");
+    //       alert('Сессия истекла. Пожалуйста, войдите снова.');
+    //   } else {
+    //      alert(`Ошибка при ${isCurrentlyInWishlist ? 'удалении из' : 'добавлении в'} избранного`);
+    //   }
+    // }
+    // Local state toggle fallback if API calls are removed
+     if (wishlist.includes(productId)) {
+       setWishlist(wishlist.filter(id => id !== productId));
+     } else {
+       setWishlist([...wishlist, productId]);
+     }
+     Logger.logUserAction('Wishlist toggle (local)', { productId });
   };
 
   // Render star ratings
@@ -184,6 +241,56 @@ const Products = () => {
     setSelectedCategory('all');
     setPriceRange({ min: 0, max: 10000 });
     setSortBy('popularity');
+  };
+
+  // Add to cart function
+  const addToCart = async (productId) => {
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      // Assuming navigate is available from react-router-dom
+      // If not, you might need to add `const navigate = useNavigate();` at the top
+      // and import it: `import { Link, useLocation, useNavigate } from 'react-router-dom';`
+      alert('Пожалуйста, войдите, чтобы добавить товар в корзину');
+      // navigate("/login"); // Uncomment if navigate is imported and needed
+      return;
+    }
+
+    try {
+      Logger.logInfo('Adding product to cart', { productId });
+
+      // Use the endpoint from CartController.java
+      await axios.post(`/cart/add`, null, {
+        params: { 
+          productId: Number(productId),
+          quantity: 1 // Default quantity to 1
+        },
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      Logger.logSuccess('Product added to cart successfully', { productId });
+      alert('Товар добавлен в корзину!');
+      // Optionally, refresh cart count in header or update local state
+    } catch (err) {
+      Logger.logError('Error adding product to cart', { 
+        productId, 
+        error: err.response?.data || err.message 
+      });
+
+      if (err.response?.status === 401) {
+        localStorage.removeItem("jwtToken");
+        // navigate("/login"); // Uncomment if navigate is imported
+        alert('Сессия истекла. Пожалуйста, войдите снова.');
+      } else if (err.response?.status === 400 && err.response?.data === "Product not found"){
+        alert('Товар не найден.');
+      } else if (err.response?.status === 400 && err.response?.data === "Not enough stock"){
+        alert('Недостаточно товара на складе.');
+      } else {
+        alert('Ошибка при добавлении товара в корзину.');
+      }
+    }
   };
 
   return (
@@ -348,24 +455,14 @@ const Products = () => {
                             className="oracle-product-image" 
                           />
                           <div className="oracle-product-actions">
+                            {/* Removed Wishlist Button */}
                             <button 
-                              className="oracle-product-action-btn oracle-wishlist-btn" 
-                              title={wishlist.includes(product.id) ? "Удалить из избранного" : "Добавить в избранное"}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                toggleWishlist(product.id);
-                              }}
-                            >
-                              {wishlist.includes(product.id) ? <FaHeart /> : <FaRegHeart />}
-                            </button>
-                            <button 
-                              className={`oracle-product-action-btn oracle-cart-btn ${product.stock === 0 ? 'disabled' : ''}`} 
+                              className="oracle-product-action-btn oracle-cart-btn" 
                               title="Добавить в корзину"
-                              disabled={product.stock === 0}
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
+                                addToCart(product.id); // Call the addToCart function
                               }}
                             >
                               <FaShoppingCart />
@@ -374,6 +471,7 @@ const Products = () => {
                         </div>
                         
                         <div className="oracle-product-content">
+                          <h3 className="oracle-product-title">{product.name}</h3>
                           <div className="oracle-product-category">
                             {product.category === "first-aid" ? "Аптечки первой помощи" :
                              product.category === "equipment" ? "Медицинское оборудование" :
@@ -384,15 +482,8 @@ const Products = () => {
                              "Другое"}
                           </div>
                           
-                          <h3 className="oracle-product-title">{product.name}</h3>
-                          
-                          <p className="oracle-product-description">{product.description}</p>
-                          
-                          <div className="oracle-product-rating">
-                            <div className="oracle-stars">
-                              {renderRating(product.rating)}
-                            </div>
-                            <span className="oracle-reviews-count">({product.reviews})</span>
+                          <div className="oracle-product-description-wrapper">
+                            <p className="oracle-product-description">{product.description}</p>
                           </div>
                           
                           <div className="oracle-product-price-wrapper">
@@ -401,11 +492,11 @@ const Products = () => {
                           </div>
                           
                           <button 
-                            className={`oracle-btn oracle-btn-primary oracle-btn-block ${product.stock === 0 ? 'oracle-btn-disabled' : ''}`}
-                            disabled={product.stock === 0}
+                            className="oracle-btn oracle-btn-primary oracle-btn-block"
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
+                              addToCart(product.id);
                             }}
                           >
                             {product.stock === 0 ? 'Нет в наличии' : 'В корзину'}

@@ -169,7 +169,7 @@ const CreateProduct = () => {
                         <button
                             type="button"
                             className="news-btn news-btn-outline"
-                            onClick={() => navigate('/shop')}
+                            onClick={() => navigate('/products')}
                         >
                             <FaArrowLeft style={{ marginRight: 8 }} /> Отмена
                         </button>

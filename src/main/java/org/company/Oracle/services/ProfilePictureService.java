@@ -12,7 +12,6 @@ import org.company.Oracle.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,177 +32,141 @@ public class ProfilePictureService {
     private ProfilePictureRepository profilePictureRepository;
 
     @Autowired
-    private NewsRepository newsRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private NewsRepository newsRepository;
 
     @Autowired
     private ProductRepository productRepository;
 
-    private final String FOLDER_PATH = System.getProperty("user.dir") + "/uploads";
-    private final String NEWS_FOLDER_PATH = System.getProperty("user.dir") + "/news";
-    private final String PRODUCT_FOLDER_PATH = System.getProperty("user.dir") + "/product";
+    private final String USER_PATH = System.getProperty("user.dir") + "/uploads";
+    private final String NEWS_PATH = System.getProperty("user.dir") + "/news";
+    private final String PRODUCT_PATH = System.getProperty("user.dir") + "/product";
 
     private static final Logger logger = LoggerFactory.getLogger(ProfilePictureService.class);
 
-    private Integer fileSize;
-
     @Transactional
-    public ProfilePicture uploadFileToDataSystem(MultipartFile file, Long entityId, String entityType) throws IOException{
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(authentication.getName());
-        logger.info("Найден пользователь {}", authentication.getName());
+    public ProfilePicture uploadFileToDataSystem(MultipartFile file, Long entityId, String entityType) throws IOException {
+        User user = getCurrentUser();
         validate(file, entityType, user);
+
         return switch (entityType) {
-            case "User" -> handleUserAvatar(file, user);
-            case "News" -> handleNewsAvatar(file, entityId, user);
-            case "List" -> handleListAvatars(file);
-            case "Product" -> handleProductAvatar(file, entityId, user);
-            default ->
-                    throw new IllegalArgumentException("Введён неправильный тип аватарки при запросе к сервису. Введённый тип: " + entityType + " допустимые типы: " + News.class.getSimpleName() + ", " + User.class.getSimpleName() + ", List");
+            case "User" -> saveUserAvatar(file, user);
+            case "News" -> saveNewsAvatar(file, entityId, user);
+            case "List" -> saveListImage(file);
+            case "Product" -> saveProductAvatar(file, entityId, user);
+            default -> throw new IllegalArgumentException("Тип " + entityType + " не поддерживается");
         };
     }
 
-    private ProfilePicture handleProductAvatar(MultipartFile file, Long productId, User user) throws IOException {
-        isExist(user);
-        logger.info("Сохранения изображения для продукта");
-        Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Продукт не найден. Айди:" + productId));
-        ProfilePicture savedFile = createFolder(file, Paths.get(PRODUCT_FOLDER_PATH, product.getId().toString()).toString());
-        product.setAvatar(savedFile);
-        productRepository.save(product);
-        logger.info("Устанавливается аватарока {} для продукта {}", savedFile.getName(), product.getName());
-        logger.info("Файл {} был сохранён в базу данных", savedFile.getName());
-        return savedFile;
+    private ProfilePicture saveUserAvatar(MultipartFile file, User user) throws IOException {
+        removeOldUserAvatar(user);
+        ProfilePicture newPic = saveFile(file, Paths.get(USER_PATH, user.getId().toString()).toString());
+        user.setAvatar(newPic);
+        userRepository.save(user);
+        return newPic;
     }
 
-    private ProfilePicture handleListAvatars(MultipartFile file) throws IOException {
-        logger.info("Сохранение списка изображений для новостей");
-        ProfilePicture savedFile = createFolder(file, Paths.get(NEWS_FOLDER_PATH, file.getOriginalFilename().toString()).toString());
-        logger.info("Файл {} был сохранён в базу данных", savedFile.getName());
-        return savedFile;
-    }
-
-    private ProfilePicture handleNewsAvatar(MultipartFile file, Long entityId, User user) throws IOException {
-        isExist(user);
-        logger.info("Сохранение изображения для новости.");
-        News news = newsRepository.findById(entityId).orElseThrow(() -> new RuntimeException("Новость не найдена"));
-        ProfilePicture savedFile = createFolder(file, Paths.get(NEWS_FOLDER_PATH, news.getId().toString()).toString());
-        news.setAvatar(savedFile);
+    private ProfilePicture saveNewsAvatar(MultipartFile file, Long newsId, User user) throws IOException {
+        News news = newsRepository.findById(newsId).orElseThrow(() -> new RuntimeException("Новость не найдена"));
+        ProfilePicture newPic = saveFile(file, Paths.get(NEWS_PATH, news.getId().toString()).toString());
+        news.setAvatar(newPic);
         news.setAuthor(user);
         newsRepository.save(news);
-        logger.info("Файл был сохранён в базу данных с айди: {}. Для новости: {}. Файл:{}, Владелец: {}", savedFile.getId(), news.getTitle(), news.getAvatar().getName(), news.getAuthor().getName());
-        return savedFile;
+        return newPic;
     }
 
-    private ProfilePicture handleUserAvatar(MultipartFile file, User user) throws IOException {
-        isExist(user);
-        ProfilePicture savedFile = createFolder(file, Paths.get(FOLDER_PATH, user.getId().toString()).toString());
-        user.setAvatar(savedFile);
-        userRepository.save(user);
-        logger.info("Файл был сохранён в базу данных с айди: {}. Для пользователя: {}. Файл:{}", savedFile.getId(), user.getName(), user.getAvatar().getName());
-        return savedFile;
+    private ProfilePicture saveListImage(MultipartFile file) throws IOException {
+        return saveFile(file, NEWS_PATH);
     }
 
-    private ProfilePicture createFolder(MultipartFile file, String FolderPath) throws IOException {
-        File Folder = new File(FolderPath);
-        if (!Folder.exists()) {
-            Folder.mkdirs();
-            logger.info("Создана директория: {}", FOLDER_PATH);
+    private ProfilePicture saveProductAvatar(MultipartFile file, Long productId, User user) throws IOException {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Продукт не найден"));
+        if (product.getAvatar() != null) {
+            deletePhysicalAndDb(product.getAvatar());
+            product.setAvatar(null);
         }
-        String filePath = Paths.get(FolderPath, UUID.randomUUID() + "_" + file.getOriginalFilename()).toString();
-        try{
-            file.transferTo(new File(filePath));
-        }catch (Exception e){
-            logger.error("Файл {} не найден на пути: {}, ошибка: {}", file.getOriginalFilename(), filePath, e.getMessage());
-            throw new IOException("Файл не был найден");
-        }
-        logger.info("Файл {} был сохранён в: {}", file.getOriginalFilename(), filePath);
-        return createProfilePicture(file, filePath);
+        ProfilePicture newPic = saveFile(file, Paths.get(PRODUCT_PATH, product.getId().toString()).toString());
+        product.setAvatar(newPic);
+        productRepository.save(product);
+        return newPic;
     }
 
+    private ProfilePicture saveFile(MultipartFile file, String folderPath) throws IOException {
+        File dir = new File(folderPath);
+        if (!dir.exists()) dir.mkdirs();
 
-    private ProfilePicture createProfilePicture(MultipartFile file, String filePath){
-        ProfilePicture profilePicture = ProfilePicture.builder()
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        String fullPath = Paths.get(folderPath, fileName).toString();
+        file.transferTo(new File(fullPath));
+
+        ProfilePicture pic = ProfilePicture.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())
-                .filePath(filePath)
-                .fileSize(fileSize)
+                .filePath(fullPath)
+                .fileSize((int) (file.getSize() / 1024))
                 .build();
 
-        return profilePictureRepository.save(profilePicture);
+        return profilePictureRepository.save(pic);
     }
 
-    private void isExist(User user){
-        ProfilePicture existingFile = profilePictureRepository.findByUser(user);
-        if(existingFile != null){
-            File oldFile = new File(existingFile.getFilePath());
-            if(oldFile.exists()){
-                if (oldFile.delete()){
-                    user.setAvatar(null);
-                    profilePictureRepository.delete(existingFile);
-                    logger.info("Старая фотография профиля была удалена");
-                }
-                else {
-                    logger.error("Ошибка. Не вышло удалить старую фотографию профиля");
-                    throw new IllegalStateException("Не удалось удалить старый файл");
-                }
-            }
+    private void removeOldUserAvatar(User user) {
+        ProfilePicture old = profilePictureRepository.findByUser(user);
+        if (old != null) {
+            deletePhysicalAndDb(old);
+            user.setAvatar(null);
             userRepository.save(user);
         }
     }
 
-    private void validate(MultipartFile file, String entityType, User user){
-        if (!entityType.equals("List") && user == null) {
-            throw new UsernameNotFoundException("Пользователь не найден");
-        }
-        if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("Файл отсутствует или пуст");
-        }
-        String contentType = file.getContentType();
-        logger.debug("MIME Type: " + contentType);
-        fileSize = Math.toIntExact(file.getSize() / 1024);
-        if ( fileSize > 2 * 1024){
-            throw new IllegalArgumentException("Ошибка. Файл не должен весить больше 2 мегабайт. Вес файла: " + fileSize / 1024 + " мегабайт");
-        }
-        if (contentType != null && !contentType.startsWith("image")) {
-            throw new IllegalArgumentException("Ошибка. Доступны только изображения");
-        }
+    private void deletePhysicalAndDb(ProfilePicture pic) {
+        File file = new File(pic.getFilePath());
+        if (file.exists()) file.delete();
+        profilePictureRepository.delete(pic);
     }
 
-    public void deleteFile(Long fileId){
-        ProfilePicture file = profilePictureRepository.findById(fileId).orElseThrow(() -> new IllegalArgumentException("Файл не найден"));
-        File physicalFile = new File(file.getFilePath());
-        if (physicalFile.exists()){
-            if (physicalFile.delete()){
-                logger.info("Файл был успешно удалён из системы");
-            }
-            else {
-                logger.error("Не удалось удалить файл {} по пути {}", file.getName(), file.getFilePath());
-                throw new IllegalStateException("Не удалось удалить файл");
-            }
-        }
-        else {
-            logger.warn("Физический файл {} не был найден, но запись в БД будет удалена", file.getName());
-        }
+    private void validate(MultipartFile file, String entityType, User user) {
+        if (!entityType.equals("List") && user == null)
+            throw new UsernameNotFoundException("Пользователь не найден");
+
+        if (file == null || file.isEmpty())
+            throw new IllegalArgumentException("Файл отсутствует или пуст");
+
+        String type = file.getContentType();
+        if (type == null || !type.startsWith("image"))
+            throw new IllegalArgumentException("Разрешены только изображения");
+
+        int sizeKB = (int) (file.getSize() / 1024);
+        if (sizeKB > 20048)
+            throw new IllegalArgumentException("Максимальный размер — 2MB. Сейчас: " + sizeKB + "KB");
+    }
+
+    public void deleteFile(Long fileId) {
+        ProfilePicture file = profilePictureRepository.findById(fileId)
+                .orElseThrow(() -> new IllegalArgumentException("Файл не найден"));
+        File f = new File(file.getFilePath());
+        if (f.exists()) f.delete();
         profilePictureRepository.delete(file);
     }
 
     @Transactional
     public List<ProfilePicture> uploadListOfFiles(List<MultipartFile> images, News news) {
-        try{
-            List<ProfilePicture> newsImages = new ArrayList<>();
-            for (MultipartFile image: images){
-                logger.info("Загружается файл {}", image);
-                ProfilePicture pictures = uploadFileToDataSystem(image, null , "List");
-                pictures.setNews(news);
-                newsImages.add(pictures);
+        List<ProfilePicture> result = new ArrayList<>();
+        for (MultipartFile image : images) {
+            try {
+                ProfilePicture pic = uploadFileToDataSystem(image, null, "List");
+                pic.setNews(news);
+                result.add(pic);
+            } catch (Exception e) {
+                logger.error("Ошибка загрузки изображения: {}", e.getMessage());
             }
-            return newsImages;
         }
-        catch (Exception e){
-            logger.error("Ошибка при загрузке файлов: ", e);
-            throw new RuntimeException("Ошибка. Файлы не найдены. " + e.getMessage());
-        }
+        return result;
+    }
+
+    private User getCurrentUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email);
     }
 }

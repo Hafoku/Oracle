@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Используем Link вместо <a>
+import { Link, useNavigate } from "react-router-dom"; // Используем Link и useNavigate
 import "./App.css"; // Подключаем стили
 import logo from './assets/static/logo.png'; // Добавляем импорт логотипа
 import { FaBars, FaTimes, FaMapMarkerAlt, FaPhone, FaEnvelope, FaShoppingCart, FaPills, FaSearch, FaUserMd } from 'react-icons/fa';
+import Logger from './Logger';
+import axios from 'axios';
 
 const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState(null);
     const [searchOpen, setSearchOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState(''); // State for search input
+    const [cartCount, setCartCount] = useState(0); // State for cart count
+
+    const navigate = useNavigate(); // Initialize navigate hook
 
     // Отслеживаем скролл страницы
     useEffect(() => {
@@ -35,6 +41,54 @@ const Header = () => {
         setSearchOpen(!searchOpen);
     };
 
+    // Handle search input change
+    const handleSearchInputChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    // Handle search submission
+    const handleSearchSubmit = (event) => {
+        event.preventDefault(); // Prevent form default submission
+        if (searchQuery.trim()) {
+            navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+            setSearchOpen(false); // Close search bar after submission (optional)
+            // Optionally clear the search input after navigation: setSearchQuery('');
+        }
+    };
+
+    // Fetch cart count
+    useEffect(() => {
+        const token = localStorage.getItem("jwtToken");
+        if (token) {
+            const fetchCounts = async () => {
+                try {
+                    // Fetch cart count (using GET /cart)
+                    const cartResponse = await axios.get('/cart', {
+                         headers: { 
+                            Authorization: `Bearer ${token}`,
+                        }
+                    });
+                    // Assuming cartResponse.data might be an object with cart items list
+                    // Adjust this based on the actual /cart endpoint response structure
+                    if (cartResponse.data && cartResponse.data.cartItems) {
+                         setCartCount(cartResponse.data.cartItems.length);
+                    } else if (Array.isArray(cartResponse.data)) { // Fallback if it's just an array
+                         setCartCount(cartResponse.data.length);
+                    }
+
+                } catch (err) {
+                    Logger.logError('Error fetching cart count', err); // Updated log message
+                    // Optionally clear counts on error
+                     setCartCount(0);
+                }
+            };
+            fetchCounts();
+        } else {
+            // Clear counts if no token
+            setCartCount(0);
+        }
+    }, []); // Empty dependency array means this runs once on mount
+
     return (
         <>
             {/* Main Header */}
@@ -49,16 +103,18 @@ const Header = () => {
                         </div>
 
                         {/* Search Bar */}
-                        <div className={`oracle-header-search ${searchOpen ? 'active' : ''}`}>
+                        <form className={`oracle-header-search ${searchOpen ? 'active' : ''}`} onSubmit={handleSearchSubmit}> {/* Wrap in form */}
                             <input 
                                 type="text" 
                                 placeholder="Поиск лекарств и товаров..." 
                                 className="oracle-search-input"
+                                value={searchQuery}
+                                onChange={handleSearchInputChange}
                             />
-                            <button className="oracle-search-btn">
+                            <button type="submit" className="oracle-search-btn"> {/* Type submit */}
                                 <FaSearch />
                             </button>
-                        </div>
+                        </form>
 
                         {/* Navigation */}
                         <ul className="oracle-nav-links">
@@ -81,7 +137,7 @@ const Header = () => {
                             <Link to="/account" className="oracle-action-btn">
                                 <FaUserMd />
                             </Link>
-                            <Link to="/cart" className="oracle-action-btn oracle-cart-badge" data-count="0">
+                            <Link to="/cart" className="oracle-action-btn oracle-cart-badge" data-count={cartCount}>
                                 <FaShoppingCart />
                             </Link>
                             <button 
@@ -113,14 +169,18 @@ const Header = () => {
                 </div>
 
                 <div className="oracle-side-menu-search">
-                    <input 
-                        type="text" 
-                        placeholder="Поиск лекарств и товаров..." 
-                        className="oracle-search-input"
-                    />
-                    <button className="oracle-search-btn">
-                        <FaSearch />
-                    </button>
+                     <form onSubmit={handleSearchSubmit}> {/* Wrap in form */} {/* Use the same submit handler */}
+                        <input 
+                            type="text" 
+                            placeholder="Поиск лекарств и товаров..." 
+                            className="oracle-search-input"
+                             value={searchQuery}
+                             onChange={handleSearchInputChange}
+                        />
+                        <button type="submit" className="oracle-search-btn"> {/* Type submit */} {/* Use the same submit handler */} 
+                            <FaSearch />
+                        </button>
+                     </form>
                 </div>
 
                 <nav className="oracle-side-menu-nav">

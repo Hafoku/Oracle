@@ -115,7 +115,7 @@ const UpdateProduct = () => {
                 }
             });
     
-            navigate('/shop');
+            navigate('/products');
         } catch (err) {
             setError('Ошибка при обновлении продукта');
         } finally {
@@ -263,7 +263,7 @@ const UpdateProduct = () => {
                             <button
                                 type="button"
                                 className="oracle-btn oracle-btn-secondary"
-                                onClick={() => navigate('/shop')}
+                                onClick={() => navigate('/products')}
                             >
                                 Отмена
                             </button>
