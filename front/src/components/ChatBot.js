@@ -35,7 +35,18 @@ const ChatBot = () => {
         setIsLoading(true);
 
         try {
-            const result = await model.generateContent(userMessage);
+            const result = await model.generateContent([
+                {
+                  role: "system",
+                  parts: [
+                    { text: "Ты — медицинский помощник. Не ставь диагнозов, но можешь предположить вероятные причины симптомов, предложить безрецептурные препараты и посоветовать, когда обратиться к врачу. Отвечай на русском языке. Используй короткие и чёткие формулировки." }
+                  ]
+                },
+                {
+                  role: "user",
+                  parts: [{ text: userMessage }]
+                }
+              ]);              
             const response = await result.response;
             const text = response.text();
             

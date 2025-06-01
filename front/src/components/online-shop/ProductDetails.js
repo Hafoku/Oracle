@@ -235,7 +235,7 @@ const ProductDetails = () => {
                         {isAdmin && (
                             <div className="oracle-product-admin-actions">
                                 <button 
-                                    className="oracle-btn oracle-btn-secondary"
+                                    className="oracle-btn oracle-btn-secondary-2"
                                     onClick={navigateToUpdate}
                                 >
                                     Редактировать товар
@@ -243,7 +243,6 @@ const ProductDetails = () => {
                                 <button 
                                     className="oracle-btn oracle-btn-danger"
                                     onClick={deleteProduct}
-                                    style={{ marginLeft: '10px' }}
                                 >
                                     Удалить товар
                                 </button>

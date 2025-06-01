@@ -108,28 +108,21 @@ public class    OnlineShopController {
 
     @Autowired
     private CartItemRepository cartItemRepository;
-
     @DeleteMapping("/product/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
         logger.info("Удаление продукта с id: {}", id);
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Продукт не найден"));
-
-        // Удаление связанных cart_items
-        cartItemRepository.deleteByProduct(product);
-
-        // Удаление изображения
-        if (product.getAvatar() != null) {
-            ProfilePicture avatar = product.getAvatar();
-            try {
-                Path path = Paths.get(avatar.getFilePath().replace("\\", "/"));
-                Files.deleteIfExists(path);
-                profilePictureRepository.delete(avatar);
-            } catch (IOException e) {
-                logger.error("Ошибка при удалении изображения: {}", e.getMessage());
-            }
-        }
-
-        productRepository.delete(product);
+        productService.deleteProduct(product);
         return ResponseEntity.ok("Продукт успешно удален");
     }
+
+    @PostMapping("/create_product/ai")
+    public ResponseEntity<Product> createProductWithAI(@RequestParam String name,
+                                                       @RequestParam String description,
+                                                       @RequestParam int price,
+                                                       @RequestParam String type) {
+        Product product = productService.createProductWithImage(name, description, price, type);
+        return ResponseEntity.ok(product);
+    }
+
 }

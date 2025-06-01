@@ -41,4 +41,9 @@ public class WebConfig implements WebMvcConfigurer {
         bean.setOrder(-102);
         return bean;
     }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:uploads/");
+    }
 }

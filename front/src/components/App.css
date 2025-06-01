@@ -2055,6 +2055,8 @@ a:hover {
 
 .oracle-product-admin-actions {
   margin-top: 1rem;
+  display: flex;
+  gap: 10px;
 }
 
 .oracle-product-specifications {
