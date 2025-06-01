@@ -53,7 +53,11 @@ const Cart = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            fetchCartItems(); // Обновляем состояние корзины после успешного обновления
+            setCartItems(prevItems =>
+                prevItems.map(item =>
+                    item.id === itemId ? { ...item, quantity: item.quantity + delta } : item
+                )
+            );
         } catch (err) {
             if (err.response?.status === 401) {
                 localStorage.removeItem("jwtToken");

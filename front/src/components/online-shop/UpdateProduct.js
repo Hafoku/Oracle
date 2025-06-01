@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import AvatarEditor from "react-avatar-editor";
 import '../App.css';
 import { FaExclamationCircle, FaUpload } from 'react-icons/fa';
 
 const UpdateProduct = () => {
     const navigate = useNavigate();
     const { id } = useParams();
+    const editorRef = useRef(null);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -15,9 +17,10 @@ const UpdateProduct = () => {
         type: 'first-aid',
     });
 
-    const [image, setImage] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const [existingImageId, setExistingImageId] = useState(null);
+    const [scale, setScale] = useState(1);
 
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
@@ -30,13 +33,14 @@ const UpdateProduct = () => {
         { id: 'medicine', name: 'Медикаменты' },
         { id: 'accessories', name: 'Аксессуары' }
     ];
+
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
         if (!token) {
             navigate('/login');
             return;
         }
-    
+
         const fetchProduct = async () => {
             try {
                 const response = await axios.get(`http://localhost:8082/product/${id}`, {
@@ -44,7 +48,7 @@ const UpdateProduct = () => {
                         Authorization: `Bearer ${token}`
                     }
                 });
-    
+
                 const product = response.data;
                 setFormData({
                     name: product.name,
@@ -52,44 +56,71 @@ const UpdateProduct = () => {
                     description: product.description,
                     type: product.type
                 });
-    
+
                 if (product.avatar && product.avatar.id) {
+                    const existingImageUrl = `http://localhost:8082/product/files/${product.avatar.id}`;
+                    setImagePreview(existingImageUrl);
                     setExistingImageId(product.avatar.id);
                 }
-    
+
                 setLoading(false);
             } catch (err) {
                 setError('Ошибка при загрузке данных продукта');
                 setLoading(false);
             }
         };
-    
+
         fetchProduct();
     }, [id, navigate]);
-    
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleImageChange = (e) => {
+    const handleFileSelect = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setImage(file);
-            setImagePreview(URL.createObjectURL(file));
+            setSelectedFile(file);
+            setImagePreview(null);
         }
     };
+
+    const handleScaleChange = (e) => {
+        const newScale = parseFloat(e.target.value);
+        setScale(newScale);
+    };
+
+    const handleSave = () => {
+        if (editorRef.current) {
+            const canvas = editorRef.current.getImageScaledToCanvas();
+            canvas.toBlob((blob) => {
+                setImagePreview(URL.createObjectURL(blob));
+                setSelectedFile(null);
+            }, "image/png");
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setSelectedFile(null);
+        if (existingImageId) {
+            setImagePreview(`http://localhost:8082/product/files/${existingImageId}`);
+        } else {
+            setImagePreview(null);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitting(true);
         setError(null);
-    
+
         const token = localStorage.getItem('jwtToken');
         if (!token) {
             navigate('/login');
             return;
         }
-    
+
         try {
             const productDto = {
                 name: formData.name,
@@ -97,24 +128,27 @@ const UpdateProduct = () => {
                 description: formData.description,
                 type: formData.type
             };
-    
+
             const formDataToSend = new FormData();
             formDataToSend.append(
                 "newProduct",
                 new Blob([JSON.stringify(productDto)], { type: "application/json" })
             );
-    
-            if (image) {
-                formDataToSend.append("avatar", image);
+
+            if (imagePreview && (!existingImageId || imagePreview !== `http://localhost:8082/product/files/${existingImageId}`)) {
+                const response = await fetch(imagePreview);
+                const blob = await response.blob();
+                formDataToSend.append("avatar", blob, "product-image.png");
+            } else if (existingImageId && !imagePreview) {
             }
-    
+
             await axios.put(`http://localhost:8082/product/${id}`, formDataToSend, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`
                 }
             });
-    
+
             navigate('/products');
         } catch (err) {
             setError('Ошибка при обновлении продукта');
@@ -122,7 +156,7 @@ const UpdateProduct = () => {
             setSubmitting(false);
         }
     };
-    
+
     if (loading) {
         return (
             <div className="page-container">
@@ -210,41 +244,78 @@ const UpdateProduct = () => {
 
                             <div className="oracle-form-group oracle-form-group-full">
                                 <label className="oracle-form-label">Изображение продукта</label>
-                                <div className="oracle-image-upload">
-                                    <input
-                                        type="file"
-                                        onChange={handleImageChange}
-                                        accept="image/*"
-                                        className="oracle-form-input"
-                                        id="product-image"
-                                    />
-                                    <label htmlFor="product-image" className="oracle-upload-label">
-                                        <FaUpload />
-                                        <span>Выбрать изображение</span>
-                                    </label>
-                                </div>
-                                {(imagePreview || existingImageId) && (
-                                    <div className="oracle-image-preview">
+                                {!selectedFile ? (
+                                    <div className="oracle-image-upload">
+                                        <input
+                                            type="file"
+                                            onChange={handleFileSelect}
+                                            accept="image/*"
+                                            className="oracle-form-input"
+                                            id="product-image"
+                                        />
+                                        <label htmlFor="product-image" className="oracle-upload-label">
+                                            <FaUpload />
+                                            <span>Выбрать изображение</span>
+                                        </label>
+                                    </div>
+                                ) : (
+                                    <div className="editor-container">
+                                        <AvatarEditor
+                                            ref={editorRef}
+                                            image={selectedFile}
+                                            width={300}
+                                            height={300}
+                                            border={20}
+                                            borderRadius={10}
+                                            scale={scale}
+                                            className="avatar-editor"
+                                        />
+                                        <div className="scale-container">
+                                            <span>Масштаб:</span>
+                                            <input
+                                                type="range"
+                                                min="1"
+                                                max="3"
+                                                step="0.01"
+                                                value={scale}
+                                                onChange={handleScaleChange}
+                                                className="scale-slider"
+                                            />
+                                        </div>
+                                        <div className="buttons-container">
+                                            <button type="button" onClick={handleSave} className="oracle-btn oracle-btn-primary">
+                                                Сохранить
+                                            </button>
+                                            <button type="button" onClick={handleCancelEdit} className="oracle-btn oracle-btn-secondary-2">
+                                                Отмена
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {imagePreview && !selectedFile && (
+                                    <div className="oracle-image-preview" style={{
+                                        width: '300px',
+                                        height: '300px',
+                                        margin: '1rem auto',
+                                        overflow: 'hidden',
+                                        borderRadius: '8px',
+                                        border: '1px solid var(--secondary-gray)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}>
                                         <img
-                                            src={
-                                                imagePreview ||
-                                                (existingImageId 
-                                                    ? `http://localhost:8082/product/files/${existingImageId}`
-                                                    : '/images/no-image.png')
-                                            }
+                                            src={imagePreview}
                                             alt="Предпросмотр"
                                             onError={(e) => {
                                                 console.error('Ошибка загрузки изображения:', e);
                                                 e.target.src = "/images/no-image.png";
                                             }}
                                             style={{
-                                                width: '400px',
-                                                height: '400px',
-                                                objectFit: 'contain',
-                                                maxWidth: '400px',
-                                                maxHeight: '400px',
-                                                minWidth: '400px',
-                                                minHeight: '400px'
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover',
                                             }}
                                         />
                                     </div>

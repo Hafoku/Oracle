@@ -190,16 +190,7 @@ const AboutUs = () => {
             </p>
           </div>
         </section>
-
-        {/* Карта */}
-        <section className="oracle-section">
-          <div className="oracle-card">
-            <h2 className="oracle-card-title">Мы на карте</h2>
-            <YandexMap />
-          </div>
-        </section>
       </div>
-
       <Footer />
     </div>
   );

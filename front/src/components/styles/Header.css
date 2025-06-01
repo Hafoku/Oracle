@@ -1,0 +1,19 @@
+.oracle-header {
+    background-color: #cddbc0;
+    padding: 1rem 0;
+    box-shadow: var(--shadow-light);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all var(--transition-speed);
+    transform: translateY(0);
+}
+
+.oracle-header-scrolled {
+    padding: 0.5rem 0;
+    box-shadow: var(--shadow-medium);
+}
+
+.oracle-header.header-hidden {
+    transform: translateY(-100%); /* Adjust based on header height */
+}

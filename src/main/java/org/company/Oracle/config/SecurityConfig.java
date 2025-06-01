@@ -45,14 +45,22 @@ public class SecurityConfig {
                 )
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/messages", "/", "/user/login", "/user/logout", "/user/registration","/uploads/**").permitAll()
+                        .requestMatchers("/messages", "/", "/user/login", "/user/logout", "/user/registration",
+                                "/uploads/**", "/auth/**").permitAll()
+
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+
                         .requestMatchers("/user/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/login/done").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/news").authenticated()
-                        .anyRequest()
-                        .permitAll()
+
+                        .requestMatchers("/news").authenticated()
+
+                        // 🔒 ограничиваем доступ к истории чата
+                        .requestMatchers("/chat/history", "/chat/save").authenticated()
+
+                        .anyRequest().permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/user/logout")

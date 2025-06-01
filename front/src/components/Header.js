@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Используем Link и useNavigate
 import "./App.css"; // Подключаем стили
+import "./styles/Header.css";
 import logo from './assets/static/logo.png'; // Добавляем импорт логотипа
 import { FaBars, FaTimes, FaMapMarkerAlt, FaPhone, FaEnvelope, FaShoppingCart, FaPills, FaSearch, FaUserMd } from 'react-icons/fa';
 import Logger from './Logger';
@@ -13,18 +14,40 @@ const Header = () => {
     const [searchOpen, setSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState(''); // State for search input
     const [cartCount, setCartCount] = useState(0); // State for cart count
+    const [headerVisible, setHeaderVisible] = useState(true); // New state for header visibility
 
     const navigate = useNavigate(); // Initialize navigate hook
+    const lastScrollY = useRef(0); // Use useRef to store previous scroll position
 
     // Отслеживаем скролл страницы
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 10);
+            const currentScrollY = window.scrollY;
+
+            // Determine scroll direction
+            const isScrollingDown = currentScrollY > lastScrollY.current;
+
+            // Update isScrolled state (optional, if still needed for other styling)
+            setIsScrolled(currentScrollY > 10);
+
+            // Logic to show/hide header
+            // Hide header when scrolling down past a threshold (e.g., header height)
+            // Show header when scrolling up
+            // Always show header at the very top of the page
+            if (currentScrollY < 50) { // Show header at the top
+                setHeaderVisible(true);
+            } else if (isScrollingDown && headerVisible) {
+                setHeaderVisible(false);
+            } else if (!isScrollingDown && !headerVisible) {
+                setHeaderVisible(true);
+            }
+
+            lastScrollY.current = currentScrollY; // Update last scroll position
         };
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    }, [headerVisible]); // Add headerVisible to dependency array
 
     // Закрываем боковое меню при клике на ссылку
     const closeSideMenu = () => {
@@ -64,7 +87,7 @@ const Header = () => {
                 try {
                     // Fetch cart count (using GET /cart)
                     const cartResponse = await axios.get('/cart', {
-                         headers: { 
+                         headers: {
                             Authorization: `Bearer ${token}`,
                         }
                     });
@@ -92,7 +115,7 @@ const Header = () => {
     return (
         <>
             {/* Main Header */}
-            <div className={`oracle-header ${isScrolled ? 'oracle-header-scrolled' : ''}`}>
+            <div className={`oracle-header ${isScrolled ? 'oracle-header-scrolled' : ''} ${headerVisible ? '' : 'header-hidden'}`}> {/* Apply header-hidden class */}
                 <div className="oracle-container">
                     <div className="oracle-nav">
                         {/* Logo */}

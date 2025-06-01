@@ -234,9 +234,6 @@ const HomePage = () => {
                   </div>
                   <h3 className="oracle-card-title">{category.name}</h3>
                   <p>{category.description}</p>
-                  <Link to={`/category/${category.id}`} className="oracle-btn oracle-btn-outline oracle-mt-2">
-                    Подробнее
-                  </Link>
                 </div>
               </div>
             ))}
