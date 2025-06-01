@@ -5,20 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eb620641-0baf-4930-ae75-1f5e0e1da3db" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/ChatBotController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/dto/ChatMessageDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/models/ChatHistory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/repositories/ChatHistoryRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/ChatBotService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/ChatHistoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/ChatBot.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/ChatBot.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/News/News.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/News/News.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/News/News.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/Cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/Cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/UpdateProduct.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/UpdateProduct.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/dto/ChatHistory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/App.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

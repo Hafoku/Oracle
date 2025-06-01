@@ -163,6 +163,35 @@
     gap: 0.5rem;
 }
 
+.oracle-cart-item.is-dragging {
+    background-color: var(--secondary-light-green);
+    box-shadow: var(--shadow-medium);
+    transform: rotate(2deg); /* Optional: add a slight rotation */
+}
+
+.oracle-cart-item.is-editable {
+    cursor: grab; /* Indicate draggable */
+}
+
+.oracle-cart-item.is-editable:active {
+    cursor: grabbing; /* Indicate dragging */
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--secondary-gray);
+}
+
+.cart-header h2 {
+    font-size: 1.5rem;
+    color: var(--primary-dark);
+    margin: 0;
+}
+
 /* Dark Theme for Cart */
 [data-theme="dark"] .oracle-cart-item {
     background-color: var(--card-background);

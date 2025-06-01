@@ -499,7 +499,7 @@ const Products = () => {
                               addToCart(product.id);
                             }}
                           >
-                            {product.stock === 0 ? 'Нет в наличии' : 'В корзину'}
+                            {product.stock === 0 ? 'Добавить в корзину' : 'В корзину'}
                           </button>
                         </div>
                       </div>

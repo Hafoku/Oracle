@@ -18,6 +18,7 @@ import UpdateProduct from "./online-shop/UpdateProduct";
 import Products from "./Products";
 import Contacts from "./contacts";
 import ChatBot from "./ChatBot";
+import Checkout from "./online-shop/Checkout";
 
 // Компонент для автоматической прокрутки вверх при переходе между страницами
 function ScrollToTop() {
@@ -45,28 +46,37 @@ function AppLayout({ children }) {
 }
 
 function App() {
+  const location = useLocation();
+  const hideHeaderRoutes = ["/login", "/registration"];
+  const shouldShowHeader = !hideHeaderRoutes.includes(location.pathname);
+
   return (
-    <AppLayout>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/registration" element={<RegistrationForm />} />
-        <Route path="/messages" element={<AuthContent />} />
-        <Route path="/account" element={<AccountPage />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/news/:id" element={<News />} />
-        <Route path="/update_news/:id" element={<UpdateNews />} />
-        <Route path="/create_news" element={<CreateNews />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/create_product/" element={<CreateProduct />} />
-        <Route path="/create_product_ai/" element={<CreateProductAI />} />
-        <Route path="/update_product/:id" element={<UpdateProduct />} />
-        <Route path="/cart/" element={<Cart />} />
-        <Route path="/contacts" element={<Contacts />} />
-      </Routes>
-    </AppLayout>
+    <>
+      {shouldShowHeader && <Header />}
+      <main className="main-content">
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/registration" element={<RegistrationForm />} />
+          <Route path="/messages" element={<AuthContent />} />
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/news/:id" element={<News />} />
+          <Route path="/update_news/:id" element={<UpdateNews />} />
+          <Route path="/create_news" element={<CreateNews />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/create_product/" element={<CreateProduct />} />
+          <Route path="/create_product_ai/" element={<CreateProductAI />} />
+          <Route path="/update_product/:id" element={<UpdateProduct />} />
+          <Route path="/cart/" element={<Cart />} />
+          <Route path="/checkout/" element={<Checkout />} />
+          <Route path="/contacts" element={<Contacts />} />
+        </Routes>
+      </main>
+      {shouldShowHeader && <ChatBot />}
+    </>
   );
 }
 
