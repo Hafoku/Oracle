@@ -1,0 +1,66 @@
+# ORACLE/docker-compose.yml
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .  # Контекст сборки - корень проекта (ORACLE/)
+      dockerfile: front/Dockerfile # Путь к Dockerfile для frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: .  # Контекст сборки - корень проекта (ORACLE/)
+      dockerfile: Dockerfile.backend # Имя Dockerfile для backend в корне
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/your_db_name
+      - SPRING_DATASOURCE_USERNAME=your_db_user
+      - SPRING_DATASOURCE_PASSWORD=your_db_password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update # или create, validate, none
+      # Добавь сюда другие переменные окружения для бэкенда, если они есть в .env
+      # Например: - MY_API_KEY=${MY_API_KEY_FROM_ENV_FILE}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      # Монтируем папку uploads с хоста в контейнер
+      # Путь /app/uploads внутри контейнера - пример, замени на тот,
+      # который использует твое Spring приложение для работы с загрузками.
+      - ./uploads:/app/uploads
+      # Можно также монтировать логи, если это необходимо, но Docker logs предпочтительнее
+      # - ./logs_from_container:/app/logs # Пример
+    networks:
+      - app-network
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      # ЗАМЕНИ ЭТИ ЗНАЧЕНИЯ!
+      - POSTGRES_DB=your_db_name
+      - POSTGRES_USER=your_db_user
+      - POSTGRES_PASSWORD=your_db_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U your_db_user -d your_db_name"] # Используй своего юзера и БД
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

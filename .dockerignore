@@ -1,0 +1,41 @@
+# ORACLE/.dockerignore
+
+# Исключаем служебные папки Git, IDE
+.git/
+.idea/
+.vscode/
+.settings/
+*.launch
+
+# Исключаем артефакты сборки Maven и Node.js
+target/
+node_modules/
+**/node_modules/ # На всякий случай, если где-то еще появятся
+build/ # Если React собирается в папку build локально
+**/build/
+dist/
+**/dist/
+
+# Логи и временные файлы
+logs.log*
+*.log
+*.gz
+temp/
+tmp/
+
+# Загружаемые файлы (они будут в volume)
+uploads/
+
+# Файл .env (лучше передавать переменные через docker-compose environment)
+.env
+
+# Сами Dockerfile и docker-compose.yml не нужно включать в контекст копирования файлов приложения
+# Dockerfile
+# Dockerfile.*
+# docker-compose.yml
+# *.Dockerfile # Общий шаблон
+
+# Другие ненужные файлы
+README.md
+mvnw.cmd # Если не используется в Linux-контейнере
+# Добавь сюда другие файлы или папки, которые не нужны в образе

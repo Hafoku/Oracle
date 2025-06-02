@@ -1,0 +1,36 @@
+# ORACLE/Dockerfile.backend
+
+# Этап 1: Сборка Java приложения
+FROM eclipse-temurin:23-jdk-jammy AS builder
+WORKDIR /app
+
+# Копируем Maven wrapper и pom.xml из корневого контекста
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+
+# Скачиваем зависимости (используем Maven Wrapper)
+RUN ./mvnw dependency:go-offline
+
+# Копируем исходный код (папку src/ из корневого контекста)
+COPY src ./src
+
+# Собираем приложение (пропускаем тесты)
+RUN ./mvnw package -DskipTests
+
+# Этап 2: Создание легковесного образа для запуска
+FROM eclipse-temurin:23-jre-jammy
+WORKDIR /app
+
+# Копируем собранный JAR-файл из папки target
+# Имя JAR-файла может отличаться, уточни его в ORACLE/target/
+ARG JAR_FILE=target/*.jar
+COPY --from=builder /app/${JAR_FILE} app.jar
+
+# Порт, на котором работает Spring приложение (обычно 8080)
+EXPOSE 8080
+
+# Команда для запуска приложения
+# Если твое приложение ожидает какие-то файлы в 'uploads' при старте,
+# убедись, что volume монтируется правильно.
+ENTRYPOINT ["java", "-jar", "app.jar"]
