@@ -15,7 +15,7 @@ import CreateProduct from "./online-shop/CreateProduct";
 import CreateProductAI from "./online-shop/CreateProductAI";
 import Cart from "./online-shop/Cart";
 import UpdateProduct from "./online-shop/UpdateProduct";
-import Products from "./Products";
+import Products from "./online-shop/Products";
 import Contacts from "./contacts";
 import ChatBot from "./ChatBot";
 import Checkout from "./online-shop/Checkout";

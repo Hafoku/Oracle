@@ -4,7 +4,8 @@ import "./App.css";
 import Header from './Header';
 import Footer from './Footer';
 import { Link } from "react-router-dom";
-import { FaShoppingCart, FaSearch, FaPills, FaClinicMedical, FaHeartbeat, FaUserMd, FaStar, FaHeart, FaEdit, FaTimes } from "react-icons/fa";
+import { FaShoppingCart, FaSearch, FaPills, FaClinicMedical, FaHeartbeat, FaUserMd, FaStar, FaHeart, FaEdit, FaTimes, FaGripVertical, FaRandom } from "react-icons/fa";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Logger from './Logger';
 
 const HomePage = () => {
@@ -16,6 +17,8 @@ const HomePage = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [modalLoading, setModalLoading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isShuffleMode, setIsShuffleMode] = useState(false);
 
   const categories = [
     {
@@ -178,6 +181,20 @@ const HomePage = () => {
     }
   };
 
+  const toggleShuffleMode = () => {
+    setIsShuffleMode(!isShuffleMode);
+  };
+
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(featuredProducts);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setFeaturedProducts(items);
+  };
+
   const handleProductSelect = (productId) => {
     setSelectedProducts(prev => {
       if (prev.includes(productId)) {
@@ -246,14 +263,24 @@ const HomePage = () => {
         <div className="oracle-container">
           <div className="oracle-section-header">
             <h2 className="oracle-title oracle-text-center">Популярные товары</h2>
-            {isAdmin && (
-              <button 
-                className="oracle-btn oracle-btn-secondary oracle-btn-sm"
-                onClick={handleEditFeatured}
-              >
-                <FaEdit /> Редактировать
-              </button>
-            )}
+            <div className="oracle-section-actions">
+              {isAdmin && (
+                <>
+                  <button 
+                    className="oracle-btn oracle-btn-secondary-2 oracle-btn-sm"
+                    onClick={handleEditFeatured}
+                  >
+                    <FaEdit /> Редактировать
+                  </button>
+                  <button 
+                    className={`oracle-btn oracle-btn-sm ${isShuffleMode ? 'oracle-btn-primary' : 'oracle-btn-secondary-2'}`}
+                    onClick={toggleShuffleMode}
+                  >
+                    <FaRandom /> {isShuffleMode ? 'Готово' : 'Переместить'}
+                  </button>
+                </>
+              )}
+            </div>
           </div>
           
           {loading ? (
@@ -266,58 +293,84 @@ const HomePage = () => {
             </div>
           ) : (
             <>
-              <div className="oracle-products-grid">
-                {featuredProducts.map(product => (
-                  <div className="oracle-product-card" key={product.id}>
-                    {console.log(product)}
-                    {product.sale && <div className="oracle-sale-badge">Скидка</div>}
-                    <div className="oracle-product-image-wrapper">
-                      {product.avatar ? (
-                        <img
-                          src={`http://localhost:8082/product/files/${product.avatar.id}`}
-                          alt={product.name}
-                          className="oracle-product-image"
-                          onError={e => {
-                            e.target.onerror = null;
-                            e.target.src = "/images/no-image.png";
-                          }}
-                        />
-                      ) : (
-                        <div className="oracle-product-card__placeholder">
-                          <i className="fas fa-image"></i>
-                        </div>
-                      )}
-                      <div className="oracle-product-actions">
-                        <button className="oracle-product-action-btn oracle-cart-btn" title="Добавить в корзину">
-                          <FaShoppingCart />
-                        </button>
-                      </div>
+              <DragDropContext onDragEnd={handleDragEnd}>
+                <Droppable droppableId="featured-products">
+                  {(provided) => (
+                    <div 
+                      className="oracle-products-grid"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {featuredProducts.map((product, index) => (
+                        <Draggable 
+                          key={product.id} 
+                          draggableId={product.id.toString()} 
+                          index={index}
+                          isDragDisabled={!isAdmin || (!showEditModal && !isShuffleMode)}
+                        >
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              className={`oracle-product-card ${snapshot.isDragging ? 'dragging' : ''}`}
+                            >
+                              {(isAdmin && (showEditModal || isShuffleMode)) && (
+                                <div 
+                                  className="oracle-drag-handle"
+                                  {...provided.dragHandleProps}
+                                >
+                                  <FaGripVertical />
+                                </div>
+                              )}
+                              {product.sale && <div className="oracle-sale-badge">Скидка</div>}
+                              <div className="oracle-product-image-wrapper">
+                                {product.avatar ? (
+                                  <img
+                                    src={`http://localhost:8082/product/files/${product.avatar.id}`}
+                                    alt={product.name}
+                                    className="oracle-product-image"
+                                    onError={e => {
+                                      e.target.onerror = null;
+                                      e.target.src = "/images/no-image.png";
+                                    }}
+                                  />
+                                ) : (
+                                  <div className="oracle-product-card__placeholder">
+                                    <i className="fas fa-image"></i>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="oracle-product-content">
+                                <h3 className="oracle-product-title">{product.name}</h3>
+                                <div className="oracle-product-category">
+                                  {product.type === "first-aid" ? "Аптечки первой помощи" :
+                                   product.type === "equipment" ? "Медицинское оборудование" :
+                                   product.type === "medicine" ? "Медикаменты" :
+                                   product.type === "prescription" ? "Рецептурные препараты" : 
+                                   product.type === "otc" ? "Безрецептурные препараты" : 
+                                   product.type === "supplements" ? "Витамины и добавки" :
+                                   "Другое"}
+                                </div>
+                                <div className="oracle-product-description-wrapper">
+                                  <p className="oracle-product-description">{product.description}</p>
+                                </div>
+                                <div className="oracle-product-price-wrapper">
+                                  <p className="oracle-product-price">{product.price} ₸</p>
+                                  {product.oldPrice && <p className="oracle-product-old-price">{product.oldPrice} ₸</p>}
+                                </div>
+                                <button className="oracle-btn oracle-btn-primary oracle-btn-block">
+                                  В корзину
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
                     </div>
-                    <div className="oracle-product-content">
-                      <h3 className="oracle-product-title">{product.name}</h3>
-                      <div className="oracle-product-category">
-                        {product.type === "first-aid" ? "Аптечки первой помощи" :
-                         product.type === "equipment" ? "Медицинское оборудование" :
-                         product.type === "medicine" ? "Медикаменты" :
-                         product.type === "prescription" ? "Рецептурные препараты" : 
-                         product.type === "otc" ? "Безрецептурные препараты" : 
-                         product.type === "supplements" ? "Витамины и добавки" :
-                         "Другое"}
-                      </div>
-                      <div className="oracle-product-description-wrapper">
-                        <p className="oracle-product-description">{product.description}</p>
-                      </div>
-                      <div className="oracle-product-price-wrapper">
-                        <p className="oracle-product-price">{product.price} ₸</p>
-                        {product.oldPrice && <p className="oracle-product-old-price">{product.oldPrice} ₸</p>}
-                      </div>
-                      <button className="oracle-btn oracle-btn-primary oracle-btn-block">
-                        В корзину
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
               <div className="oracle-text-center oracle-mt-4">
                 <Link to="/products" className="oracle-btn oracle-btn-secondary">Все товары</Link>
               </div>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import './App.css';
-import Header from './Header';
-import Footer from './Footer';
+import '../App.css';
+import Header from '../Header';
+import Footer from '../Footer';
 import { FaSearch, FaFilter, FaShoppingCart, FaHeart, FaRegHeart, FaStar, FaChevronDown } from 'react-icons/fa';
-import Logger from './Logger';
+import Logger from '../Logger';
 
 const Products = () => {
   // State for products
@@ -454,20 +454,6 @@ const Products = () => {
                             alt={product.name} 
                             className="oracle-product-image" 
                           />
-                          <div className="oracle-product-actions">
-                            {/* Removed Wishlist Button */}
-                            <button 
-                              className="oracle-product-action-btn oracle-cart-btn" 
-                              title="Добавить в корзину"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                addToCart(product.id); // Call the addToCart function
-                              }}
-                            >
-                              <FaShoppingCart />
-                            </button>
-                          </div>
                         </div>
                         
                         <div className="oracle-product-content">

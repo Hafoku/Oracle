@@ -732,17 +732,24 @@ a:hover {
   box-shadow: var(--shadow-medium);
 }
 
+.oracle-product-image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
 .oracle-product-image {
   width: 100%;
-  height: 200px;
+  height: 220px;
   object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.oracle-product-card:hover .oracle-product-image {
+  transform: scale(1.05);
 }
 
 .oracle-product-content {
   padding: 1.25rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 .oracle-product-title {
@@ -1269,7 +1276,39 @@ a:hover {
 }
 
 .oracle-section-header {
-  margin-bottom: 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.oracle-section-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.oracle-btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.oracle-btn-sm svg {
+  font-size: 1rem;
+}
+
+.oracle-btn-secondary-2 {
+  background-color: var(--secondary-gray);
+  color: var(--text-dark);
+}
+
+.oracle-btn-secondary-2:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
 }
 
 .oracle-section-subtitle {
@@ -2424,4 +2463,33 @@ a:hover {
   .oracle-modal-products-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
+}
+
+.oracle-drag-handle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: grab;
+  color: #666;
+  z-index: 10;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.oracle-drag-handle:hover {
+  color: #333;
+}
+
+.oracle-product-card.dragging {
+  opacity: 0.8;
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.oracle-product-card {
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
