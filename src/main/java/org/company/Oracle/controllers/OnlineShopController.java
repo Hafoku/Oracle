@@ -81,7 +81,7 @@ public class    OnlineShopController {
             logger.error("Файл не существует/нечитаемый. Файл: {}", resource);
             throw new RuntimeException("Файл не существует/нечитаемый");
         }
-        logger.info("Идёт запрос на получение изображение продукта: {}, c путём:{}", image.getName(), resource);
+        logger.info("Идёт запрос на получение изображение: {}, c путём:{}", image.getName(), resource);
         return ResponseEntity.ok()
                 .contentType((MediaType.parseMediaType(image.getType())))
                 .body(resource);
