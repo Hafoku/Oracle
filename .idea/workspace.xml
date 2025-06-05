@@ -8,8 +8,11 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/HomePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/HomePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/front/yarn.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/config/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/JWTService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/JWTService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

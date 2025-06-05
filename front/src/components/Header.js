@@ -218,19 +218,6 @@ const Header = () => {
                             Каталог
                         </Link>
                     </div>
-
-                    <div className={`oracle-side-menu-item ${activeDropdown === 1 ? 'active' : ''}`}>
-                        <div className="oracle-side-menu-link" onClick={() => toggleMobileDropdown(1)}>
-                            Категории <span className="oracle-mobile-dropdown-arrow">▾</span>
-                        </div>
-                        <div className="oracle-side-menu-dropdown">
-                            <Link to="/category/prescription" onClick={closeSideMenu}>Рецептурные препараты</Link>
-                            <Link to="/category/otc" onClick={closeSideMenu}>Безрецептурные препараты</Link>
-                            <Link to="/category/supplements" onClick={closeSideMenu}>Витамины и добавки</Link>
-                            <Link to="/category/personal-care" onClick={closeSideMenu}>Товары для здоровья</Link>
-                        </div>
-                    </div>
-
                     <div className="oracle-side-menu-item">
                         <Link to="/about" className="oracle-side-menu-link" onClick={closeSideMenu}>
                             О нас

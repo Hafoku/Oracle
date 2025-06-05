@@ -1,3 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .oracle-btn {
+    @apply px-4 py-2 rounded-md font-medium transition-colors duration-200;
+  }
+  
+  .oracle-btn-primary {
+    @apply bg-oracle-primary text-white hover:bg-indigo-600;
+  }
+  
+  .oracle-btn-secondary {
+    @apply bg-oracle-secondary text-white hover:bg-gray-600;
+  }
+  
+  .oracle-btn-light {
+    @apply bg-white text-oracle-primary border border-oracle-primary hover:bg-gray-50;
+  }
+  
+  .oracle-card {
+    @apply bg-white rounded-lg shadow-md p-6;
+  }
+  
+  .oracle-title {
+    @apply text-2xl font-bold text-oracle-text mb-4;
+  }
+  
+  .oracle-section {
+    @apply py-12;
+  }
+  
+  .oracle-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .oracle-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+  }
+  
+  .oracle-product-card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-200 hover:shadow-lg;
+  }
+  
+  .oracle-product-image {
+    @apply w-full h-48 object-cover;
+  }
+  
+  .oracle-product-content {
+    @apply p-4;
+  }
+  
+  .oracle-product-title {
+    @apply text-lg font-semibold text-oracle-text mb-2;
+  }
+  
+  .oracle-product-description {
+    @apply text-gray-600 text-sm mb-4;
+  }
+  
+  .oracle-product-price {
+    @apply text-xl font-bold text-oracle-primary;
+  }
+  
+  .oracle-product-old-price {
+    @apply text-sm text-gray-500 line-through;
+  }
+  
+  .oracle-sale-badge {
+    @apply absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-md text-sm;
+  }
+  
+  .oracle-drag-handle {
+    @apply absolute top-2 left-2 text-gray-400 hover:text-gray-600 cursor-grab;
+  }
+  
+  .oracle-products-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+  }
+  
+  .oracle-products-grid-single-row {
+    @apply flex flex-row flex-nowrap gap-6 overflow-x-auto pb-4;
+  }
+  
+  .oracle-products-grid-single-row .oracle-product-card {
+    @apply flex-none w-[calc(25%-1.5rem)];
+  }
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
