@@ -307,7 +307,7 @@ const Products = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button className="oracle-search-btn">
+            <button className="oracle-search-btn flex items-center justify-center">
               <FaSearch />
             </button>
           </div>

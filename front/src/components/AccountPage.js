@@ -324,16 +324,13 @@ const AccountPage = () => {
                                 <div className="oracle-card">
                                     <h2 className="oracle-card-title">Админ панель</h2>
                                     <div className="flex flex-col gap-2">
-                                        <Link to="/create_news" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block" style={{ marginBottom: '20px' }}>
-                                            Создать новость
-                                        </Link>
                                         <Link to="/create_product" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block" style={{ marginBottom: '20px' }}>
                                             Добавить товар
                                         </Link>
                                         <Link to="/create_product_ai" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block" style={{ marginBottom: '20px' }}>
                                             Добавить товар с помощью ИИ
                                         </Link>
-                                        <Link to="/users_list" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block">
+                                        <Link to="/UsersList" className="oracle-btn-acc oracle-btn-acc-primary oracle-btn-block">
                                             Список пользователей
                                         </Link>
                                     </div>

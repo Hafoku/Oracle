@@ -259,11 +259,6 @@ const HomePage = () => {
                 </button>
               </div>
             </div>
-            <div className="flex justify-center gap-4">
-              <Link to="/products" className="oracle-btn oracle-btn-primary">
-                Каталог товаров
-              </Link>
-            </div>
           </div>
         </div>
       </div>

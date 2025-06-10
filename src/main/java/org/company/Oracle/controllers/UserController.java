@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
@@ -21,6 +22,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.stereotype.Controller;
+
+import java.util.List;
 
 
 @RequestMapping("/user")
@@ -72,5 +75,13 @@ public class UserController {
     public ResponseEntity<User> showCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity.ok().body(userService2.findAuthenticatedUser(authentication));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<User>> getAllUsers() {
+        logger.info("Attempting to fetch all users");
+        List<User> users = (List<User>) userRepository.findAll();
+        logger.info("Successfully fetched {} users", users.size());
+        return ResponseEntity.ok(users);
     }
 }

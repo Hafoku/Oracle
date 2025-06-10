@@ -19,6 +19,7 @@ import Products from "./online-shop/Products";
 import Contacts from "./contacts";
 import ChatBot from "./ChatBot";
 import Checkout from "./online-shop/Checkout";
+import UsersList from "./UsersList";
 
 // Компонент для автоматической прокрутки вверх при переходе между страницами
 function ScrollToTop() {
@@ -73,6 +74,7 @@ function App() {
           <Route path="/cart/" element={<Cart />} />
           <Route path="/checkout/" element={<Checkout />} />
           <Route path="/contacts" element={<Contacts />} />
+          <Route path="/userslist" element={<UsersList />} />
         </Routes>
       </main>
       {shouldShowHeader && <ChatBot />}

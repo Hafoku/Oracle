@@ -299,6 +299,9 @@ a:hover {
   font-size: 1rem;
   cursor: pointer;
   transition: color var(--transition-speed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .oracle-header-search .oracle-search-btn:hover {
@@ -596,6 +599,9 @@ a:hover {
   margin-bottom: 1.5rem;
   line-height: 1.2;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .oracle-hero-description {
@@ -682,6 +688,8 @@ a:hover {
   font-weight: 600;
   margin-bottom: 0.75rem;
   color: var(--primary-dark);
+  display: flex;
+  align-items: center;
 }
 
 .oracle-card-icon {
@@ -774,7 +782,7 @@ a:hover {
 
 /* Buttons */
 .oracle-btn {
-  display: inline-block;
+  display: inline-flex;
   padding: 0.75rem 1.5rem;
   border-radius: 4px;
   font-weight: 500;
@@ -782,6 +790,8 @@ a:hover {
   cursor: pointer;
   transition: all var(--transition-speed);
   border: none;
+  align-items: center;
+  justify-content: center;
 }
 
 .oracle-btn-light {

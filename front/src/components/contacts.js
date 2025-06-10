@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "./Footer";
 import "./App.css";
 // Для работы иконок: npm install react-icons
@@ -6,7 +6,44 @@ import { FaPhoneAlt, FaEnvelope, FaWhatsapp, FaMapMarkerAlt, FaClock, FaReply, F
 
 const Contacts = () => {
   const [activeQuestion, setActiveQuestion] = useState(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
   
+  useEffect(() => {
+    // Load Yandex Maps script
+    const script = document.createElement('script');
+    script.src = `https://api-maps.yandex.ru/2.1/?apikey=${process.env.REACT_APP_YANDEX_MAPS_API_KEY}&lang=ru_RU`;
+    script.async = true;
+    script.onload = () => {
+      window.ymaps.ready(() => {
+        setMapLoaded(true);
+      });
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (mapLoaded) {
+      // Initialize map
+      const map = new window.ymaps.Map('map', {
+        center: [51.133822, 71.413080], // Astana coordinates
+        zoom: 15
+      });
+
+      // Add marker
+      const marker = new window.ymaps.Placemark([51.133822, 71.413080], {
+        balloonContent: 'Oracle Pharmacy<br>Ул. Кабанбай батыра, 17'
+      }, {
+        preset: 'islands#redDotIcon'
+      });
+
+      map.geoObjects.add(marker);
+    }
+  }, [mapLoaded]);
+
   const toggleQuestion = (index) => {
     if (activeQuestion === index) {
       setActiveQuestion(null);
@@ -201,55 +238,39 @@ const Contacts = () => {
                   <FaMapMarkedAlt style={{ marginRight: 10, marginBottom: -3 }}/>Наше местоположение
                 </h2>
                 <div style={{ height: "400px", borderRadius: "8px", overflow: "hidden", marginBottom: "20px" }}>
-                  <div style={{ 
+                  <div id="map" style={{ 
                     width: "100%", 
-                    height: "100%", 
-                    backgroundColor: "#eaeef1",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "1.2rem",
-                    color: "#666",
-                    position: "relative",
-                    overflow: "hidden"
+                    height: "100%",
+                    position: "relative"
                   }}>
-                    <div style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0.4, backgroundImage: "url('https://maps.googleapis.com/maps/api/staticmap?center=Astana,Kazakhstan&zoom=15&size=600x400&maptype=roadmap&key=YOUR_API_KEY')", backgroundSize: "cover", backgroundPosition: "center"}}></div>
-                    <div style={{position: "relative", padding: "20px", background: "rgba(255,255,255,0.8)", borderRadius: "8px", textAlign: "center"}}>
-                      <FaMapMarkedAlt style={{fontSize: "3rem", color: "var(--primary-dark)", marginBottom: "10px", display: "block"}}/>
-                      <p>Интерактивная карта будет доступна при подключении Google Maps API</p>
-                    </div>
+                    {!mapLoaded && (
+                      <div style={{ 
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "#eaeef1",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "1.2rem",
+                        color: "#666"
+                      }}>
+                        <div style={{
+                          padding: "20px",
+                          background: "rgba(255,255,255,0.8)",
+                          borderRadius: "8px",
+                          textAlign: "center"
+                        }}>
+                          <FaMapMarkedAlt style={{fontSize: "3rem", color: "var(--primary-dark)", marginBottom: "10px", display: "block"}}/>
+                          <p>Загрузка карты...</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="oracle-row">
-                  <div className="oracle-col">
-                    <h3 style={{fontSize: "1.3rem", marginBottom: "15px", color: "var(--primary-dark)"}}>
-                      <FaRoute style={{ marginRight: 8, marginBottom: -2 }}/>Как к нам добраться
-                    </h3>
-                    <div style={{display: "flex", alignItems: "flex-start", marginBottom: "10px"}}>
-                      <div style={{minWidth: "30px", color: "var(--secondary-orange)"}}>
-                        <FaBus />
-                      </div>
-                      <div>
-                        <strong>Общественный транспорт:</strong> Автобусы №25, №37, №47 до остановки "Центральная площадь"
-                      </div>
-                    </div>
-                    <div style={{display: "flex", alignItems: "flex-start", marginBottom: "10px"}}>
-                      <div style={{minWidth: "30px", color: "var(--secondary-orange)"}}>
-                        <FaCar />
-                      </div>
-                      <div>
-                        <strong>На автомобиле:</strong> Парковка доступна со стороны улицы Абая, бесплатная первые 2 часа
-                      </div>
-                    </div>
-                    <div style={{display: "flex", alignItems: "flex-start", marginBottom: "10px"}}>
-                      <div style={{minWidth: "30px", color: "var(--secondary-orange)"}}>
-                        <FaWalking />
-                      </div>
-                      <div>
-                        <strong>Пешком:</strong> 7 минут от торгового центра "Керуен", через центральный парк
-                      </div>
-                    </div>
-                  </div>
                   <div className="oracle-col">
                     <h3 style={{fontSize: "1.3rem", marginBottom: "15px", color: "var(--primary-dark)"}}>
                       <FaClock style={{ marginRight: 8, marginBottom: -2 }}/>Часы работы
@@ -364,83 +385,7 @@ const Contacts = () => {
             </div>
           </div>
         </div>
-        
-        {/* Социальные сети и подписка */}
-        <div className="oracle-section">
-          <div className="oracle-row">
-            <div className="oracle-col">
-              <div className="oracle-card" style={{textAlign: "center", backgroundColor: "var(--primary-dark)", color: "white"}}>
-                <h2 className="oracle-card-title" style={{color: "white", marginBottom: "20px"}}>
-                  <FaShareAlt style={{marginRight: 10}}/>Присоединяйтесь к нам в социальных сетях
-                </h2>
-                <p style={{marginBottom: "30px", opacity: 0.8}}>
-                  <FaBell style={{marginRight: 8}}/>Будьте в курсе наших акций, новостей и получайте полезную информацию
-                </p>
-                
-                <div style={{display: "flex", justifyContent: "center", gap: "20px", marginBottom: "30px"}}>
-                  <a href="#" className="social-link" style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50%", 
-                    background: "rgba(255,255,255,0.2)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "1.5rem",
-                    color: "white",
-                    transition: "all 0.3s ease"
-                  }}>
-                    <FaFacebookF />
-                  </a>
-                  <a href="#" className="social-link" style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50%", 
-                    background: "rgba(255,255,255,0.2)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "1.5rem",
-                    color: "white",
-                    transition: "all 0.3s ease"
-                  }}>
-                    <FaInstagram />
-                  </a>
-                  <a href="#" className="social-link" style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50%", 
-                    background: "rgba(255,255,255,0.2)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "1.5rem",
-                    color: "white",
-                    transition: "all 0.3s ease"
-                  }}>
-                    <FaTelegram />
-                  </a>
-                  <a href="#" className="social-link" style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50%", 
-                    background: "rgba(255,255,255,0.2)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "1.5rem",
-                    color: "white",
-                    transition: "all 0.3s ease"
-                  }}>
-                    <FaYoutube />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-
       <Footer />
     </div>
   );
