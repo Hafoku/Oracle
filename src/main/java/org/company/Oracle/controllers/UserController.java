@@ -1,9 +1,11 @@
 package org.company.Oracle.controllers;
 
 import org.company.Oracle.models.User;
+import org.company.Oracle.models.Role;
 import org.company.Oracle.dto.UserDTO;
 import org.company.Oracle.exceptions.UserAlreadyExistException;
 import org.company.Oracle.repositories.UserRepository;
+import org.company.Oracle.repositories.RoleRepository;
 import org.company.Oracle.services.IUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -20,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.stereotype.Controller;
 
@@ -40,6 +43,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @GetMapping("/login")
     public String loginPage(Model model){
@@ -78,10 +84,27 @@ public class UserController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
         logger.info("Attempting to fetch all users");
         List<User> users = (List<User>) userRepository.findAll();
         logger.info("Successfully fetched {} users", users.size());
         return ResponseEntity.ok(users);
+    }
+
+    @PutMapping("/{id}/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<User> updateUserRole(@PathVariable Long id, @RequestBody String roleName) {
+        logger.info("Attempting to update role for user with ID: {}", id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        Role newRole = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
+
+        user.setRole(newRole);
+        userRepository.save(user);
+        logger.info("Successfully updated role for user {} to {}", user.getEmail(), newRole.getName());
+        return ResponseEntity.ok(user);
     }
 }

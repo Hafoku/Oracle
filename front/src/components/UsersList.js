@@ -10,10 +10,11 @@ const UsersList = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentUserRole, setCurrentUserRole] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchUsersAndCurrentUser = async () => {
       const token = localStorage.getItem("jwtToken");
 
       if (!token) {
@@ -23,33 +24,84 @@ const UsersList = () => {
       }
 
       try {
-        setLoading(true);
-        const response = await axios.get("/user/all", {
+        // Fetch current user's role first to determine access
+        const currentUserResponse = await axios.get("/user/current", {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
-        setUsers(response.data);
+        const roleName = currentUserResponse.data.role?.name;
+        setCurrentUserRole(roleName);
+        Logger.logSuccess('Current user role fetched successfully: ' + roleName);
+
+        if (roleName !== 'ADMIN') {
+          setError('У вас нет прав для просмотра этой страницы. Войдите как администратор.');
+          Logger.logWarning('Non-admin user attempted to access UsersList.');
+          // Optional: redirect to account page or home page
+          // setTimeout(() => navigate("/account"), 3000); 
+          setLoading(false); // Stop loading to display the error
+          return;
+        }
+
+        setLoading(true);
+        // Fetch all users only if admin
+        const usersResponse = await axios.get("/user/all", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        setUsers(usersResponse.data);
         setError(null);
         Logger.logSuccess('Users fetched successfully');
+
       } catch (err) {
-        Logger.logError('Error fetching users:', err);
+        Logger.logError('Error fetching data:', err);
         if (err.response?.status === 401 || err.response?.status === 403) {
-          setError('У вас нет прав для просмотра этой страницы. Войдите как администратор.');
+          setError('Сессия истекла или у вас нет прав доступа. Пожалуйста, войдите снова.');
           localStorage.removeItem("jwtToken");
-          // Optionally redirect after a delay
           setTimeout(() => navigate("/login"), 3000);
         } else {
-          setError('Ошибка при загрузке списка пользователей.');
+          setError('Ошибка при загрузке данных.');
         }
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUsers();
+    fetchUsersAndCurrentUser();
   }, [navigate]);
+
+  const handleRoleChange = async (userId, newRoleName) => {
+    const token = localStorage.getItem("jwtToken");
+    // Re-check admin role on role change attempt for robustness
+    if (!token || currentUserRole !== 'ADMIN') {
+      Logger.logWarning('Unauthorized attempt to change role.');
+      alert('У вас нет прав для изменения роли.');
+      return;
+    }
+
+    try {
+      Logger.logInfo(`Attempting to update role for user ${userId} to ${newRoleName}`);
+      await axios.put(`/user/${userId}/role`, newRoleName, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'text/plain'
+        }
+      });
+
+      setUsers(prevUsers =>
+        prevUsers.map(user =>
+          user.id === userId ? { ...user, role: { name: newRoleName } } : user
+        )
+      );
+      Logger.logSuccess(`Role for user ${userId} updated to ${newRoleName}`);
+    } catch (err) {
+      Logger.logError(`Error updating role for user ${userId}:`, err);
+      alert('Ошибка при изменении роли. Попробуйте еще раз.');
+    }
+  };
 
   if (loading) {
     return (
@@ -74,6 +126,7 @@ const UsersList = () => {
             Перейти к логину
           </button>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -104,9 +157,22 @@ const UsersList = () => {
                   {users.map((user, index) => (
                     <tr key={user.id} className={`hover:bg-gray-50 transition-colors duration-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                       <td className="py-3 px-4 border-b border-gray-200 text-sm text-gray-800">{user.id}</td>
-                      <td className="py-3 px-4 border-b border-gray-200 text-sm text-gray-800">{user.userName}</td>
+                      <td className="py-3 px-4 border-b border-gray-200 text-sm text-gray-800">{user.name}</td>
                       <td className="py-3 px-4 border-b border-gray-200 text-sm text-gray-800">{user.email}</td>
-                      <td className="py-3 px-4 border-b border-gray-200 text-sm text-gray-800 font-medium">{user.role?.name || 'N/A'}</td>
+                      <td className="py-3 px-4 border-b border-gray-200 text-sm text-gray-800 font-medium">
+                        {currentUserRole === 'ADMIN' ? (
+                          <select
+                            className="form-select block w-full px-2 py-1 text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-opacity-50 focus:border-blue-300"
+                            value={user.role?.name || 'USER'}
+                            onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                          >
+                            <option value="USER">USER</option>
+                            <option value="ADMIN">ADMIN</option>
+                          </select>
+                        ) : (
+                          user.role?.name || 'N/A'
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

@@ -6,13 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="eb620641-0baf-4930-ae75-1f5e0e1da3db" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/AccountPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/AccountPage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/components/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/HomePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/HomePage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/contacts.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/contacts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/Products.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/Products.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/UsersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/UsersList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/DataInitializer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
