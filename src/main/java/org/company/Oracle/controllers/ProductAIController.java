@@ -3,6 +3,7 @@ package org.company.Oracle.controllers;
 import org.company.Oracle.dto.ProductGenerateRequest;
 import org.company.Oracle.dto.ProductGenerateResponse;
 import org.company.Oracle.services.ProductAIService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
