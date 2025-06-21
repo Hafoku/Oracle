@@ -22,21 +22,31 @@ const RegistrationForm = () => {
   const navigate = useNavigate();
 
   // Шкала надёжности пароля
-  const getPasswordStrength = (password) => {
-    let score = 0;
-    if (password.length >= 6) score++;
-    if (/[A-Z]/.test(password)) score++;
-    if (/[0-9]/.test(password)) score++;
-    if (/[^A-Za-z0-9]/.test(password)) score++;
-    if (password.length >= 10) score++;
+  const getPasswordStrength = (password = '') => {
     if (!password) return { score: 0, label: '', color: '' };
-    if (score <= 1) return { score, label: 'Слабый', color: '#e53e3e' };
-    if (score === 2) return { score, label: 'Средний', color: '#f6ad55' };
-    if (score === 3 || score === 4) return { score, label: 'Хороший', color: '#38a169' };
-    if (score >= 5) return { score, label: 'Отличный', color: '#3182ce' };
-    return { score, label: '', color: '' };
+  
+    const checks = [
+      password.length >= 6,
+      /[A-Z]/.test(password),
+      /[0-9]/.test(password),
+      /[^A-Za-z0-9]/.test(password),
+      password.length >= 10
+    ];
+  
+    const score = checks.filter(Boolean).length;
+  
+    const levels = [
+      { max: 1, label: 'Слабый', color: '#e53e3e' },
+      { max: 2, label: 'Средний', color: '#f6ad55' },
+      { max: 4, label: 'Хороший', color: '#38a169' },
+      { max: Infinity, label: 'Отличный', color: '#3182ce' }
+    ];
+  
+    const level = levels.find(l => score <= l.max);
+  
+    return { score, label: level.label, color: level.color };
   };
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));

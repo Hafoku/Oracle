@@ -22,7 +22,7 @@ const Cart = () => {
 
     const fetchCartItems = async () => {
         try {
-            const response = await axios.get('http://2.133.132.170:8082/cart', {
+            const response = await axios.get('http://localhost:8082/cart', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
                 }
@@ -46,7 +46,7 @@ const Cart = () => {
         if (cartItem.quantity + delta < 1) return;
 
         try {
-            await axios.put(`http://2.133.132.170:8082/cart/items/${itemId}`, delta, {
+            await axios.put(`http://localhost:8082/cart/items/${itemId}`, delta, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
                     'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ const Cart = () => {
 
     const removeItem = async (itemId) => {
         try {
-            await axios.delete(`http://2.133.132.170:8082/cart/items/${itemId}`, {
+            await axios.delete(`http://localhost:8082/cart/items/${itemId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
                 }
@@ -146,7 +146,7 @@ const Cart = () => {
                                                 <img
                                                     src={
                                                         item.product.avatar
-                                                            ? `http://2.133.132.170:8082/files/${item.product.avatar.id}`
+                                                            ? `http://localhost:8082/files/${item.product.avatar.id}`
                                                             : '/images/no-image.png'
                                                     }
                                                     alt={item.product.name}

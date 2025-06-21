@@ -4,7 +4,7 @@ import { FaRobot, FaTimes, FaPaperPlane } from 'react-icons/fa';
 import './styles/ChatBot.css';
 
 // URL к эндпоинту Spring Boot-сервера
-const API_URL = 'http://2.133.132.170:8082/chat/message';
+const API_URL = 'http://localhost:8082/chat/message';
 
 const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(false);

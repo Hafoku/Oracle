@@ -43,7 +43,7 @@ const UpdateProduct = () => {
 
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`http://2.133.132.170:8082/product/${id}`, {
+                const response = await axios.get(`http://localhost:8082/product/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -58,7 +58,7 @@ const UpdateProduct = () => {
                 });
 
                 if (product.avatar && product.avatar.id) {
-                    const existingImageUrl = `http://2.133.132.170:8082/product/files/${product.avatar.id}`;
+                    const existingImageUrl = `http://localhost:8082/product/files/${product.avatar.id}`;
                     setImagePreview(existingImageUrl);
                     setExistingImageId(product.avatar.id);
                 }
@@ -104,7 +104,7 @@ const UpdateProduct = () => {
     const handleCancelEdit = () => {
         setSelectedFile(null);
         if (existingImageId) {
-            setImagePreview(`http://2.133.132.170:8082/product/files/${existingImageId}`);
+            setImagePreview(`http://localhost:8082/product/files/${existingImageId}`);
         } else {
             setImagePreview(null);
         }
@@ -135,14 +135,14 @@ const UpdateProduct = () => {
                 new Blob([JSON.stringify(productDto)], { type: "application/json" })
             );
 
-            if (imagePreview && (!existingImageId || imagePreview !== `http://2.133.132.170:8082/product/files/${existingImageId}`)) {
+            if (imagePreview && (!existingImageId || imagePreview !== `http://localhost:8082/product/files/${existingImageId}`)) {
                 const response = await fetch(imagePreview);
                 const blob = await response.blob();
                 formDataToSend.append("avatar", blob, "product-image.png");
             } else if (existingImageId && !imagePreview) {
             }
 
-            await axios.put(`http://2.133.132.170:8082/product/${id}`, formDataToSend, {
+            await axios.put(`http://localhost:8082/product/${id}`, formDataToSend, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`

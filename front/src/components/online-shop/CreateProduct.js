@@ -65,7 +65,7 @@ const CreateProduct = () => {
                 productData.append('file', image);
             }
 
-            await axios.post('http://2.133.132.170:8082/create_product', productData, {
+            await axios.post('http://localhost:8082/create_product', productData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     "Authorization": `Bearer ${token}`

@@ -228,7 +228,7 @@ const AccountPage = () => {
                                             <img
                                                 src={
                                                     user?.avatar?.id
-                                                        ? `http://2.133.132.170:8082/product/files/${user.avatar.id}`
+                                                        ? `http://localhost:8082/product/files/${user.avatar.id}`
                                                         : "/avatars/defaultPhoto.jpg"
                                                 }
                                                 onError={(e) => {

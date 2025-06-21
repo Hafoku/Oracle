@@ -398,7 +398,7 @@ const HomePage = () => {
                             <div className="relative">
                               {product.avatar ? (
                                 <img
-                                  src={`http://2.133.132.170:8082/product/files/${product.avatar.id}`}
+                                  src={`http://localhost:8082/product/files/${product.avatar.id}`}
                                   alt={product.name}
                                   className="oracle-product-image"
                                   onError={e => {
@@ -487,7 +487,7 @@ const HomePage = () => {
                       {product.sale && <div className="oracle-sale-badge">Скидка</div>}
                       {product.avatar ? (
                         <img
-                          src={`http://2.133.132.170:8082/product/files/${product.avatar.id}`}
+                          src={`http://localhost:8082/product/files/${product.avatar.id}`}
                           alt={product.name}
                           className="oracle-product-image"
                           onError={e => {

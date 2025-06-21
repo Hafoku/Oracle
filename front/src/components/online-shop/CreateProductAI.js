@@ -91,7 +91,7 @@ const CreateProductAI = () => {
         setError(null);
 
         try {
-            const response = await axios.post('http://2.133.132.170:8082/ai/generate', {
+            const response = await axios.post('http://localhost:8082/ai/generate', {
                 name: formData.name
             });
 
@@ -140,7 +140,7 @@ const CreateProductAI = () => {
                 productData.append('file', blob, 'product-image.png');
             }
 
-            await axios.post('http://2.133.132.170:8082/create_product', productData, {
+            await axios.post('http://localhost:8082/create_product', productData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     "Authorization": `Bearer ${token}`

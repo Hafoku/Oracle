@@ -32,7 +32,7 @@ const Checkout = () => {
 
     const fetchCartItems = async () => {
         try {
-            const response = await axios.get('http://2.133.132.170:8082/cart', {
+            const response = await axios.get('http://localhost:8082/cart', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
                 }
@@ -77,7 +77,7 @@ const Checkout = () => {
 
             console.log('Submitting order with shipping info:', shippingInfo);
             // Example backend call (replace with your actual API endpoint)
-            // await axios.post('http://2.133.132.170:8082/order', { cartItems, shippingInfo }, {
+            // await axios.post('http://localhost:8082/order', { cartItems, shippingInfo }, {
             //     headers: { Authorization: `Bearer ${token}` }
             // });
 

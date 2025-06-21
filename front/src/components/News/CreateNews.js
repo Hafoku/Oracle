@@ -130,7 +130,7 @@ const CreateNews = () => {
         });
       }
 
-      const response = await axios.post("http://2.133.132.170:8082/news", formDataToSend, {
+      const response = await axios.post("http://localhost:8082/news", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${token}`
