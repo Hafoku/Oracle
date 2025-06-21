@@ -25,7 +25,7 @@ const News = () => {
 
   const fetchNews = async (token) => {
     try {
-      const response = await axios.get(`http://localhost:8082/news/${id}`, {
+      const response = await axios.get(`http://2.133.132.170:8082/news/${id}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -40,7 +40,7 @@ const News = () => {
   const fetchCurrentUser = async (token) => {
     try {
       // Получаем данные текущего пользователя
-      const response = await axios.get('http://localhost:8082/user/current', {
+      const response = await axios.get('http://2.133.132.170:8082/user/current', {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -67,7 +67,7 @@ const News = () => {
           return;
         }
         
-        await axios.delete(`http://localhost:8082/news/${id}`, {
+        await axios.delete(`http://2.133.132.170:8082/news/${id}`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -128,7 +128,7 @@ const News = () => {
           )}
           {news.avatar && (
             <img
-              src={`http://localhost:8082/files/${news.avatar.id}`}
+              src={`http://2.133.132.170:8082/files/${news.avatar.id}`}
               alt={news.title}
               className="news-main-image"
               onClick={() => openImageModal(news.avatar)} // Открыть модальное окно при клике
@@ -143,7 +143,7 @@ const News = () => {
           {news.author?.avatar && (
             <div className="author-avatar">
               <img
-                src={`http://localhost:8082/files/${news.author.avatar.id}`}
+                src={`http://2.133.132.170:8082/files/${news.author.avatar.id}`}
                 alt="Аватар автора"
                 className="author-avatar-image"
                 onClick={() => openImageModal(news.author.avatar)} // Открыть модальное окно при клике
@@ -169,7 +169,7 @@ const News = () => {
               {news.images.map((image, index) => (
                 <img
                   key={index}
-                  src={`http://localhost:8082/files/${image.id}`}
+                  src={`http://2.133.132.170:8082/files/${image.id}`}
                   alt={`Изображение ${index + 1}`}
                   className="gallery-image"
                   onClick={() => openImageModal(image)} // Открыть модальное окно при клике
@@ -185,7 +185,7 @@ const News = () => {
         <div className="modal-overlay" onClick={closeImageModal}>
           <div className="modal-content">
             <img
-              src={`http://localhost:8082/files/${selectedImage.id}`}
+              src={`http://2.133.132.170:8082/files/${selectedImage.id}`}
               alt="Выбранное изображение"
               className="modal-image"
             />

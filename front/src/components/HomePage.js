@@ -20,6 +20,7 @@ const HomePage = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [isShuffleMode, setIsShuffleMode] = useState(false);
   const [productOrder, setProductOrder] = useState([]);
+  const [hasCustomFeatured, setHasCustomFeatured] = useState(false);
 
   const categories = [
     {
@@ -138,11 +139,32 @@ const HomePage = () => {
         const products = Array.from(response.data);
         setAllProducts(products);
         
-        // Get featured products (first 4 by default)
-        const featured = products.slice(0, 4);
+        // Try to load saved featured products from localStorage
+        const savedFeaturedIds = localStorage.getItem('featuredProductIds');
+        let featured;
+        
+        if (savedFeaturedIds) {
+          const savedIds = JSON.parse(savedFeaturedIds);
+          // Filter products that still exist in the database
+          featured = products.filter(p => savedIds.includes(p.id));
+          
+          // If we don't have enough saved products, add some from the beginning
+          if (featured.length < 4) {
+            const remainingProducts = products.filter(p => !savedIds.includes(p.id));
+            const neededCount = 4 - featured.length;
+            featured = [...featured, ...remainingProducts.slice(0, neededCount)];
+          }
+        } else {
+          // Get featured products (first 4 by default)
+          featured = products.slice(0, 4);
+        }
+        
         setFeaturedProducts(featured);
         setSelectedProducts(featured.map(p => p.id));
         setProductOrder(featured.map(p => p.id)); // Initialize order
+        
+        // Check if we have custom featured products
+        setHasCustomFeatured(!!localStorage.getItem('featuredProductIds'));
         
         setError(null);
       } catch (err) {
@@ -172,7 +194,12 @@ const HomePage = () => {
       // Временно обновляем локально
       const newFeatured = allProducts.filter(p => selectedProducts.includes(p.id));
       setFeaturedProducts(newFeatured);
+      
+      // Save selected product IDs to localStorage
+      localStorage.setItem('featuredProductIds', JSON.stringify(selectedProducts));
+      
       setShowEditModal(false);
+      setHasCustomFeatured(true);
       
       Logger.logSuccess('Featured products updated successfully');
     } catch (err) {
@@ -188,6 +215,9 @@ const HomePage = () => {
       // When exiting shuffle mode, save the current order
       const newOrder = featuredProducts.map(product => product.id);
       localStorage.setItem('featuredProductsOrder', JSON.stringify(newOrder));
+      // Also update the featured product IDs to match the new order
+      localStorage.setItem('featuredProductIds', JSON.stringify(newOrder));
+      setHasCustomFeatured(true);
     } else {
       // When entering shuffle mode, try to load saved order
       const savedOrder = localStorage.getItem('featuredProductsOrder');
@@ -219,6 +249,9 @@ const HomePage = () => {
 
     // Save the new order to localStorage
     localStorage.setItem('featuredProductsOrder', JSON.stringify(newOrder));
+    // Also update the featured product IDs to match the new order
+    localStorage.setItem('featuredProductIds', JSON.stringify(newOrder));
+    setHasCustomFeatured(true);
   };
 
   const handleProductSelect = (productId) => {
@@ -232,6 +265,17 @@ const HomePage = () => {
         return prev;
       }
     });
+  };
+
+  const handleResetToDefault = () => {
+    const defaultProducts = allProducts.slice(0, 4);
+    setSelectedProducts(defaultProducts.map(p => p.id));
+    setFeaturedProducts(defaultProducts);
+    localStorage.setItem('featuredProductIds', JSON.stringify(defaultProducts.map(p => p.id)));
+    localStorage.setItem('featuredProductsOrder', JSON.stringify(defaultProducts.map(p => p.id)));
+    setShowEditModal(false);
+    setHasCustomFeatured(false);
+    Logger.logSuccess('Reset to default products');
   };
 
   return (
@@ -285,7 +329,14 @@ const HomePage = () => {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">Популярные товары</h2>
+            <div>
+              <h2 className="text-3xl font-bold">Популярные товары</h2>
+              {hasCustomFeatured && (
+                <p className="text-sm text-gray-500 mt-1">
+                  Настроено администратором
+                </p>
+              )}
+            </div>
             {isAdmin && (
               <div className="flex gap-4">
                 <button 
@@ -294,12 +345,12 @@ const HomePage = () => {
                 >
                   <FaEdit className="inline-block mr-2" /> Редактировать
                 </button>
-                <button 
+                {/* <button 
                   className={`oracle-btn ${isShuffleMode ? 'bg-[#264d36] hover:bg-[rgb(20,63,39)]' : 'oracle-btn-secondary-2'}`}
                   onClick={toggleShuffleMode}
                 >
                   <FaRandom className="inline-block mr-2" /> {isShuffleMode ? 'Готово' : 'Переместить'}
-                </button>
+                </button> */}
               </div>
             )}
           </div>
@@ -327,7 +378,7 @@ const HomePage = () => {
                         key={product.id} 
                         draggableId={product.id.toString()} 
                         index={index}
-                        isDragDisabled={!isAdmin || (!showEditModal && !isShuffleMode)}
+                        isDragDisabled={!isAdmin || !isShuffleMode}
                       >
                         {(provided, snapshot) => (
                           <div
@@ -335,7 +386,7 @@ const HomePage = () => {
                             {...provided.draggableProps}
                             className={`oracle-product-card ${snapshot.isDragging ? 'shadow-xl scale-105' : ''}`}
                           >
-                            {(isAdmin && (showEditModal || isShuffleMode)) && (
+                            {(isAdmin && isShuffleMode) && (
                               <div 
                                 className="oracle-drag-handle"
                                 {...provided.dragHandleProps}
@@ -347,7 +398,7 @@ const HomePage = () => {
                             <div className="relative">
                               {product.avatar ? (
                                 <img
-                                  src={`http://localhost:8082/product/files/${product.avatar.id}`}
+                                  src={`http://2.133.132.170:8082/product/files/${product.avatar.id}`}
                                   alt={product.name}
                                   className="oracle-product-image"
                                   onError={e => {
@@ -386,6 +437,116 @@ const HomePage = () => {
           )}
         </div>
       </section>
+
+      {/* Edit Featured Products Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="oracle-modal bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex justify-between items-center">
+                <h3 className="text-xl font-semibold">Выберите популярные товары</h3>
+                <button 
+                  onClick={() => setShowEditModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <FaTimes className="w-5 h-5" />
+                </button>
+              </div>
+              <p className="text-gray-600 mt-2">
+                Выберите до 4 товаров для отображения на главной странице 
+                <span className="ml-2 font-medium text-[#264d36]">
+                  ({selectedProducts.length}/4)
+                </span>
+              </p>
+            </div>
+            
+            <div className="p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {allProducts.map(product => (
+                  <div 
+                    key={product.id}
+                    className={`oracle-product-card cursor-pointer transition-all ${
+                      selectedProducts.includes(product.id) 
+                        ? 'selected' 
+                        : ''
+                    }`}
+                    onClick={() => handleProductSelect(product.id)}
+                  >
+                    {/* Checkbox overlay */}
+                    <div className="absolute top-2 right-2 z-10">
+                      <input
+                        type="checkbox"
+                        checked={selectedProducts.includes(product.id)}
+                        onChange={() => handleProductSelect(product.id)}
+                        className="w-5 h-5 text-[#264d36] border-gray-300 rounded focus:ring-[#264d36] cursor-pointer"
+                      />
+                    </div>
+                    
+                    {/* Product Image */}
+                    <div className="oracle-product-image-wrapper">
+                      {product.sale && <div className="oracle-sale-badge">Скидка</div>}
+                      {product.avatar ? (
+                        <img
+                          src={`http://2.133.132.170:8082/product/files/${product.avatar.id}`}
+                          alt={product.name}
+                          className="oracle-product-image"
+                          onError={e => {
+                            e.target.onerror = null;
+                            e.target.src = "/images/no-image.png";
+                          }}
+                        />
+                      ) : (
+                        <div className="oracle-product-image bg-gray-200 flex items-center justify-center">
+                          <i className="fas fa-image text-4xl text-gray-400"></i>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Product Content */}
+                    <div className="oracle-product-content">
+                      <div className="text-sm text-gray-500 mb-2">
+                        {product.type === "first-aid" ? "Аптечки первой помощи" :
+                         product.type === "equipment" ? "Медицинское оборудование" :
+                         product.type === "medicine" ? "Медикаменты" :
+                         product.type === "prescription" ? "Рецептурные препараты" : 
+                         product.type === "otc" ? "Безрецептурные препараты" : 
+                         product.type === "supplements" ? "Витамины и добавки" :
+                         "Другое"}
+                      </div>
+                      <h3 className="oracle-product-title">{product.name}</h3>
+                      <p className="oracle-product-description">{product.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="p-6 border-t border-gray-200 flex justify-between items-center">
+              <button
+                onClick={handleResetToDefault}
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Сбросить к дефолтным
+              </button>
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setShowEditModal(false)}
+                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                >
+                  Отмена
+                </button>
+                <button
+                  onClick={handleSaveFeatured}
+                  disabled={modalLoading || selectedProducts.length === 0}
+                  className="px-4 py-2 bg-[#264d36] text-white rounded-lg hover:bg-[rgb(20,63,39)] disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {modalLoading ? 'Сохранение...' : 'Сохранить'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Services Section */}
       <section className="oracle-section">

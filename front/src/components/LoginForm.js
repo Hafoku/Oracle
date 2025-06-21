@@ -107,11 +107,11 @@ const LoginForm = () => {
                         </button>
                     </div>
 
-                    <div className="oracle-auth-links">
+                    {/* <div className="oracle-auth-links">
                         <Link to="/forgot-password" className="oracle-link">
                             Забыли пароль?
                         </Link>
-                    </div>
+                    </div> */}
                 </form>
 
                 <div className="oracle-auth-divider">

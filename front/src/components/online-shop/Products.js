@@ -53,7 +53,7 @@ const Products = () => {
           name: product.name,
           price: product.price,
           oldPrice: product.oldPrice,
-          image: product.avatar ? `http://localhost:8082/product/files/${product.avatar.id}` : '/images/no-image.png',
+          image: product.avatar ? `http://2.133.132.170:8082/product/files/${product.avatar.id}` : '/images/no-image.png',
           category: product.type,
           rating: product.rating || 0,
           reviews: product.reviews || 0,

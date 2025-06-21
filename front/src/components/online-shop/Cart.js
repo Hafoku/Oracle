@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import '../App.css';
 import '../styles/Cart.css';
-import { FaShoppingCart, FaTrash, FaMinus, FaPlus, FaArrowLeft, FaEdit, FaCheck } from 'react-icons/fa';
+import { FaShoppingCart, FaTrash, FaMinus, FaPlus, FaArrowLeft } from 'react-icons/fa';
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,13 +22,13 @@ const Cart = () => {
 
     const fetchCartItems = async () => {
         try {
-            const response = await axios.get('http://localhost:8082/cart', {
+            const response = await axios.get('http://2.133.132.170:8082/cart', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
                 }
             });
             if (response.data) {
-                const itemsWithIds = response.data.products ? response.data.products.map(item => ({ ...item, draggableId: `item-${item.id}` })) : [];
+                const itemsWithIds = response.data.products ? response.data.products : [];
                 setCartItems(itemsWithIds);
             } else {
                 setCartItems([]);
@@ -48,7 +46,7 @@ const Cart = () => {
         if (cartItem.quantity + delta < 1) return;
 
         try {
-            await axios.put(`http://localhost:8082/cart/items/${itemId}`, delta, {
+            await axios.put(`http://2.133.132.170:8082/cart/items/${itemId}`, delta, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
                     'Content-Type': 'application/json'
@@ -71,7 +69,7 @@ const Cart = () => {
 
     const removeItem = async (itemId) => {
         try {
-            await axios.delete(`http://localhost:8082/cart/items/${itemId}`, {
+            await axios.delete(`http://2.133.132.170:8082/cart/items/${itemId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
                 }
@@ -84,22 +82,6 @@ const Cart = () => {
 
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0);
-    };
-
-    const onDragEnd = (result) => {
-        if (!result.destination) {
-            return;
-        }
-
-        const reorderedItems = Array.from(cartItems);
-        const [removed] = reorderedItems.splice(result.source.index, 1);
-        reorderedItems.splice(result.destination.index, 0, removed);
-
-        setCartItems(reorderedItems);
-    };
-
-    const toggleEditing = () => {
-        setIsEditing(!isEditing);
     };
 
     if (loading) {
@@ -155,88 +137,58 @@ const Cart = () => {
                         <>
                             <div className="cart-header">
                                 <h2>Товары в корзине</h2>
-                                <button
-                                    className="oracle-btn oracle-btn-secondary-2 oracle-btn-sm"
-                                    onClick={toggleEditing}
-                                >
-                                    {isEditing ? <><FaCheck /> Готово</> : <><FaEdit /> Редактировать</>}
-                                </button>
                             </div>
-                            <DragDropContext onDragEnd={onDragEnd}>
-                                <Droppable droppableId="cart-items" direction="vertical" isDropDisabled={!isEditing}>
-                                    {(provided) => (
-                                        <div
-                                            {...provided.droppableProps}
-                                            ref={provided.innerRef}
-                                            className="oracle-cart-items"
-                                        >
-                                            {cartItems.map((item, index) => (
-                                                <Draggable key={item.draggableId} draggableId={item.draggableId} index={index} isDragDisabled={!isEditing}>
-                                                    {(provided, snapshot) => (
-                                                        <div
-                                                            ref={provided.innerRef}
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                            className={`oracle-cart-item ${snapshot.isDragging ? 'is-dragging' : ''} ${isEditing ? 'is-editable' : ''}`}
-                                                        >
-                                                            <div className="oracle-cart-item-content">
-                                                                <div className="oracle-cart-item-image">
-                                                                    <img
-                                                                        src={
-                                                                            item.product.avatar
-                                                                                ? `http://localhost:8082/files/${item.product.avatar.id}`
-                                                                                : '/images/no-image.png'
-                                                                        }
-                                                                        alt={item.product.name}
-                                                                        onError={(e) => {
-                                                                            e.target.src = '/images/no-image.png';
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                                <div className="oracle-cart-item-details">
-                                                                    <h3 className="oracle-cart-item-title">{item.product.name}</h3>
-                                                                    <p className="oracle-cart-item-price">Цена за 1 шт. товара: {item.product.price} ₸</p>
-                                                                </div>
-                                                                <div className="oracle-cart-item-actions">
-                                                                    {!isEditing && (
-                                                                        <div className="oracle-quantity-controls">
-                                                                            <button
-                                                                                className="oracle-btn oracle-btn-secondary oracle-btn-icon"
-                                                                                onClick={() => updateQuantity(item.id, -1)}
-                                                                                aria-label="Уменьшить количество"
-                                                                            >
-                                                                                <FaMinus />
-                                                                            </button>
-                                                                            <span className="oracle-quantity">{item.quantity}</span>
-                                                                            <button
-                                                                                className="oracle-btn oracle-btn-secondary oracle-btn-icon"
-                                                                                onClick={() => updateQuantity(item.id, 1)}
-                                                                                aria-label="Увеличить количество"
-                                                                            >
-                                                                                <FaPlus />
-                                                                            </button>
-                                                                        </div>
-                                                                    )}
-                                                                    {isEditing && (
-                                                                        <button
-                                                                            className="oracle-btn oracle-btn-icon oracle-btn-danger"
-                                                                            onClick={() => removeItem(item.id)}
-                                                                            aria-label="Удалить товар"
-                                                                        >
-                                                                            <FaTrash />
-                                                                        </button>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </Draggable>
-                                            ))}
-                                            {provided.placeholder}
+                            <div className="oracle-cart-items">
+                                {cartItems.map((item) => (
+                                    <div key={item.id} className="oracle-cart-item">
+                                        <div className="oracle-cart-item-content">
+                                            <div className="oracle-cart-item-image">
+                                                <img
+                                                    src={
+                                                        item.product.avatar
+                                                            ? `http://2.133.132.170:8082/files/${item.product.avatar.id}`
+                                                            : '/images/no-image.png'
+                                                    }
+                                                    alt={item.product.name}
+                                                    onError={(e) => {
+                                                        e.target.src = '/images/no-image.png';
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="oracle-cart-item-details">
+                                                <h3 className="oracle-cart-item-title">{item.product.name}</h3>
+                                                <p className="oracle-cart-item-price">Цена за 1 шт. товара: {item.product.price} ₸</p>
+                                            </div>
+                                            <div className="oracle-cart-item-actions">
+                                                <div className="oracle-quantity-controls">
+                                                    <button
+                                                        className="oracle-btn oracle-btn-secondary oracle-btn-icon"
+                                                        onClick={() => updateQuantity(item.id, -1)}
+                                                        aria-label="Уменьшить количество"
+                                                    >
+                                                        <FaMinus />
+                                                    </button>
+                                                    <span className="oracle-quantity">{item.quantity}</span>
+                                                    <button
+                                                        className="oracle-btn oracle-btn-secondary oracle-btn-icon"
+                                                        onClick={() => updateQuantity(item.id, 1)}
+                                                        aria-label="Увеличить количество"
+                                                    >
+                                                        <FaPlus />
+                                                    </button>
+                                                </div>
+                                                <button
+                                                    className="oracle-btn oracle-btn-icon oracle-btn-danger"
+                                                    onClick={() => removeItem(item.id)}
+                                                    aria-label="Удалить товар"
+                                                >
+                                                    <FaTrash />
+                                                </button>
+                                            </div>
                                         </div>
-                                    )}
-                                </Droppable>
-                            </DragDropContext>
+                                    </div>
+                                ))}
+                            </div>
 
                             <div className="oracle-cart-summary">
                                 <div className="oracle-cart-total">

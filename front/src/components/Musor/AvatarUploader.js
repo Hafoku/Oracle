@@ -48,7 +48,7 @@ const AvatarUploader = ({ onSave, onCancel }) => {
   };
 
   return (
-    <div className="avatar-uploader oracle-container">
+    <div className="oracle-container">
       {!image ? (
         <div className="file-upload-container">
           <label className="oracle-btn oracle-btn-primary oracle-btn-block file-upload-label">

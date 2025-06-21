@@ -38,7 +38,7 @@ const UpdateNews = () => {
     // Загрузка существующей новости
     const fetchNews = async () => {
       try {
-        const response = await axios.get(`http://localhost:8082/news/${id}`, {
+        const response = await axios.get(`http://2.133.132.170:8082/news/${id}`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -117,7 +117,7 @@ const UpdateNews = () => {
 
     try {
       // Отправляем запрос на удаление изображения
-      await axios.delete(`http://localhost:8082/news/${id}/images/${imageId}`, {
+      await axios.delete(`http://2.133.132.170:8082/news/${id}/images/${imageId}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -204,7 +204,7 @@ const UpdateNews = () => {
         });
       }
       
-      await axios.put(`http://localhost:8082/news/${id}`, formDataToSend, {
+      await axios.put(`http://2.133.132.170:8082/news/${id}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${token}`
@@ -318,7 +318,7 @@ const UpdateNews = () => {
               {(previewAvatar || existingImages.mainImage) && (
                 <div className="image-preview mt-1" style={{ position: 'relative' }}>
                   <img 
-                    src={previewAvatar || `http://localhost:8082/files/${existingImages.mainImage.id}`}
+                    src={previewAvatar || `http://2.133.132.170:8082/files/${existingImages.mainImage.id}`}
                     alt="Главное изображение"
                     style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: 'var(--radius)' }}
                   />
@@ -374,7 +374,7 @@ const UpdateNews = () => {
                 {existingImages.additionalImages.map((image) => (
                   <div key={image.id} className="gallery-image-container">
                     <img
-                      src={`http://localhost:8082/files/${image.id}`}
+                      src={`http://2.133.132.170:8082/files/${image.id}`}
                       alt="Дополнительное изображение"
                       className="gallery-image"
                     />

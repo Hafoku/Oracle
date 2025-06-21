@@ -117,13 +117,21 @@ const UsersList = () => {
   if (error) {
     return (
       <div className="page-wrapper">
-        <div className="oracle-container my-8 text-center">
-          <div className="text-red-600 font-bold text-lg">{error}</div>
+        <div className="oracle-container access-denied-container">
+          <div className="access-denied-icon">
+            <svg viewBox="0 0 48 48" fill="none" width="64" height="64">
+              <circle cx="24" cy="24" r="22" fill="#fff" stroke="#e53e3e" strokeWidth="4"/>
+              <path d="M24 16v8" stroke="#e53e3e" strokeWidth="3" strokeLinecap="round"/>
+              <circle cx="24" cy="32" r="2" fill="#e53e3e"/>
+            </svg>
+          </div>
+          <h2 className="access-denied-title">Нет доступа</h2>
+          <p className="access-denied-desc">{error}</p>
           <button 
-            className="oracle-btn oracle-btn-primary mt-4"
-            onClick={() => navigate("/login")}
+            className="oracle-btn oracle-btn-primary access-denied-btn"
+            onClick={() => navigate('/login')}
           >
-            Перейти к логину
+            Войти как администратор
           </button>
         </div>
         <Footer />

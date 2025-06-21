@@ -8,7 +8,6 @@ import Logger from './Logger';
 import axios from 'axios';
 
 const Header = () => {
-    const [isScrolled, setIsScrolled] = useState(false);
     const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState(null);
     const [searchOpen, setSearchOpen] = useState(false);
@@ -26,9 +25,6 @@ const Header = () => {
 
             // Determine scroll direction
             const isScrollingDown = currentScrollY > lastScrollY.current;
-
-            // Update isScrolled state (optional, if still needed for other styling)
-            setIsScrolled(currentScrollY > 10);
 
             // Logic to show/hide header
             // Hide header when scrolling down past a threshold (e.g., header height)
@@ -115,7 +111,7 @@ const Header = () => {
     return (
         <>
             {/* Main Header */}
-            <div className={`oracle-header ${isScrolled ? 'oracle-header-scrolled' : ''} ${headerVisible ? '' : 'header-hidden'}`}> {/* Apply header-hidden class */}
+            <div className={`oracle-header oracle-header-scrolled ${headerVisible ? '' : 'header-hidden'}`}>
                 <div className="oracle-container">
                     <div className="oracle-nav">
                         {/* Logo */}
@@ -160,7 +156,7 @@ const Header = () => {
                             <Link to="/account" className="oracle-action-btn">
                                 <FaUserMd />
                             </Link>
-                            <Link to="/cart" className="oracle-action-btn oracle-cart-badge" data-count={cartCount}>
+                            <Link to="/cart" className="oracle-action-btn ">
                                 <FaShoppingCart />
                             </Link>
                             <button 

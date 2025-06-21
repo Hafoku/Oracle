@@ -110,13 +110,14 @@ a:hover {
 .oracle-row {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -15px;
+  align-items: stretch;
 }
 
 .oracle-col {
-  padding: 0 15px;
-  margin-top: 50px;
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Header Styles - Top Bar */
@@ -293,12 +294,19 @@ a:hover {
   border-radius: 4px;
   font-size: 0.95rem;
   transition: all var(--transition-speed);
+  color: #222 !important;
+  background: #fff;
 }
 
 .oracle-header-search .oracle-search-input:focus {
   border-color: var(--primary-light);
   box-shadow: 0 0 0 2px rgba(205, 219, 192, 0.3);
   outline: none;
+}
+
+.oracle-search-input::placeholder {
+  color: #888 !important;
+  opacity: 1;
 }
 
 .oracle-header-search .oracle-search-btn {
@@ -685,11 +693,15 @@ a:hover {
   box-shadow: var(--shadow-light);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+  margin-top: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem; 
   transition: transform var(--transition-speed), box-shadow var(--transition-speed);
   display: flex;
   flex-direction: column;
   height: 100%;
   justify-content: space-between;
+  flex: 1 1 0;
 }
 
 .oracle-card:hover {
@@ -858,9 +870,9 @@ a:hover {
   color: var(--primary-dark);
 }
 
-.oracle-btn-outline:hover {
+/* .oracle-btn-outline:hover {
   background-color: var(--primary-dark);
-}
+} */
 
 .oracle-btn-block {
   display: block;
@@ -936,6 +948,8 @@ a:hover {
 .oracle-testimonial {
   background-color: var(--text-light);
   padding: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   border-radius: 8px;
   box-shadow: var(--shadow-light);
   margin-bottom: 1.5rem;
@@ -2218,7 +2232,6 @@ a:hover {
 /* Avatar Uploader Styles */
 .avatar-uploader {
   max-width: 500px;
-  margin: 2rem auto;
   padding: 2rem;
   background-color: var(--text-light);
   border-radius: 8px;
@@ -2507,13 +2520,533 @@ a:hover {
 }
 
 .oracle-product-card.dragging {
-  opacity: 0.8;
-  transform: scale(1.02);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transform: rotate(5deg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   z-index: 1000;
 }
 
 .oracle-product-card {
   position: relative;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Modal Product Cards - Smaller version */
+.oracle-modal .oracle-product-card {
+  max-width: 280px;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
+.oracle-modal .oracle-product-image {
+  height: 160px;
+}
+
+.oracle-modal .oracle-product-content {
+  padding: 1rem;
+}
+
+.oracle-modal .oracle-product-title {
+  font-size: 1rem;
+  height: 2.4rem;
+}
+
+.oracle-modal .oracle-product-description {
+  font-size: 0.85rem;
+  height: 2.4rem;
+}
+
+.oracle-modal .oracle-product-card {
+  position: relative;
+}
+
+.oracle-modal .oracle-product-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Selected product indicator */
+.oracle-modal .oracle-product-card.selected {
+  border: 2px solid var(--primary-dark);
+  background-color: rgba(38, 77, 54, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(38, 77, 54, 0.15);
+}
+
+.oracle-modal .oracle-product-card.selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(38, 77, 54, 0.1) 50%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Password Change Section Styles */
+.password-change-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--secondary-gray);
+}
+
+.password-change-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark-green));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  color: var(--text-light);
+  font-size: 1.5rem;
+  box-shadow: 0 4px 15px rgba(38, 77, 54, 0.3);
+}
+
+.password-change-subtitle {
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}
+
+.password-change-form {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.form-label-icon {
+  margin-right: 0.5rem;
+  color: var(--secondary-dark-green);
+  font-size: 0.8rem;
+}
+
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input {
+  padding-right: 3rem !important;
+  border: 2px solid var(--secondary-gray);
+  transition: all 0.3s ease;
+}
+
+.password-input:focus {
+  border-color: var(--secondary-dark-green);
+  box-shadow: 0 0 0 3px rgba(38, 77, 54, 0.1);
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-dark);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle-btn:hover {
+  background-color: var(--secondary-gray);
+  color: var(--primary-dark);
+}
+
+.password-submit-btn {
+  margin-top: 1rem;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark-green));
+  border: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.password-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(38, 77, 54, 0.3);
+}
+
+.password-submit-btn:active {
+  transform: translateY(0);
+}
+
+.btn-icon {
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .password-change-form {
+    max-width: 100%;
+  }
+  
+  .password-change-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+  }
+}
+
+/* Profile Section Styles */
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile-avatar-section {
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--secondary-gray);
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--text-light);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.profile-avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(38, 77, 54, 0.8), rgba(20, 63, 39, 0.8));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  font-size: 2rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.profile-avatar-wrapper:hover .profile-avatar-overlay {
+  opacity: 1;
+}
+
+.avatar-change-btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.avatar-change-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(38, 77, 54, 0.2);
+}
+
+.avatar-form-container {
+  margin-top: 1rem;
+}
+
+.profile-info-section {
+  flex: 1;
+}
+
+.profile-info-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--secondary-gray);
+}
+
+.profile-info-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark-green));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  color: var(--text-light);
+  font-size: 1.25rem;
+  box-shadow: 0 4px 15px rgba(38, 77, 54, 0.3);
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.profile-detail-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(248, 250, 252, 0.8));
+  border-radius: 12px;
+  border: 1px solid var(--secondary-gray);
+  transition: all 0.3s ease;
+}
+
+.profile-detail-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-color: var(--secondary-dark-green);
+}
+
+.profile-detail-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--secondary-dark-green), var(--primary-dark));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.profile-detail-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-detail-label {
+  font-size: 0.8rem;
+  color: var(--text-dark);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
+}
+
+.profile-detail-value {
+  font-size: 1rem;
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.profile-role {
+  background: linear-gradient(135deg, var(--secondary-orange), #e69722);
+  color: var(--text-light);
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-logout-btn {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 2px solid var(--secondary-orange);
+  color: var(--secondary-orange);
+}
+
+.profile-logout-btn:hover {
+  background-color: var(--secondary-orange);
+  /* color: var(--text-light); */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(230, 151, 34, 0.3);
+}
+
+/* Responsive adjustments for profile */
+@media (max-width: 768px) {
+  .profile-header {
+    gap: 1.5rem;
+  }
+  
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .profile-info-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .profile-info-icon {
+    margin-right: 0;
+  }
+  
+  .profile-detail-item {
+    padding: 0.75rem;
+  }
+  
+  .profile-detail-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 0.8rem;
+  }
+}
+
+/* --- FORCE BLACK TEXT IN SEARCH INPUT --- */
+.oracle-search-input,
+.oracle-search-input:focus,
+.oracle-search-input:active {
+  color: #111 !important;
+  background: #fff !important;
+  caret-color: #111 !important;
+}
+.oracle-search-input::placeholder {
+  color: #888 !important;
+  opacity: 1;
+}
+
+.oracle-testimonials .oracle-row {
+  display: flex;
+  align-items: stretch;
+}
+.oracle-testimonial {
+  height: 100%;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* --- UNIVERSAL SVG ICON FIX FOR CONTACTS AND CARDS --- */
+.contact-icon svg,
+.oracle-card-title svg,
+.oracle-card svg,
+.oracle-btn svg {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: middle;
+  fill: currentColor;
+}
+.contact-icon {
+  font-size: 2rem !important;
+  color: var(--primary-dark) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- ACCESS DENIED STYLES FOR USERS LIST --- */
+.access-denied-container {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.access-denied-icon {
+  margin-bottom: 1.5rem;
+}
+.access-denied-title {
+  color: #e53e3e;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.access-denied-desc {
+  color: #444;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+.access-denied-btn {
+  padding: 0.75rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.oracle-password-toggle {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font-size: 1.15em;
+  padding: 0 2px;
+  z-index: 2;
+}
+
+.oracle-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.oracle-password-strength {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.oracle-password-strength-bar {
+  height: 6px;
+  border-radius: 4px;
+  min-width: 40px;
+  max-width: 120px;
+  transition: width 0.3s, background 0.3s;
+  background: #e2e8f0;
+  flex-shrink: 0;
+}
+.oracle-password-strength-label {
+  font-size: 0.95em;
+  font-weight: 500;
+  min-width: 60px;
+  text-align: left;
 }

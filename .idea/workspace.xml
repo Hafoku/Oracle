@@ -6,10 +6,28 @@
   <component name="ChangeListManager">
     <list default="true" id="eb620641-0baf-4930-ae75-1f5e0e1da3db" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/axios_helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/axios_helper.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/AccountPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/AccountPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/ChatBot.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/ChatBot.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/HomePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/HomePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/LoginForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/LoginForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/Musor/AvatarUploader.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/Musor/AvatarUploader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/News/CreateNews.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/News/CreateNews.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/News/News.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/News/News.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/News/UpdateNews.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/News/UpdateNews.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/RegistrationForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/RegistrationForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/UsersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/UsersList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/Cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/Cart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/Checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/Checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/CreateProduct.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/CreateProduct.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/CreateProductAI.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/CreateProductAI.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/ProductAIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/controllers/ProductAIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/ProductAIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/ProductAIService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/ProductDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/ProductDetails.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/Products.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/Products.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/online-shop/UpdateProduct.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/online-shop/UpdateProduct.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/config/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/ChatBotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/company/Oracle/services/ChatBotService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

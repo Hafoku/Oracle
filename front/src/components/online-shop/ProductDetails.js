@@ -195,7 +195,7 @@ const ProductDetails = () => {
                     <div className="oracle-product-gallery">
                         <div className="oracle-product-image-wrapper">
                             <img 
-                                src={product.avatar ? `http://localhost:8082/product/files/${product.avatar.id}` : '/images/no-image.png'}
+                                src={product.avatar ? `http://2.133.132.170:8082/product/files/${product.avatar.id}` : '/images/no-image.png'}
                                 alt={product.name}
                                 className="oracle-product-detail-image"
                                 onError={(e) => {

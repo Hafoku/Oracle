@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { request } from "../axios_helper";
 import { useNavigate, Link } from "react-router-dom";
-import { FaUser, FaEnvelope, FaLock, FaArrowRight, FaHome } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaLock, FaArrowRight, FaHome, FaEye, FaEyeSlash } from "react-icons/fa";
 import './App.css';
 import './styles/auth.css';
 import Logger from "./Logger";
@@ -16,7 +16,26 @@ const RegistrationForm = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showMatchingPassword, setShowMatchingPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState({ score: 0, label: '', color: '' });
   const navigate = useNavigate();
+
+  // Шкала надёжности пароля
+  const getPasswordStrength = (password) => {
+    let score = 0;
+    if (password.length >= 6) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    if (password.length >= 10) score++;
+    if (!password) return { score: 0, label: '', color: '' };
+    if (score <= 1) return { score, label: 'Слабый', color: '#e53e3e' };
+    if (score === 2) return { score, label: 'Средний', color: '#f6ad55' };
+    if (score === 3 || score === 4) return { score, label: 'Хороший', color: '#38a169' };
+    if (score >= 5) return { score, label: 'Отличный', color: '#3182ce' };
+    return { score, label: '', color: '' };
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +43,10 @@ const RegistrationForm = () => {
     // Очищаем ошибку поля при изменении
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: null }));
+    }
+    // Обновляем шкалу надёжности пароля
+    if (name === 'password') {
+      setPasswordStrength(getPasswordStrength(value));
     }
   };
 
@@ -77,7 +100,14 @@ const RegistrationForm = () => {
     } catch (error) {
       Logger.logError(error);
       if (error.response?.data) {
-        setErrors(error.response.data);
+        // Если сервер вернул ошибку о существующем пользователе
+        if (typeof error.response.data === 'string' && error.response.data.includes('уже существует')) {
+          setServerError(error.response.data);
+        } else if (typeof error.response.data === 'object') {
+          setErrors(error.response.data);
+        } else {
+          setServerError("Ошибка при регистрации. Пожалуйста, попробуйте позже.");
+        }
       } else {
         setServerError("Ошибка при регистрации. Пожалуйста, попробуйте позже.");
       }
@@ -138,14 +168,30 @@ const RegistrationForm = () => {
               <FaLock className="oracle-input-icon" />
               <input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 className={`oracle-form-input ${errors.password ? 'oracle-input-error' : ''}`}
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Пароль"
               />
+              <button
+                type="button"
+                className="oracle-password-toggle"
+                tabIndex={-1}
+                onClick={() => setShowPassword(v => !v)}
+                aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
+            {/* Шкала надёжности пароля */}
+            {formData.password && (
+              <div className="oracle-password-strength">
+                <div className="oracle-password-strength-bar" style={{ width: `${passwordStrength.score * 20}%`, background: passwordStrength.color }}></div>
+                <span className="oracle-password-strength-label" style={{ color: passwordStrength.color }}>{passwordStrength.label}</span>
+              </div>
+            )}
             {errors.password && <div className="oracle-field-error">{errors.password}</div>}
           </div>
 
@@ -154,13 +200,22 @@ const RegistrationForm = () => {
               <FaLock className="oracle-input-icon" />
               <input
                 id="matchingPassword"
-                type="password"
+                type={showMatchingPassword ? "text" : "password"}
                 name="matchingPassword"
                 className={`oracle-form-input ${errors.matchingPassword ? 'oracle-input-error' : ''}`}
                 value={formData.matchingPassword}
                 onChange={handleChange}
                 placeholder="Подтвердите пароль"
               />
+              <button
+                type="button"
+                className="oracle-password-toggle"
+                tabIndex={-1}
+                onClick={() => setShowMatchingPassword(v => !v)}
+                aria-label={showMatchingPassword ? "Скрыть пароль" : "Показать пароль"}
+              >
+                {showMatchingPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
             {errors.matchingPassword && (
               <div className="oracle-field-error">{errors.matchingPassword}</div>

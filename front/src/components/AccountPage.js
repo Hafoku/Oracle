@@ -5,13 +5,16 @@ import axios from "axios";
 import AvatarUploader from "./Musor/AvatarUploader";
 import Header from './Header';
 import Footer from './Footer';
-import { FaSignOutAlt, FaKey, FaPlus, FaUsers, FaNewspaper, FaUserCircle } from "react-icons/fa";
+import { FaSignOutAlt, FaKey, FaPlus, FaUsers, FaNewspaper, FaUserCircle, FaUser, FaEnvelope, FaShieldAlt, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import Logger from "./Logger";
 
 const AccountPage = () => {
     const [showAvatarForm, setShowAvatarForm] = useState(false);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showOldPassword, setShowOldPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -219,25 +222,28 @@ const AccountPage = () => {
                     <div className="oracle-row">
                         <div className="oracle-col">
                             <div className="oracle-card">
-                                <div className="user-info">
-                                    <div className="avatar-section text-center mb-4">
-                                        <div>
+                                <div className="profile-header">
+                                    <div className="profile-avatar-section">
+                                        <div className="profile-avatar-wrapper">
                                             <img
                                                 src={
                                                     user?.avatar?.id
-                                                        ? `http://localhost:8082/product/files/${user.avatar.id}`
+                                                        ? `http://2.133.132.170:8082/product/files/${user.avatar.id}`
                                                         : "/avatars/defaultPhoto.jpg"
                                                 }
                                                 onError={(e) => {
-                                                    e.target.onerror = null; // предотвращает бесконечный цикл
+                                                    e.target.onerror = null;
                                                     e.target.src = "/avatars/defaultPhoto.jpg";
                                                 }}
-                                                alt="Аватар"
-                                                className="avatar-circle mx-auto mb-3 oracle-avatar-circle"
+                                                alt="Аватар пользователя"
+                                                className="profile-avatar"
                                             />
+                                            <div className="profile-avatar-overlay">
+                                                <FaUser />
+                                            </div>
                                         </div>
                                         {showAvatarForm ? (
-                                            <>
+                                            <div className="avatar-form-container">
                                                 <AvatarUploader
                                                     onSave={handleAvatarUpload}
                                                     onCancel={() => setShowAvatarForm(false)}
@@ -248,26 +254,55 @@ const AccountPage = () => {
                                                 >
                                                     Отмена
                                                 </button>
-                                            </>
+                                            </div>
                                         ) : (
                                             <button
-                                                className="oracle-btn oracle-btn-secondary"
+                                                className="oracle-btn oracle-btn-secondary avatar-change-btn"
                                                 onClick={toggleAvatarForm}
                                             >
-                                                Поменять аватарку
+                                                <FaUser className="btn-icon" />
+                                                Изменить фото
                                             </button>
                                         )}
                                     </div>
-                                    <div className="user-details">
-                                        <h2 className="oracle-card-title">Профиль</h2>
-                                        <p className="mb-2"><strong>Имя:</strong> {user.userName}</p>
-                                        <p className="mb-2"><strong>Почта:</strong> {user.email}</p>
-                                        <p className="mb-2"><strong>Роль:</strong> {user.role}</p>
+                                    <div className="profile-info-section">
+                                        <div className="profile-details">
+                                            <div className="profile-detail-item">
+                                                <div className="profile-detail-icon">
+                                                    <FaUser />
+                                                </div>
+                                                <div className="profile-detail-content">
+                                                    <label className="profile-detail-label">Имя пользователя</label>
+                                                    <span className="profile-detail-value">{user.userName}</span>
+                                                </div>
+                                            </div>
+                                            <div className="profile-detail-item">
+                                                <div className="profile-detail-icon">
+                                                    <FaEnvelope />
+                                                </div>
+                                                <div className="profile-detail-content">
+                                                    <label className="profile-detail-label">Email адрес</label>
+                                                    <span className="profile-detail-value">{user.email}</span>
+                                                </div>
+                                            </div>
+                                            <div className="profile-detail-item">
+                                                <div className="profile-detail-icon">
+                                                    <FaShieldAlt />
+                                                </div>
+                                                <div className="profile-detail-content">
+                                                    <label className="profile-detail-label">Роль в системе</label>
+                                                    <span className="profile-detail-value profile-role">
+                                                        {user.role === 'ADMIN' ? 'Администратор' : 'Пользователь'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <button
                                             onClick={handleLogout}
-                                            className="oracle-btn-acc oracle-btn-acc-outline mt-3"
+                                            className="oracle-btn oracle-btn-outline profile-logout-btn"
                                         >
-                                            <FaSignOutAlt className="oracle-btn-icon" /> Выйти из аккаунта
+                                            <FaSignOutAlt className="btn-icon" />
+                                            Выйти из аккаунта
                                         </button>
                                     </div>
                                 </div>
@@ -276,39 +311,84 @@ const AccountPage = () => {
 
                         <div className="oracle-col">
                             <div className="oracle-card">
-                                <h2 className="oracle-card-title">Смена пароля</h2>
-                                <form onSubmit={handlePasswordChange}>
-                                    <div className="form-group mb-3">
-                                        <input
-                                            type="password"
-                                            className="oracle-search-input"
-                                            placeholder="Текущий пароль"
-                                            value={oldPassword}
-                                            onChange={(e) => setOldPassword(e.target.value)}
-                                            required
-                                        />
+                                <div className="password-change-header">
+                                    <div className="password-change-icon">
+                                        <FaLock />
                                     </div>
-                                    <div className="form-group mb-3">
-                                        <input
-                                            type="password"
-                                            className="oracle-search-input"
-                                            placeholder="Новый пароль"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            required
-                                        />
+                                    <h2 className="oracle-card-title">Смена пароля</h2>
+                                </div>
+                                <form onSubmit={handlePasswordChange} className="password-change-form">
+                                    <div className="form-group mb-4">
+                                        <label className="form-label">
+                                            <FaShieldAlt className="form-label-icon" />
+                                            Текущий пароль
+                                        </label>
+                                        <div className="password-input-wrapper">
+                                            <input
+                                                type={showOldPassword ? "text" : "password"}
+                                                className="oracle-search-input password-input"
+                                                placeholder="Введите текущий пароль"
+                                                value={oldPassword}
+                                                onChange={(e) => setOldPassword(e.target.value)}
+                                                required
+                                            />
+                                            <button
+                                                type="button"
+                                                className="password-toggle-btn"
+                                                onClick={() => setShowOldPassword(!showOldPassword)}
+                                            >
+                                                {showOldPassword ? <FaEyeSlash /> : <FaEye />}
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="form-group mb-3">
-                                        <input
-                                            type="password"
-                                            className="oracle-search-input"
-                                            placeholder="Повторите новый пароль"
-                                            value={confirmPassword}
-                                            onChange={(e) => setConfirmPassword(e.target.value)}
-                                            required
-                                        />
+                                    <div className="form-group mb-4">
+                                        <label className="form-label">
+                                            <FaLock className="form-label-icon" />
+                                            Новый пароль
+                                        </label>
+                                        <div className="password-input-wrapper">
+                                            <input
+                                                type={showNewPassword ? "text" : "password"}
+                                                className="oracle-search-input password-input"
+                                                placeholder="Введите новый пароль"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                required
+                                            />
+                                            <button
+                                                type="button"
+                                                className="password-toggle-btn"
+                                                onClick={() => setShowNewPassword(!showNewPassword)}
+                                            >
+                                                {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                                            </button>
+                                        </div>
                                     </div>
-                                    <button type="submit" className="oracle-btn oracle-btn-primary oracle-btn-block">
+                                    <div className="form-group mb-4">
+                                        <label className="form-label">
+                                            <FaLock className="form-label-icon" />
+                                            Подтвердите новый пароль
+                                        </label>
+                                        <div className="password-input-wrapper">
+                                            <input
+                                                type={showConfirmPassword ? "text" : "password"}
+                                                className="oracle-search-input password-input"
+                                                placeholder="Повторите новый пароль"
+                                                value={confirmPassword}
+                                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                                required
+                                            />
+                                            <button
+                                                type="button"
+                                                className="password-toggle-btn"
+                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            >
+                                                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="submit" className="oracle-btn oracle-btn-primary oracle-btn-block password-submit-btn">
+                                        <FaLock className="btn-icon" />
                                         Изменить пароль
                                     </button>
                                 </form>
