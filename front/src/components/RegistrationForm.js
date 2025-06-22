@@ -144,7 +144,6 @@ const RegistrationForm = () => {
         <form onSubmit={handleSubmit} className="oracle-auth-form">
           <div className="oracle-form-group">
             <div className="oracle-input-wrapper">
-              <FaUser className="oracle-input-icon" />
               <input
                 id="name"
                 name="name"
@@ -159,7 +158,6 @@ const RegistrationForm = () => {
 
           <div className="oracle-form-group">
             <div className="oracle-input-wrapper">
-              <FaEnvelope className="oracle-input-icon" />
               <input
                 id="email"
                 type="email"
@@ -175,7 +173,6 @@ const RegistrationForm = () => {
 
           <div className="oracle-form-group">
             <div className="oracle-input-wrapper">
-              <FaLock className="oracle-input-icon" />
               <input
                 id="password"
                 type={showPassword ? "text" : "password"}
@@ -207,7 +204,6 @@ const RegistrationForm = () => {
 
           <div className="oracle-form-group">
             <div className="oracle-input-wrapper">
-              <FaLock className="oracle-input-icon" />
               <input
                 id="matchingPassword"
                 type={showMatchingPassword ? "text" : "password"}
@@ -242,7 +238,7 @@ const RegistrationForm = () => {
                 <span className="oracle-spinner"></span>
               ) : (
                 <>
-                  Зарегистрироваться <FaArrowRight className="oracle-btn-icon" />
+                  Зарегистрироваться 
                 </>
               )}
             </button>
@@ -261,7 +257,7 @@ const RegistrationForm = () => {
             </Link>
           </p>
           <Link to="/" className="oracle-btn oracle-btn-outline oracle-btn-block oracle-mt-2">
-            <FaHome className="oracle-btn-icon" /> Вернуться на главную
+             Вернуться на главную
           </Link>
         </div>
       </div>

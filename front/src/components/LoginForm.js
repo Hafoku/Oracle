@@ -65,7 +65,6 @@ const LoginForm = () => {
                 <form onSubmit={handleSubmit} className="oracle-auth-form">
                     <div className="oracle-form-group">
                         <div className="oracle-input-wrapper">
-                            <FaEnvelope className="oracle-input-icon" />
                             <input
                                 type="email"
                                 className="oracle-form-input"
@@ -79,7 +78,6 @@ const LoginForm = () => {
 
                     <div className="oracle-form-group">
                         <div className="oracle-input-wrapper">
-                            <FaLock className="oracle-input-icon" />
                             <input
                                 type="password"
                                 className="oracle-form-input"
@@ -101,7 +99,7 @@ const LoginForm = () => {
                                 <span className="oracle-spinner"></span>
                             ) : (
                                 <>
-                                    Войти <FaArrowRight className="oracle-btn-icon" />
+                                    Войти 
                                 </>
                             )}
                         </button>
@@ -126,7 +124,7 @@ const LoginForm = () => {
                         </Link>
                     </p>
                     <Link to="/" className="oracle-btn oracle-btn-outline oracle-btn-block oracle-mt-2">
-                        <FaHome className="oracle-btn-icon" /> Вернуться на главную
+                         Вернуться на главную
                     </Link>
                 </div>
             </div>
