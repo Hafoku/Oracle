@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import AvatarEditor from "react-avatar-editor";
-import '../App.css';
+import '../styles/UpdateProduct.css';
 import { FaExclamationCircle, FaUpload } from 'react-icons/fa';
 
 const UpdateProduct = () => {
@@ -252,6 +252,7 @@ const UpdateProduct = () => {
                                             accept="image/*"
                                             className="oracle-form-input"
                                             id="product-image"
+                                            aria-label="Выбрать изображение"
                                         />
                                         <label htmlFor="product-image" className="oracle-upload-label">
                                             <FaUpload />
@@ -263,10 +264,10 @@ const UpdateProduct = () => {
                                         <AvatarEditor
                                             ref={editorRef}
                                             image={selectedFile}
-                                            width={300}
-                                            height={300}
+                                            width={400}
+                                            height={400}
                                             border={20}
-                                            borderRadius={10}
+                                            borderRadius={12}
                                             scale={scale}
                                             className="avatar-editor"
                                         />
@@ -280,6 +281,7 @@ const UpdateProduct = () => {
                                                 value={scale}
                                                 onChange={handleScaleChange}
                                                 className="scale-slider"
+                                                aria-label="Масштаб изображения"
                                             />
                                         </div>
                                         <div className="buttons-container">
@@ -294,28 +296,12 @@ const UpdateProduct = () => {
                                 )}
 
                                 {imagePreview && !selectedFile && (
-                                    <div className="oracle-image-preview" style={{
-                                        width: '300px',
-                                        height: '300px',
-                                        margin: '1rem auto',
-                                        overflow: 'hidden',
-                                        borderRadius: '8px',
-                                        border: '1px solid var(--secondary-gray)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}>
+                                    <div className="oracle-image-preview">
                                         <img
                                             src={imagePreview}
-                                            alt="Предпросмотр"
                                             onError={(e) => {
                                                 console.error('Ошибка загрузки изображения:', e);
                                                 e.target.src = "/images/no-image.png";
-                                            }}
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                objectFit: 'cover',
                                             }}
                                         />
                                     </div>

@@ -393,11 +393,11 @@ const Products = () => {
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
               >
-                <option value="popularity">По популярности</option>
+                {/* <option value="popularity">По популярности</option> */}
                 <option value="price-asc">Цена: по возрастанию</option>
                 <option value="price-desc">Цена: по убыванию</option>
                 <option value="name">По названию</option>
-                <option value="rating">По рейтингу</option>
+                {/*<option value="rating">По рейтингу</option> */}
               </select>
             </div>
           </div>
@@ -431,11 +431,11 @@ const Products = () => {
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
                     >
-                      <option value="popularity">По популярности</option>
+                      {/* <option value="popularity">По популярности</option> */}
                       <option value="price-asc">Цена: по возрастанию</option>
                       <option value="price-desc">Цена: по убыванию</option>
                       <option value="name">По названию</option>
-                      <option value="rating">По рейтингу</option>
+                      {/* <option value="rating">По рейтингу</option> */}
                     </select>
                   </div>
                 </div>

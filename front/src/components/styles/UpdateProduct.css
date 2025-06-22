@@ -1,22 +1,23 @@
 .oracle-form-container {
-    background: var(--surface-color);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    padding: 2rem;
-    margin: 2rem auto;
-    max-width: 800px;
+    background: var(--card-background);
+    border-radius: 24px;
+    box-shadow: var(--shadow-medium);
+    padding: 2.5rem 2rem;
+    margin: 2.5rem auto;
+    max-width: 1200px;
+    transition: box-shadow 0.2s;
 }
 
 .oracle-form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 .oracle-form-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
 }
 
 .oracle-form-group-full {
@@ -26,8 +27,9 @@
 .oracle-form-label {
     display: block;
     margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: var(--text-color);
+    font-weight: 600;
+    color: var(--primary-dark);
+    letter-spacing: 0.01em;
 }
 
 .img{
@@ -37,17 +39,19 @@
 
 .oracle-form-input {
     width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    background: var(--input-bg);
-    color: var(--text-color);
-    transition: all 0.2s ease;
+    padding: 1rem 1.2rem;
+    border: 1.5px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--background-color);
+    color: var(--text-dark);
+    font-size: 1.05rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 2px rgba(60,60,90,0.03);
 }
 
 .oracle-form-input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px var(--primary-color-light);
+    border-color: var(--primary-dark);
+    box-shadow: 0 0 0 2px var(--primary-light);
     outline: none;
 }
 
@@ -59,22 +63,27 @@
 .oracle-upload-label {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    background: var(--primary-color);
-    color: white;
-    border-radius: var(--radius);
+    gap: 0.7rem;
+    padding: 0.9rem 1.5rem;
+    background: linear-gradient(90deg, var(--primary-dark) 60%, var(--secondary-dark-green) 100%);
+    color: var(--text-light);
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    font-weight: 500;
+    font-size: 1.05rem;
+    box-shadow: 0 2px 8px rgba(60,60,90,0.07);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
 }
 
 .oracle-upload-label:hover {
-    background: var(--primary-color-dark);
+    background: linear-gradient(90deg, var(--secondary-dark-green) 60%, var(--primary-dark) 100%);
+    box-shadow: 0 4px 16px rgba(60,60,90,0.10);
+    transform: translateY(-2px) scale(1.03);
 }
 
 .oracle-upload-label svg {
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 1.3rem;
+    height: 1.3rem;
 }
 
 .oracle-image-upload input[type="file"] {
@@ -90,83 +99,192 @@
 
 .oracle-image-preview {
     margin-top: 1rem;
-    border-radius: var(--radius);
+    border-radius: 20px;
     overflow: hidden;
-    border: 2px solid var(--border-color);
-    padding: 1rem;
-    background: var(--surface-color-light);
+    border: 3px solid var(--primary-dark);
+    padding: 0.5rem;
+    background: var(--secondary-gray);
     width: 400px !important;
     height: 400px !important;
     margin-left: auto;
     margin-right: auto;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-medium);
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: box-shadow 0.2s, border-color 0.2s;
 }
 
 .oracle-image-preview:hover {
-    border-color: var(--primary-color);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    border-color: var(--primary-dark);
+    box-shadow: 0 6px 24px rgba(60,60,90,0.13);
+    transform: translateY(-2px) scale(1.01);
 }
 
-.oracle-image-preview::before {
-    content: 'Предпросмотр изображения';
-    display: block;
-    text-align: center;
-    font-size: 0.875rem;
-    color: var(--text-color-light);
-    margin-bottom: 0.5rem;
-}
 
 .oracle-image-preview img {
-    width: 400px;
-    height: 400px;
-    object-fit: contain;
-    border-radius: var(--radius-sm);
-    background: white;
-    padding: 0.5rem;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    background: var(--card-background);
+    padding: 0.2rem;
+    box-shadow: 0 2px 8px rgba(60,60,90,0.10);
+}
+
+.editor-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    background: var(--secondary-gray);
+    border-radius: 20px;
+    padding: 2rem 1.2rem;
+    box-shadow: var(--shadow-medium);
+    margin-bottom: 1rem;
+    width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.scale-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.scale-slider {
+    width: 180px;
+    accent-color: var(--primary-color);
+}
+
+.buttons-container {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.oracle-btn {
+    padding: 1.2rem 2.8rem;
+    border-radius: 16px;
+    font-size: 1.18rem;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    box-shadow: var(--shadow-medium);
+    letter-spacing: 0.03em;
+}
+
+.oracle-btn-primary {
+    background: linear-gradient(90deg, var(--primary-dark) 60%, var(--secondary-dark-green) 100%);
+    color: var(--text-light);
+    border: 3px solid var(--primary-dark);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.13);
+}
+
+.oracle-btn-primary:hover {
+    background: var(--primary-light);
+    color: var(--secondary-dark-green);
+    border-color: var(--secondary-dark-green);
+}
+
+.oracle-btn-secondary {
+    background: var(--secondary-gray);
+    color: var(--primary-dark);
+    border: 3px solid var(--primary-dark);
+    font-weight: 700;
+    margin-top: 0;
+}
+
+.oracle-btn-secondary:hover {
+    background: var(--primary-light);
+    color: var(--secondary-dark-green);
+    border-color: var(--secondary-dark-green);
+}
+
+.oracle-btn-secondary-2 {
+    background: var(--error-color-light, #ffeaea);
+    color: var(--error-color, #d32f2f);
+    border: 3px solid var(--error-color, #d32f2f);
+    font-weight: 700;
+}
+
+.oracle-btn-secondary-2:hover {
+    background: var(--error-color, #d32f2f);
+    color: var(--text-light);
+    border-color: var(--error-color-dark, #b71c1c);
 }
 
 .oracle-form-actions {
     display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.oracle-form-actions .oracle-btn {
-    flex: 1;
-    padding: 0.75rem 1.5rem;
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+    justify-content: center;
 }
 
 .oracle-error-message {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 1rem;
+    gap: 0.7rem;
+    padding: 1.1rem;
     background: var(--error-color-light);
     color: var(--error-color);
-    border-radius: var(--radius);
+    border-radius: 12px;
     margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+    box-shadow: 0 2px 8px rgba(60,60,90,0.07);
 }
 
 .oracle-error-message svg {
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 1.3rem;
+    height: 1.3rem;
 }
 
-@media (max-width: 768px) {
-    .oracle-form-grid {
-        grid-template-columns: 1fr;
-    }
+.avatar-editor {
+    background: var(--card-background);
+    border-radius: 12px;
+    border: 3px solid var(--primary-dark) !important;
+    box-shadow: var(--shadow-light);
+}
 
+@media (max-width: 900px) {
     .oracle-form-container {
-        padding: 1.5rem;
+        padding: 1.5rem 0.5rem;
         margin: 1rem;
     }
+    .oracle-form-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+    .oracle-image-preview, .editor-container {
+        width: 100% !important;
+        max-width: 98vw;
+        height: 220px !important;
+        min-width: 0;
+    }
+}
 
-    .oracle-form-actions {
-        flex-direction: column;
+@media (max-width: 600px) {
+    .oracle-form-container {
+        padding: 0.7rem 0.1rem;
+        margin: 0.5rem;
+    }
+    .oracle-form-grid {
+        grid-template-columns: 1fr;
+        gap: 0.7rem;
+    }
+    .oracle-image-preview, .editor-container {
+        width: 100% !important;
+        max-width: 99vw;
+        height: 140px !important;
+        min-width: 0;
+    }
+    .oracle-btn {
+        padding: 0.9rem 1.2rem;
+        font-size: 1.02rem;
     }
 } 
