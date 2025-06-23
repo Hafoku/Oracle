@@ -783,21 +783,58 @@ a:hover {
 }
 
 .oracle-product-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   padding: 1.25rem;
+  height: 100%;
 }
 
 .oracle-product-title {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  color: var(--text-dark);
+  line-height: 1.2;
+  height: auto;
+  -webkit-line-clamp: unset;
+  -webkit-box-orient: unset;
+  overflow: visible;
+}
+
+.oracle-product-description-wrapper {
+  width: 100%;
   margin-bottom: 0.5rem;
-  color: var(--primary-dark);
-  line-height: 1.3;
-  height: 2.8rem;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  transition: color var(--transition-speed);
+}
+
+.oracle-product-description {
+  font-size: 0.92rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+  height: auto;
+  -webkit-line-clamp: unset;
+  -webkit-box-orient: unset;
+  overflow: visible;
+}
+
+.oracle-product-price-wrapper {
+  margin-bottom: 0.7rem;
+}
+
+.oracle-btn.oracle-btn-primary.oracle-btn-block {
+  background-color: #e0e0e0;
+  color: #333;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  box-shadow: none;
+  margin-top: auto;
+  align-self: stretch;
+  transition: background 0.2s, color 0.2s;
+}
+.oracle-btn.oracle-btn-primary.oracle-btn-block:hover {
+  background-color: #d5d5d5;
+  color: #222;
 }
 
 .oracle-product-price {

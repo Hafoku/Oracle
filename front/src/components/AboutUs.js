@@ -66,7 +66,7 @@ const AboutUs = () => {
 
       <div className="oracle-container">
         {/* О компании */}
-        <section className="oracle-section">
+        <section className="oracle-section-2">
           <div className="oracle-card">
             <h2 className="oracle-title">Oracle Pharmacy</h2>
             <p className="oracle-mb-3">
@@ -79,7 +79,7 @@ const AboutUs = () => {
         </section>
 
         {/* Миссия и Видение */}
-        <section className="oracle-section">
+        <section className="oracle-section-2">
           <div className="oracle-row">
             <div className="oracle-col">
               <div className="oracle-card">
@@ -108,7 +108,7 @@ const AboutUs = () => {
         </section>
 
         {/* Наши ценности */}
-        <section className="oracle-section">
+        <section className="oracle-section-2">
           <h2 className="oracle-title oracle-text-center oracle-mb-4">Наши ценности</h2>
           <div className="oracle-row">
             <div className="oracle-col">
@@ -142,7 +142,7 @@ const AboutUs = () => {
         </section>
 
         {/* История компании */}
-        <section className="oracle-section">
+        <section className="oracle-section-2">
           <div className="oracle-card">
             <div className="oracle-card-icon">
               <FaHistory />
@@ -158,7 +158,7 @@ const AboutUs = () => {
         </section>
 
         {/* Руководство */}
-        <section className="oracle-section">
+        <section className="oracle-section-2">
           <div className="oracle-card">
             <h2 className="oracle-card-title">Руководство</h2>
             <div className="oracle-mb-3">
@@ -169,7 +169,7 @@ const AboutUs = () => {
         </section>
 
         {/* Партнеры */}
-        <section className="oracle-section">
+        <section className="oracle-section-2">
           <div className="oracle-card">
             <h2 className="oracle-card-title">Наши партнеры</h2>
             <ul className="oracle-mb-3">
@@ -182,7 +182,7 @@ const AboutUs = () => {
         </section>
 
         {/* Сертификаты и лицензии */}
-        <section className="oracle-section">
+        <section className="oracle-section-2">
           <div className="oracle-card">
             <h2 className="oracle-card-title">Сертификаты и лицензии</h2>
             <p className="oracle-mb-3">

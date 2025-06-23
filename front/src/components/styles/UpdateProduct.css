@@ -167,7 +167,7 @@
     justify-content: center;
 }
 
-.oracle-btn {
+/* .oracle-btn {
     padding: 1.2rem 2.8rem;
     border-radius: 16px;
     font-size: 1.18rem;
@@ -177,7 +177,7 @@
     transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
     box-shadow: var(--shadow-medium);
     letter-spacing: 0.03em;
-}
+} */
 
 .oracle-btn-primary {
     background: linear-gradient(90deg, var(--primary-dark) 60%, var(--secondary-dark-green) 100%);
