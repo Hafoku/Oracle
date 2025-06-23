@@ -257,7 +257,7 @@ const AccountPage = () => {
                                             </div>
                                         ) : (
                                             <button
-                                                className="oracle-btn oracle-btn-secondary avatar-change-btn"
+                                                className="oracle-btn oracle-btn-secondary oracle-btn-secondary2 avatar-change-btn"
                                                 onClick={toggleAvatarForm}
                                             >
                                                 <FaUser className="btn-icon" />

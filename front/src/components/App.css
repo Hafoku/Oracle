@@ -859,6 +859,10 @@ a:hover {
   color: var(--text-light);
 }
 
+.oracle-btn-secondary2{
+  margin-top: 2rem;
+}
+
 .oracle-btn-secondary-2:hover {
   background-color: #e69722;
   color: var(--text-light);

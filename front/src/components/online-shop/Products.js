@@ -17,8 +17,8 @@ const Products = () => {
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
-  const [sortBy, setSortBy] = useState('popularity');
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 50000 });
+  const [sortBy, setSortBy] = useState('price-desc');
   const [showFilters, setShowFilters] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   
@@ -65,23 +65,8 @@ const Products = () => {
 
         // Fetch wishlist (only if token exists) - REMOVED WISHlist FETCH
         const token = localStorage.getItem("jwtToken");
-        // if (token) {
-        //      try {
-        //         const wishlistResponse = await axios.get('/wishlist', {
-        //             headers: {
-        //                 Authorization: `Bearer ${token}`,
-        //             }
-        //         });
-        //         const initialWishlistIds = wishlistResponse.data.map(item => item.product.id);
-        //         setWishlist(initialWishlistIds);
-        //          Logger.logSuccess('Wishlist fetched successfully', { count: initialWishlistIds.length });
-        //     } catch (wishlistErr) {
-        //          Logger.logError('Error fetching wishlist', wishlistErr);
-        //          setWishlist([]);
-        //     }
-        // } else {
+
              setWishlist([]); // Ensure wishlist is empty if not fetching
-        // }
 
         // Set initial search query from URL
         const params = new URLSearchParams(location.search);
@@ -171,38 +156,7 @@ const Products = () => {
 
   // Toggle wishlist - REMOVED WISHlist API CALLS
   const toggleWishlist = (productId) => {
-    // const token = localStorage.getItem("jwtToken");
-    // if (!token) {
-    //   alert('Пожалуйста, войдите, чтобы добавить товар в избранное');
-    //   // navigate("/login");
-    //   return;
-    // }
 
-    // const isCurrentlyInWishlist = wishlist.includes(productId);
-    // Logger.logUserAction(`${isCurrentlyInWishlist ? 'Removing from' : 'Adding to'} wishlist`, { productId });
-
-    // try {
-    //   if (isCurrentlyInWishlist) {
-    //     await axios.delete(`/wishlist/remove/${productId}`, { headers: { Authorization: `Bearer ${token}`, }});
-    //     setWishlist(wishlist.filter(id => id !== productId));
-    //     Logger.logSuccess('Removed from wishlist', { productId });
-    //   } else {
-    //     await axios.post(`/wishlist/add/${productId}`, null, { headers: { Authorization: `Bearer ${token}`, }});
-    //     setWishlist([...wishlist, productId]);
-    //     Logger.logSuccess('Added to wishlist', { productId });
-    //   }
-    // } catch (err) {
-    //   Logger.logError(`Error ${isCurrentlyInWishlist ? 'removing from' : 'adding to'} wishlist`, { 
-    //       productId, 
-    //       error: err.response?.data || err.message 
-    //   });
-    //    if (err.response?.status === 401) {
-    //       localStorage.removeItem("jwtToken");
-    //       alert('Сессия истекла. Пожалуйста, войдите снова.');
-    //   } else {
-    //      alert(`Ошибка при ${isCurrentlyInWishlist ? 'удалении из' : 'добавлении в'} избранного`);
-    //   }
-    // }
     // Local state toggle fallback if API calls are removed
      if (wishlist.includes(productId)) {
        setWishlist(wishlist.filter(id => id !== productId));
@@ -240,18 +194,14 @@ const Products = () => {
     setSearchQuery('');
     setSelectedCategory('all');
     setPriceRange({ min: 0, max: 10000 });
-    setSortBy('popularity');
+    setSortBy('price-desc');
   };
 
   // Add to cart function
   const addToCart = async (productId) => {
     const token = localStorage.getItem("jwtToken");
     if (!token) {
-      // Assuming navigate is available from react-router-dom
-      // If not, you might need to add `const navigate = useNavigate();` at the top
-      // and import it: `import { Link, useLocation, useNavigate } from 'react-router-dom';`
       alert('Пожалуйста, войдите, чтобы добавить товар в корзину');
-      // navigate("/login"); // Uncomment if navigate is imported and needed
       return;
     }
 
@@ -435,7 +385,7 @@ const Products = () => {
                       <option value="price-asc">Цена: по возрастанию</option>
                       <option value="price-desc">Цена: по убыванию</option>
                       <option value="name">По названию</option>
-                      {/* <option value="rating">По рейтингу</option> */}
+                      
                     </select>
                   </div>
                 </div>

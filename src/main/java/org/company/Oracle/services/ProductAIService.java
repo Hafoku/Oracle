@@ -16,6 +16,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
@@ -27,7 +29,7 @@ public class ProductAIService {
     private final WebClient webClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final List<String> types = List.of("first-aid", "equipment", "medicine", "prescription", "otc", "supplements");
+    private final List<String> types = Arrays.asList("first-aid", "equipment", "medicine", "prescription", "otc", "supplements");
 
     @Value("${ai.gemini.api}")
     private String apiKey;
@@ -38,15 +40,20 @@ public class ProductAIService {
 
     public ProductGenerateResponse generateProduct(ProductGenerateRequest request) {
         String prompt = buildPrompt(request.getName(), request.getContext(), request.getLanguage());
-        log.info("📤 Сформированный prompt для Gemini: \n{}", prompt);
+        log.info("\uD83D\uDCE4 Сформированный prompt для Gemini: \n{}", prompt);
 
-        // 👇 Исправленный payload
-        Map<String, Object> payload = Map.of(
-                "contents", List.of(Map.of(
-                        "role", "user",
-                        "parts", List.of(Map.of("text", prompt))
-                ))
-        );
+        // 👇 Исправленный payload для совместимости с Java 8
+        Map<String, Object> payload = new HashMap<>();
+        List<Map<String, Object>> contents = new ArrayList<>();
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("role", "user");
+        List<Map<String, Object>> parts = new ArrayList<>();
+        Map<String, Object> textMap = new HashMap<>();
+        textMap.put("text", prompt);
+        parts.add(textMap);
+        userMap.put("parts", parts);
+        contents.add(userMap);
+        payload.put("contents", contents);
 
         try {
             log.info("📦 Payload, отправляемый в Gemini: {}", objectMapper.writeValueAsString(payload));
@@ -82,7 +89,7 @@ public class ProductAIService {
     }
 
     private String buildPrompt(String name, String context, String language) {
-        String effectiveLanguage = (language != null && !language.isBlank()) ? language : "ru";
+        String effectiveLanguage = (language != null && !language.trim().isEmpty()) ? language : "ru";
 
         return String.format(
                 "Ты помощник для медицинского интернет-магазина. Strictly respond with raw JSON only, no markdown code fences or backticks. На основе названия продукта \"%s\" сгенерируй:\n" +
